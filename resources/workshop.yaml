@@ -11,7 +11,8 @@ spec:
   url: https://github.com/eduk8s/lab-markdown-sample
   content:
     #image: quay.io/eduk8s/lab-markdown-sample:master
-    files: github.com/eduk8s/lab-markdown-sample
+    #files: github.com/eduk8s/lab-markdown-sample
+    files: github.com/springone-tour-2021/lab-workshop-3
   session:
     namespaces:
       budget: small
