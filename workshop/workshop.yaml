@@ -4,5 +4,7 @@ modules:
     activate:
     - workshop-overview
     - setup-environment
-    - exercises/01-sample-content
+    - exercises/01-content
+    - exercises/02-content
+    - exercises/03-content
     - workshop-summary
