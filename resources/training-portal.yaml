@@ -8,6 +8,7 @@ spec:
       type: anonymous
   workshops:
   - name: lab-workshop-3
+    reserved: 0
     capacity: 1
-    expires: 60m
-    orphaned: 5m
+    expires: 460m
+    orphaned: 45m
