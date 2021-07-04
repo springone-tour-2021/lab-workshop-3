@@ -11,6 +11,20 @@ modules:
         name: Content 2
     exercises/03-content:
         name: Content 3
+    exercises/04-content:
+        name: Content 4
+    exercises/05-content:
+        name: Content 5
+    exercises/06-content:
+        name: Content 6
+    exercises/07-content:
+        name: Content 7
+    exercises/08-content:
+        name: Content 8
+    exercises/09-content:
+        name: Content 9
+    exercises/10-content:
+        name: Content 10
     workshop-summary:
         name: Workshop Summary
         exit_sign: Finish Workshop
