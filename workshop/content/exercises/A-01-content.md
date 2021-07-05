@@ -3,35 +3,45 @@
 Throughout this workshop, you will be using an application that returns cat names and ages.
 
 The application comprises a Spring Boot app and a database:
-- cat-service - Exposes an enpoint "/cats/{name}" and returns the cat's name and age in months.
-- cat-postgres - Stores the names and birth dates of cats.
+- **cat-service** - Exposes an enpoint "/cats/{name}" and returns the cat's name and age in months.
+- **cat-postgres** - Stores the names and birth dates of cats.
 
 ## Prerequisites
 
-You will need a [GitHub account](https://github.com) and a [personal access token](https://helphub.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) (with "repo" access rights).
+You will need:
+- A GitHub [account](https://github.com)
+- A GitHub [personal access token](https://helphub.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) (with "repo" access rights)
+  
+Make sure you have those ready before proceeding.
 
 ### Environment variables
 
-Run the following commands and enter the appropriate values at the prompts.
+Run the following command and enter the appropriate values at the prompts.
 ```execute-1
 source set-credentials.sh
 ```
 
+Make sure the output of the script indicates that the environment variables were properly set.
+
 ### GitHub repositories
 
-The following action blocks will fork the workshop repos into your own GitHub org.
-> Note: These commands use the GitHub CLI (`hub`), which uses the GITHUB_USERNAME and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
+The workshop requires three(3) GitHub repositories:
+- **cat-service** - source code for the cat application and files to automate testing
+- **cat-service-release** - copy of the cat application source code, once it has passed testing
+- **cat-service-release-ops** - files needed to automate deployment of cat application and postgres db
 
-> TODO: Update to us [gh](https://github.com/cli/cli) instead of hub ????
-> TODO: Figure out how to use gh help secret set
+The following action blocks will fork the workshop repos into your own GitHub org and make some changes to ensure references are pointing to your GitHub org and this workshop instance's Docker registry.
+> Note: These commands use the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USERNAME and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
 
-> TODO: change to `git clone -b 1.0`
+> TODO: 
+> 1. Update to us [gh](https://github.com/cli/cli) instead of hub ????
+> 
+> 2. Figure out how to use gh help secret set
+> 
+> 3. change to `git clone -b 1.0`
 
-The following script will:
-- Fork the app repo, `cat-service`
-- Fork the `cat-service-release` repo, which will contain a copy of `cat-release`, once `cat-release` has passed all testing.
-- Fork `cat-service-release-ops`, which contains the files for automating the deployment workflow.
-```shell
+Run the following command.
+```execute-1
 source fork-repos.sh
 ```
 
