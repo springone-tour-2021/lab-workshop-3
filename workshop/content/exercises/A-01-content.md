@@ -31,7 +31,7 @@ The workshop requires three GitHub repositories:
 - **cat-service-release-ops** - files needed to automate deployment of cat application and postgres db
 
 A script is provided to fork the repos into your own GitHub org and update references to point to your GitHub org and this workshop instance's Docker registry.
-> Note: This script uses the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USERNAME and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
+> Note: This script uses the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USER and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
 
 Run the following command.
 ```execute-1
@@ -78,6 +78,6 @@ Sandbox area:
 > 3. change to `git clone -b 1.0`
 
 ```shell
-gh secret set GIT_USERNAME -b"${GITHUB_USERNAME}" --org=${GITHUB_ORG} --repos ${GITHUB_ORG}/cat-service
+gh secret set GIT_USERNAME -b"${GITHUB_USER}" --org=${GITHUB_ORG} --repos ${GITHUB_ORG}/cat-service
 gh secret set GIT_PASSWORD
 ```

@@ -98,7 +98,7 @@ You can use the token you set in the GITHUB_TOKEN environment variable earlier i
 Create a secret to enable ArgoCD Image Updater to push to your GitHub ops repository.
 ```execute-1
 kubectl create secret generic gitcred \
-    --from-literal=username=$GITHUB_USERNAME \
+    --from-literal=username=$GITHUB_USER \
     --from-literal=password=$GITHUB_TOKEN \
     -n argocd
 ```
