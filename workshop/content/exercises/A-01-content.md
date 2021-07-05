@@ -14,7 +14,7 @@ You will need a [GitHub account](https://github.com) and a [personal access toke
 
 Run the following commands and enter the appropriate values at the prompts.
 ```execute-1
-sh set-credentials.sh
+source set-credentials.sh
 ```
 
 ### GitHub repositories
@@ -32,7 +32,7 @@ The following script will:
 - Fork the `cat-service-release` repo, which will contain a copy of `cat-release`, once `cat-release` has passed all testing.
 - Fork `cat-service-release-ops`, which contains the files for automating the deployment workflow.
 ```shell
-sh fork-repos.sh
+source fork-repos.sh
 ```
 
 At this point, you should see three new repositories in your GitHub org.
