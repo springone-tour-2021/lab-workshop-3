@@ -1,25 +1,8 @@
-## Run locally
-
-### Cats, Cats, Everywhere
-
-Throughout this workshop, you will be using an application that returns cat names and ages.
-
-The application comprises a Spring Boot app and a database:
-- cat-service - Exposes an enpoint "/cats/{name}" and returns the cat's name and age in months.
-- cat-postgres - Stores the names and birth dates of cats.
-
 ### Run the app locally
 
 Let's begin by running the application locally to understand its behavior.
 
-> TODO: change to `git clone -b 1.0`
-
-Start by cloning the application:
-```execute-1
-git clone https://github.com/booternetes-III-springonetour-july-2021/cat-service.git
-```
-
-Navigate into the cloned repo in both terminal windows.
+In both terminal windows, navigate into the app repo that you cloned & forked earlier.
 ```execute-all
 cd cat-service
 ```
@@ -41,7 +24,33 @@ drwxr-xr-x  3 eduk8s  root     96 Jul  3 22:01 bin
 drwxr-xr-x  4 eduk8s  root    128 Jul  3 22:01 src
 ```
 
-> TODO: Add steps to start app and test rest controller
+Start a postgres database.
+> Note: TODO - is this correct? the app is not connecting in the next step...
+```execute-1
+docker run -d --rm --name my-postgres -p 5432:5432 -e POSTGRES_USER=bk -e PGUSER=bk -e POSTGRES_PASSWORD=bk postgres:latest
+```
+
+Then, in terminal 2, start the app.
+```execute-1
+./mvnw spring-boot:run
+```
+
+Send a request.
+```execute-1
+http :8080/cats/Toby
+```
+
+You should see a successful response including Tobys' age in months.
+
+### Stop the app
+
+Stop the app and the database.
+```execute-2
+<ctrl-c>
+
+docker stop my-postgres
+```
+
 
 ## Next Steps
 

@@ -4,14 +4,16 @@ modules:
     activate:
     - workshop-overview
     - setup-environment
-    - exercises/01-content
-    - exercises/02-content
-    - exercises/03-content
-    - exercises/04-content
-    - exercises/05-content
-    - exercises/06-content
-    - exercises/07-content
-    - exercises/08-content
-    - exercises/09-content
-    - exercises/10-content
+    - exercises/A-01-content
+    - exercises/A-02-content
+    - exercises/B-01-content
+    - exercises/B-02-content
+    - exercises/B-03-content
+    - exercises/C-01-content
+    - exercises/C-02-content
+    - exercises/D-01-content
+    - exercises/D-02-content
+    - exercises/D-03-content
+    - exercises/D-04-content
+    - exercises/E-01-content
     - workshop-summary

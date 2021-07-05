@@ -22,15 +22,7 @@ To deploy the application to Kubernetes, you need:
 
 For this workshop, the necessary manifests are provided in a separate `ops` repository.
 
-> TODO: Change to `git clone -b 1.0`
-
-Clone the ops repo:
-```execute-1
-cd ~
-git clone https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops.git
-```
-
-Navigate into the cloned repo.
+Navigate into the `cat-service-release-ops` repo that you cloned & forked earlier.
 ```execute-1
 cd ~/cat-service-release-ops
 ```
@@ -194,7 +186,7 @@ http :8080/cats/Toby
 
 Stop the port-forwarding process.
 ```execute-2
-Ctrl-C
+<ctrl-c>
 ```
 
 #### Cleanup
@@ -210,4 +202,4 @@ kubectl delete namepace dev
 Optionally, you can repeat the steps in this exercise, using the prod namespace and the prod overlay.
 
 ## Next Steps
-In the enxt steps, you will automate the test, build, and deployment of the application.
+In the next steps, you will automate the test, build, and deployment of the application.
