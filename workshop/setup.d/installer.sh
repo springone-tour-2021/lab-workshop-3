@@ -8,15 +8,15 @@ echo "### Finished configuring git global settings"
 echo "### Installing hub CLI"
 HUB_VERSION=2.14.2
 curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz | tar zx && \
-     ./hub-linux-amd64-$HUB_VERSION/install && \
+     mv ./hub-linux-amd64-${HUB_VERSION}/bin/hub /home/eduk8s/bin && \
      rm -rf hub-linux-amd64-$HUB_VERSION
 echo "### Finished installing hub CLI"
 
 echo "### Installing argocd CLI"
 #ARGOCD_VERSION=2.0.4
-#https://github.com/argoproj/argo-cd/releases/download/v2.0.4/argocd-linux-amd64
+#https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-linux-amd64
 VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-curl -sSL -o /home/eduk8s/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
+curl -sSL -o /home/eduk8s/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${VERSION}/argocd-linux-amd64
 chmod +x /home/eduk8s/bin/argocd
 echo "### Finished installing argocd CLI"
 
