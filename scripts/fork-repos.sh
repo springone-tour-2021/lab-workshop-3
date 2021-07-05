@@ -7,7 +7,7 @@ error_flag=0
 
 for repo in "${repos[@]}"
 do
-  git ls-remote https://github.com/${GITHUB_ORG}/${repo} &>/dev/null
+  git ls-remote https://$GITHUB_TOKEN:x-oauth-basic@github.com/${GITHUB_ORG}/${repo} &>/dev/null
   error_code=$?
   if [[ $error_code == 0 ]]; then
     error_flag=1
@@ -30,8 +30,8 @@ fi
 # cat-service
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service && cd cat-service
 hub fork --remote-name origin
-sed -i '' "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
-sed -i '' "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
+sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
+sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
 git add .github/workflows/deploy.sh
 git commit -m "Update GitHub org. Use mvn package instead of deploy."
 git push --set-upstream origin main
