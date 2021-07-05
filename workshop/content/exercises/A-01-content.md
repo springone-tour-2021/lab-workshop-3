@@ -18,7 +18,7 @@ Make sure you have those ready before proceeding.
 
 Run the following command and enter the appropriate values at the prompts.
 ```execute-1
-source set-credentials.sh
+source scripts/set-credentials.sh
 ```
 
 Make sure the output of the script indicates that the environment variables were properly set.
@@ -35,7 +35,7 @@ A script is provided to fork the repos into your own GitHub org and update refer
 
 Run the following command.
 ```execute-1
-source fork-repos.sh
+source scripts/fork-repos.sh
 ```
 
 At this point, you should see three new repositories in your GitHub org.
