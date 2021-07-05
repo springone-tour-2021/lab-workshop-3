@@ -20,8 +20,8 @@ if [[ $error_flag == 1 ]]; then
   echo "!!!!! ERROR !!!!!"
   echo
   echo "Please delete the existing repositories and re-run this script."
-  echo "You can delete the repos from the GitHub UI, or by typing:"
-  echo "  hub delete ${GITHUB_ORG}/<repo-name>"
+  echo "You can delete the repos from https://github.com/${GITHUB_ORG}, or by typing:"
+  echo "  hub delete ${GITHUB_ORG}/<repo-name> (requires delete_repo rights)"
   return
 fi
 
