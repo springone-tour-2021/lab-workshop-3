@@ -14,16 +14,7 @@ You will need a [GitHub account](https://github.com) and a [personal access toke
 
 Run the following commands and enter the appropriate values at the prompts.
 ```execute-1
-echo -n "Enter your GitHub username [${GITHUB_USERNAME}]: " && read GITHUB_USERNAME
-export GITHUB_USERNAME
-
-echo -n "Enter your GitHub auth token: " && read -s GITHUB_TOKEN || { stty -echo; read GITHUB_TOKEN; stty echo; }
-export GITHUB_TOKEN
-echo
-
-echo -n "Enter your GitHub org name [${GITHUB_USERNAME}]: " && read GITHUB_ORG
-GITHUB_ORG="${GITHUB_ORG:-$GITHUB_USERNAME}"
-export GITHUB_ORG
+sh set-credentials.sh
 ```
 
 ### GitHub repositories
@@ -36,79 +27,18 @@ The following action blocks will fork the workshop repos into your own GitHub or
 
 > TODO: change to `git clone -b 1.0`
 
-First, fork the app repo, `cat-service`.
+The following script will:
+- Fork the app repo, `cat-service`
+- Fork the `cat-service-release` repo, which will contain a copy of `cat-release`, once `cat-release` has passed all testing.
+- Fork `cat-service-release-ops`, which contains the files for automating the deployment workflow.
 ```shell
-export REPO=cat-service
-# Clone and fork repo. Set branch as main.
-git ls-remote https://github.com/${GITHUB_ORG}/${REPO} &>/dev/null
-exit_code=$?
-if [[ $exit_code == 0 ]]; then
-    echo -e "Repository https://github.com/booternetes-III-springonetour-july-2021/${REPO} exists."
-    echo -e "Please delete it, and then re-run this script."
-    echo -e "You can delete the repo from the GitHub UI, or by typing:"
-    echo -e "  hub delete ${GITHUB_ORG}/${REPO} -y"
-else
-    hub clone https://github.com/booternetes-III-springonetour-july-2021/${REPO} && cd ${REPO}
-    hub fork --remote-name origin
-    sed -i '' "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
-    sed -i '' "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
-    git add .github/workflows/deploy.sh
-    git commit -m "Update GitHub org. Use mvn package instead of deploy."
-    git push --set-upstream origin main
-    cd ..
-fi
+sh fork-repos.sh
 ```
 
-Next, fork the `cat-service-release` repo, which will contain a copy of `cat-release`, once `cat-release` has passed all testing.
-```shell
-export REPO=cat-service-release
-# Clone and fork repo. Set branch as main.
-git ls-remote https://github.com/${GITHUB_ORG}/${REPO} &>/dev/null
-exit_code=$?
-if [[ $exit_code == 0 ]]; then
-    echo -e "Repository https://github.com/booternetes-III-springonetour-july-2021/${REPO} exists."
-    echo -e "Please delete it, and then re-run this script."
-    echo -e "You can delete the repo from the GitHub UI, or by typing:"
-    echo -e "  hub delete ${GITHUB_ORG}/${REPO} -y"
-else
-    hub clone https://github.com/booternetes-III-springonetour-july-2021/${REPO} \
-      && cd ${REPO} \
-      && hub fork --remote-name origin \
-      && cd .. \
-      && rm -rf ${REPO}
-fi
-```
-
-Finally, fork `cat-service-release-ops`, which contains the files for automating the deployment workflow.
-```shell
-export REPO=cat-service-release-ops
-# Clone and fork repo. Set branch as main.
-git ls-remote https://github.com/${GITHUB_ORG}/${REPO} &>/dev/null
-exit_code=$?
-if [[ $exit_code == 0 ]]; then
-    echo -e "Repository https://github.com/booternetes-III-springonetour-july-2021/${REPO} exists."
-    echo -e "Please delete it, and then re-run this script."
-    echo -e "You can delete the repo from the GitHub UI, or by typing:"
-    echo -e "  hub delete ${GITHUB_ORG}/${REPO} -y"
-else
-    hub clone https://github.com/booternetes-III-springonetour-july-2021/${REPO} && cd ${REPO}
-    hub fork --remote-name origin
-    rm *.sh
-    rm manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
-	rm manifests/overlays/prod/.argocd-source-prod-cat-service.yaml
-    find . -name *.yaml -exec sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" {} +
-    find . -name *.yaml -exec sed -i "s/gcr\.io\/pgtm-jlong/${REGISTRY_HOST}/g" {} +
-    git add -A
-    git commit -m "Update GitHub org and Docker registry. Remove unnecessary files."
-    git push --set-upstream origin main
-    cd ..
-fi
-```
-
-At this point, you should see three new repositories in your org.
+At this point, you should see three new repositories in your GitHub org.
 - `cat-service` contains the application code
-- `cat-servicerelease` contains a copy the application code, tested and ready for deployment to prod
-- `cat-service` contains the Kubernetes deployment manifests, as well as files to set up the automated deployment workflow
+- `cat-service-release` contains a copy the application code, tested and ready for deployment to prod
+- `cat-service-release-ops` contains the Kubernetes deployment manifests, as well as files to set up the automated deployment workflow
 
 You do not need to understand the contents of these repos yet. 
 You will go through them as you proceed through this workshop.
