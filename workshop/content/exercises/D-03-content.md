@@ -112,7 +112,7 @@ Leave the default option to "Commit directly to the main branch." and click on t
 Return to the ArgoCD UI and watch ArgoCD automatically apply the change to the cluster.
 
 Now try deleting the cat-service deployment in the dev namespace.
-```shell
+```execute-1
 kubectl delete deployment dev-cat-service -n dev
 ```
 

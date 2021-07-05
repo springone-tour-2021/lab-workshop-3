@@ -25,20 +25,13 @@ Make sure the output of the script indicates that the environment variables were
 
 ### GitHub repositories
 
-The workshop requires three(3) GitHub repositories:
+The workshop requires three GitHub repositories:
 - **cat-service** - source code for the cat application and files to automate testing
 - **cat-service-release** - copy of the cat application source code, once it has passed testing
 - **cat-service-release-ops** - files needed to automate deployment of cat application and postgres db
 
-The following action blocks will fork the workshop repos into your own GitHub org and make some changes to ensure references are pointing to your GitHub org and this workshop instance's Docker registry.
-> Note: These commands use the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USERNAME and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
-
-> TODO: 
-> 1. Update to us [gh](https://github.com/cli/cli) instead of hub ????
-> 
-> 2. Figure out how to use gh help secret set
-> 
-> 3. change to `git clone -b 1.0`
+A script is provided to fork the repos into your own GitHub org and update references to point to your GitHub org and this workshop instance's Docker registry.
+> Note: This script uses the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USERNAME and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
 
 Run the following command.
 ```execute-1
@@ -76,6 +69,14 @@ To enable GitHub Actions to push the tested `cat-service` code to `cat-service-r
 ---
 
 Sandbox area:
+
+> TODO:
+> 1. Update to us [gh](https://github.com/cli/cli) instead of hub ????
+>
+> 2. Figure out how to use gh help secret set
+>
+> 3. change to `git clone -b 1.0`
+
 ```shell
 gh secret set GIT_USERNAME -b"${GITHUB_USERNAME}" --org=${GITHUB_ORG} --repos ${GITHUB_ORG}/cat-service
 gh secret set GIT_PASSWORD
