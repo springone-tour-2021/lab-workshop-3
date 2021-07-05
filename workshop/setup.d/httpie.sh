@@ -4,6 +4,6 @@ virtualenv /home/eduk8s/bin/httpie
 source /home/eduk8s/bin/httpie/bin/activate
 pip install httpie
 deactivate
-echo 'alias http="/home/eduk8s/bin/httpie/bin/http"' >> ~/.bash_profile
-source ~/.bash_profile
-clear
+
+# Make sure the following line is in the file workshop/profile
+#echo 'alias http="/home/eduk8s/bin/httpie/bin/http"' >> ~/.bash_profile

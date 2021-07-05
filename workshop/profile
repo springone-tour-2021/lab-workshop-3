@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo 'export PS1_OLD="$PS1"' >> ~/.bash_profile
+echo 'export PS1="\n\[\033[33m\]\w\$ \[\033[0m\]"' >> ~/.bash_profile
+
+# The following works in combination with workshop/setup.d/httpie.sh
+echo 'alias http="/home/eduk8s/bin/httpie/bin/http"' >> ~/.bash_profile
