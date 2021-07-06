@@ -1,8 +1,9 @@
 #!/usr/bin/bash
 
-echo -e "\nCheck to see if repos exist"
-
 repos=('cat-service' 'cat-service-release' 'cat-service-release-ops')
+
+# Check to see if repositories exist in the GitHub org specified as ${GITHUB_ORG}
+echo -e "\nCheck to see if repos exist"
 error_flag=0
 
 for repo in "${repos[@]}"
@@ -22,6 +23,29 @@ if [[ $error_flag == 1 ]]; then
   echo "  hub delete ${GITHUB_ORG}/<repo-name> (requires delete_repo rights)"
   return
 fi
+
+# Check to see if local directories for the repos exist
+echo -e "\nCheck to see if local directories exist"
+error_flag=0
+for repo in "${repos[@]}"
+do
+  if [ -d "${repo}" ] ; then
+    error_flag=1
+    echo "ERROR: Directory ${repo} already exists."
+  fi
+done
+
+if [[ $error_flag == 1 ]]; then
+  echo -e "\n!!!!! ERROR !!!!!\n"
+  echo "Please delete the existing directories and re-run this script."
+  echo "You can delete the directories by typing:"
+  echo "  rm -rf <dir-name>"
+  return
+fi
+
+# Clone and fork the three repos.
+# Make changes to the references to GitHub and Docker registry
+# Push changes to GitHub
 
 echo -e "\nClone, fork and modify repo: cat-service"
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service && cd cat-service
