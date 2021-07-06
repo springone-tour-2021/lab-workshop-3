@@ -41,4 +41,3 @@ deactivate
 #alias http="/home/eduk8s/bin/httpie/bin/http"
 echo "### Finished installing httpie CLI"
 
-clear
