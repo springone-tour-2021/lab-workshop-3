@@ -32,7 +32,7 @@ docker run -d --rm --name my-postgres -p 5432:5432 -e POSTGRES_USER=bk -e PGUSER
 Then, in terminal 2, start the app.
 ```execute-2
 ./mvnw spring-boot:run \
-       -Dspring-boot.run.arguments=--spring.datasource.url="jdbc:postgresql://localhost/bk"
+      -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
 ```
 
 Send a request.
