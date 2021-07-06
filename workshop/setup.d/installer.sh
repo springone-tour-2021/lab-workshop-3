@@ -15,8 +15,15 @@ echo -e "\n### Installing hub CLI"
 HUB_VERSION=2.14.2
 curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz | tar zx && \
      mv hub-linux-amd64-2.14.2/bin/hub /home/eduk8s/bin/ && \
-     rm -rf hub-linux-amd64-$HUB_VERSION
+     rm -rf hub-linux-amd64-${HUB_VERSION}
 echo "### Finished installing hub CLI"
+
+echo -e "\n### Installing gh CLI"
+GH_VERSION=1.12.1
+curl -L https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz | tar zx && \
+     mv gh_${GH_VERSION}_linux_amd64/bin/gh /home/eduk8s/bin/ && \
+     rm -rf gh_${GH_VERSION}_linux_amd64
+echo "### Finished installing gh CLI"
 
 echo -e "\n### Installing argocd CLI"
 #ARGOCD_VERSION=2.0.4

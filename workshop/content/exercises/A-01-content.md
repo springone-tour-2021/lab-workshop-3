@@ -56,7 +56,11 @@ url: https://github.com/${GITHUB_ORG}/cat-service
 > 
 Open the repo in your browser.
 ```dashboard:open-url
-url: https://github.com/${GITHUB_ORG}/cat-service
+url: https://github.com/{{ ENV_GITHUB_ORG }}/cat-service
+```
+
+```dashboard:open-url
+url: https://github.com/{{ GITHUB_ORG }}/cat-service
 ```
 
 To enable GitHub Actions to push the tested `cat-service` code to `cat-service-release`:
