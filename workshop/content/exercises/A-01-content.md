@@ -41,16 +41,8 @@ source scripts/repos.sh
 In a browser, open [GitHub](https://github.com), and navigate to the list of repositories in your org.
 You should see three new repositories:
 - `cat-service` - the application code and testing automation files
-- `cat-service-release` - copy of the application code, tested and ready to deploy
+- `cat-service-release` - empty for now; tested code will be copied here
 - `cat-service-release-ops` - deployment files and deployment automation files
 
 You do not need to understand the contents of these repos yet. 
 You will go through them as you proceed through this workshop.
-
-### GitHub Actions secrets
-
-The last configuration detail to set up is adding credentials to `cat-service` so that the GitHub Actions in `cat-service` can push a copy of the tested code to `cat-service-release`. To do this:
-- In your browser, navigate to the `cat-service` repository
-- Navigate to Settings -> Secrets -> New repository secret.
-- Create a secret called GIT_USERNAME with your GitHub username as the value
-- Create another secret called GIT_PASSWORD with your access token as the value
