@@ -12,7 +12,7 @@ echo "### Finished configuring git global settings"
 echo -e "\n### Installing hub CLI"
 HUB_VERSION=2.14.2
 curl -L https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz | tar zx && \
-     mv ./hub-linux-amd64-${HUB_VERSION}/bin/hub /home/eduk8s/bin/hub && \
+     mv hub-linux-amd64-2.14.2/bin/hub /home/eduk8s/bin/ && \
      rm -rf hub-linux-amd64-$HUB_VERSION
 echo "### Finished installing hub CLI"
 
