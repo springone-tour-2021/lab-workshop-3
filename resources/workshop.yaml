@@ -11,7 +11,7 @@ spec:
   url: https://github.com/springone-tour-2021/lab-workshop-3
   content:
     image: quay.io/eduk8s/jdk11-environment:latest
-    files: github.com/springone-tour-2021/lab-workshop-3
+    files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
     namespaces:
       budget: small
@@ -22,4 +22,8 @@ spec:
       console:
         enabled: true
       editor:
+        enabled: true
+      registry:
+        enabled: true
+      docker:
         enabled: true
