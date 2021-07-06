@@ -1,6 +1,5 @@
-#!/bin/bash
-
-{
+#!/bin/bash -x
+exec 1>installer.log 2>&1
 
 echo -e "\n### Configuring git global settings"
 git config --global hub.protocol https
@@ -41,7 +40,5 @@ deactivate
 # Make sure the following line is in the file workshop/profile
 #alias http="/home/eduk8s/bin/httpie/bin/http"
 echo "### Finished installing httpie CLI"
-
-} 2>&1 | tee installer.log
 
 clear
