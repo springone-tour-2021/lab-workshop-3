@@ -33,6 +33,6 @@ deactivate
 #alias http="/home/eduk8s/bin/httpie/bin/http"
 echo "### Finished installing httpie CLI"
 
-clear
-
 } 2>&1 | tee installer.log
+
+clear
