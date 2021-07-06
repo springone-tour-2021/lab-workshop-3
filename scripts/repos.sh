@@ -54,14 +54,16 @@ git branch --set-upstream-to origin/main
 sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
 sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
 git add .github/workflows/deploy.sh
+echo -e "\nPushing changes to repo: cat-service"
+git diff
+echo
 git commit -m "Update GitHub org. Use mvn package instead of deploy."
 git push --set-upstream origin main
 cd ..
 
-echo -e "\nClone, fork and modify repo: cat-service-release"
-hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service-release && cd cat-service-release
-hub fork --remote-name origin
-git branch --set-upstream-to origin/release
+echo -e "\nInitialize repo: cat-service-release"
+hub init cat-service-release && cd cat-service-release
+hub create
 cd ..
 rm -rf cat-service-release
 
@@ -75,6 +77,9 @@ rm manifests/overlays/prod/.argocd-source-prod-cat-service.yaml
 find . -name *.yaml -exec sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" {} +
 find . -name *.yaml -exec sed -i "s/gcr\.io\/pgtm-jlong/${REGISTRY_HOST}/g" {} +
 git add -A
+echo -e "\nPushing changes to repo: cat-service-release-ops"
+git diff
+echo
 git commit -m "Update GitHub org and Docker registry. Remove unnecessary files."
 git push --set-upstream origin main
 cd ..

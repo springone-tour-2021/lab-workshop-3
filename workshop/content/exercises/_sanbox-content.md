@@ -9,5 +9,9 @@ Sandbox area:
 
 ```shell
 gh secret set GIT_USERNAME -b"${GITHUB_USER}" --org=${GITHUB_ORG} --repos ${GITHUB_ORG}/cat-service
+
+GOT:
+failed to fetch public key: HTTP 404: Not Found (https://api.github.com/orgs/ciberkleid/actions/secrets/public-key)
+
 gh secret set GIT_PASSWORD
 ```
