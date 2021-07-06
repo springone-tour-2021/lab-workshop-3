@@ -35,4 +35,4 @@ echo "### Finished installing httpie CLI"
 
 clear
 
-} > 2>&1 | tee installer.log
+} 2>&1 | tee installer.log
