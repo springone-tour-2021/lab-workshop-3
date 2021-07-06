@@ -39,5 +39,5 @@ modules:
         exit_sign: Finish Workshop
 config:
     vars:
-        - name: GITHUB_ORG
+    - name: GITHUB_ORG
     value: undefined
