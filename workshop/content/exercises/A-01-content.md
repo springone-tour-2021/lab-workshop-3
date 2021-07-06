@@ -38,50 +38,19 @@ Run the following command.
 source scripts/fork-repos.sh
 ```
 
-At this point, you should see three new repositories in your GitHub org.
-- `cat-service` contains the application code
-- `cat-service-release` contains a copy the application code, tested and ready for deployment to prod
-- `cat-service-release-ops` contains the Kubernetes deployment manifests, as well as files to set up the automated deployment workflow
+In a browser, open [GitHub](https://github.com), and navigate to the list of repositories in your org.
+You should see three new repositories:
+- `cat-service` - the application code and testing automation files
+- `cat-service-release` - copy of the application code, tested and ready to deploy
+- `cat-service-release-ops` - deployment files and deployment automation files
 
 You do not need to understand the contents of these repos yet. 
 You will go through them as you proceed through this workshop.
 
-Before continuing, there is one additional change you need to make.
-Open the `cat-service` repository.
-```dashboard:open-url
-url: https://github.com/${GITHUB_ORG}/cat-service
-```
+### GitHub Actions secrets
 
-> TODO: Add instructions to guide user to adding the necessary env variables for the GitHub action. No need to include the artifactory ones.
-> 
-Open the repo in your browser.
-```dashboard:open-url
-url: https://github.com/{{ ENV_GITHUB_ORG }}/cat-service
-```
-
-```dashboard:open-url
-url: https://github.com/{{ GITHUB_ORG }}/cat-service
-```
-
-To enable GitHub Actions to push the tested `cat-service` code to `cat-service-release`:
+The last configuration detail to set up is adding credentials to `cat-service` so that the GitHub Actions in `cat-service` can push a copy of the tested code to `cat-service-release`. To do this:
+- In your browser, navigate to the `cat-service` repository
 - Navigate to Settings -> Secrets -> New repository secret.
-- Create a secret called GIT_USERNAME with your GitHub username
-- Create another secret called GIT_PASSWORD with your access token
-
----
----
----
-
-Sandbox area:
-
-> TODO:
-> 1. Update to us [gh](https://github.com/cli/cli) instead of hub ????
->
-> 2. Figure out how to use gh help secret set
->
-> 3. change to `git clone -b 1.0`
-
-```shell
-gh secret set GIT_USERNAME -b"${GITHUB_USER}" --org=${GITHUB_ORG} --repos ${GITHUB_ORG}/cat-service
-gh secret set GIT_PASSWORD
-```
+- Create a secret called GIT_USERNAME with your GitHub username as the value
+- Create another secret called GIT_PASSWORD with your access token as the value
