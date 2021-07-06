@@ -25,11 +25,16 @@ drwxr-xr-x 4 eduk8s root  4096 Jul  6 18:10 src
 ```
 
 Start a postgres database.
-```execute-1
-docker run -d --rm --name my-postgres -p 5432:5432 -e POSTGRES_USER=bk -e PGUSER=bk -e POSTGRES_PASSWORD=bk postgres:latest
+```execute-2
+docker run -d --rm --name my-postgres \
+       -p 5432:5432 \
+       -e POSTGRES_USER=bk \
+       -e PGUSER=bk \
+       -e POSTGRES_PASSWORD=bk \
+       postgres:latest
 ```
 
-Then, in terminal 2, start the app.
+Start the app.
 ```execute-2
 ./mvnw spring-boot:run \
       -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
@@ -50,7 +55,7 @@ Stop the app.
 ```
 
 Stop the database.
-```execute-1
+```execute-2
 docker stop my-postgres
 ```
 
