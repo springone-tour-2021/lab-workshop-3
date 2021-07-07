@@ -53,7 +53,6 @@ hub fork --remote-name origin
 git branch --set-upstream-to origin/main
 sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
 sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
-sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres.yaml
 git add .github/workflows/deploy.sh
 echo -e "\nPushing changes to repo: cat-service"
 git diff
@@ -81,6 +80,7 @@ find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPAC
 find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: kpack/namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: argocd/namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
+sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres.yaml
 git add -A
 echo -e "\nPushing changes to repo: cat-service-release-ops"
 git diff

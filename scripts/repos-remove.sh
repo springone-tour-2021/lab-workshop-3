@@ -6,7 +6,7 @@ if [[ ! "${GITHUB_USER}" == ""  && ! "${GITHUB_TOKEN}" == ""  && ! "${GITHUB_ORG
   hub delete "${GITHUB_ORG}"/cat-service-release -y
   hub delete "${GITHUB_ORG}"/cat-service-release-ops -y
   echo
-  echo "Deleting repos from GitHub."
+  echo "Deleting clone repo directories."
   rm -rf ~/cat-service
   rm -rf ~/cat-service-release
   rm -rf ~/cat-service-release-ops
