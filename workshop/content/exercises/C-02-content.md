@@ -139,7 +139,7 @@ kind: Kustomization
 resources:
   - ../../base/
 
-namespace: dev
+namespace: $SESSION_NAMESPACE-dev
 namePrefix: dev-
 ```
 
