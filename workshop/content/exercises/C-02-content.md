@@ -62,7 +62,7 @@ These enable the use of [kustomize](https://kustomize.io), a tool for composing 
 
 For clarity and simplicity, start by focusing only on the `manifests/base/app` directory.
 ```execute-all
-ls -l manifests/base/app
+tree manifests/base/app
 ```
 
 The deployment and service yaml files are the typical manifests for app deployments.
