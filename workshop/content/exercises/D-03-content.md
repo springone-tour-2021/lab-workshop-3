@@ -12,7 +12,6 @@ ArgoCD runs on Kubernetes. You will install it and configure it to ensure that t
 
 Install ArgoCD to the kubernetes cluster.
 ```execute-1
-kubectl create namespace $(session_namespace)-argocd
 kubectl apply -n $(session_namespace)-argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.0.4/manifests/install.yaml
 ```
 

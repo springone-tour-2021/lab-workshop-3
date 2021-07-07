@@ -10,7 +10,7 @@ The application comprises a Spring Boot app and a database:
 
 You will need:
 - A GitHub [account](https://github.com)
-- A GitHub [personal access token](https://helphub.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) (with "repo" and "workflow" access rights)
+- A GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) (with "repo" and "workflow" access rights)
   
 Make sure you have those ready before proceeding.
 

@@ -156,7 +156,6 @@ You should see three key differences:
 
 Deploy the application to the dev environment:
 ```execute-1
-kubectl create namespace $(session_namespace)-dev
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl apply -f -
 ```
 
@@ -194,7 +193,6 @@ Stop the port-forwarding process.
 To delete the dev deployment, run:
 ```execute-1
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl delete -f
-kubectl delete namepace dev
 ```
 
 #### Deploy to prod
