@@ -23,7 +23,7 @@ At this point, ArgoCD will detect the change to the ops repo and re-apply the ma
 
 Install argocd-image-updater to the kubernetes cluster.
 ```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/v0.9.5/manifests/install.yaml
+kubectl apply -n $SESSION_NAMESPACE-argocd -f ~/cat-service-release-ops/tooling/argocd-image-updater/install.yaml
 ```
 
 You can use the following command to validate that the installation has completed.
@@ -60,9 +60,9 @@ yq eval '.data."accounts.image-updater" = "apiKey"' \
 
 Create roles for new account.
 You can add RBAC permissions to Argo CD's argocd-rbac-cm ConfigMap and Argo CD will pick them up automatically.
-> NOTE: TODO: can also just use local path "tooling/argocd-image-updater-config/argocd-rbac-cm.yaml"
+
 ```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f "https://raw.githubusercontent.com/$GITHUB_ORG/cat-service-release-ops/main/tooling/argocd-image-updater-config/argocd-rbac-cm.yaml"
+kubectl apply -n $SESSION_NAMESPACE-argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
 ```
 
 Generate the API token.

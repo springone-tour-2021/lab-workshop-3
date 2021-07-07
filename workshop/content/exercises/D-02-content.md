@@ -11,7 +11,7 @@ kpack runs on Kubernetes. You will install it and configure it to monitor the ca
 
 Install kpack to the kubernetes cluster.
 ```execute-1
-kubectl apply -f https://github.com/pivotal/kpack/releases/download/v0.3.1/release-0.3.1.yaml
+kubectl apply -f ~/cat-service-release-ops/tooling/kpack/release.yaml
 ```
 
 You can use the following commands to validate that the installation has completed.
