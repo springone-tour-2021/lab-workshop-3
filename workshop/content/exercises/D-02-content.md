@@ -16,8 +16,8 @@ kubectl apply -f https://github.com/pivotal/kpack/releases/download/v0.3.1/relea
 
 You can use the following commands to validate that the installation has completed.
 ```execute-1
-kubectl rollout status deployment/kpack-controller -n kpack
-kubectl rollout status deployment/kpack-webhook -n kpack
+kubectl rollout status deployment/kpack-controller -n $(session_namespace)-kpack
+kubectl rollout status deployment/kpack-webhook -n $(session_namespace)-kpack
 ```
 
 Take a look at the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
@@ -76,7 +76,7 @@ kubectl apply -f ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
 
 Wait for builder to be ready
 ```execute-1
-kubectl get bldr booternetes-builder -n kpack -w
+kubectl get bldr booternetes-builder -n $(session_namespace)-kpack -w
 ```
 
 When the output shows a reference to a builder, run the following command to verify the new builder image is in the Docker registry.
@@ -104,13 +104,13 @@ kubectl apply ~/cat-service-release-ops/build/kpack-image.yaml
 You should immediately see a build resource for the first build of cat-service-release, as well as a pod, which is where the actual assembly of the image will be carried out.
 Check for both builds and pods.
 ```execute-1
-kubectl get builds,pods -n kpack
+kubectl get builds,pods -n $(session_namespace)-kpack
 ```
 
 Wait until the build returns `SUCCEEDED=True`.
 At that point you will also see the image reference in the output.
 ```execute-1
-kubectl get builds -n kpack -w
+kubectl get builds -n $(session_namespace)-kpack -w
 ```
 
 At this point, you can also check the Docker registry to confirm that the app image has been published.

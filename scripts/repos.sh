@@ -66,6 +66,7 @@ git diff
 echo
 git commit -m "Update GitHub org. Use mvn package instead of deploy."
 git push --set-upstream origin main
+echo -e "\nRemove non-main branches"
 git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..
 
@@ -96,5 +97,6 @@ git diff
 echo
 git commit -m "Update GitHub org and Docker registry. Remove unnecessary files."
 git push --set-upstream origin main
+echo -e "\nRemove non-main branches"
 git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..

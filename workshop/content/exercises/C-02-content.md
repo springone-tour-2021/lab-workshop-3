@@ -156,7 +156,7 @@ You should see three key differences:
 
 Deploy the application to the dev environment:
 ```execute-1
-kubectl create namepace dev
+kubectl create namespace $(session_namespace)-dev
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl apply -f -
 ```
 
@@ -165,14 +165,14 @@ Wait until the dev-cat-service pod is "Running" and the Ready coulmn specifies "
 > Note: the dev-cat-service pod may need to restart a few times.
 > This is because it fails when it cannot connect to the database, and since we are deploying both at the same time this first time, the app needs to wait until the database is ready before it can successfully start up.
 ```execute-1
-kubectl -n dev get pods --watch
+kubectl -n $(session_namespace)-dev get pods --watch
 ```
 
 #### Test the dev deployment
 
 In terminal 2, start a port-forwarding process so that you can send a request to the running application.
 ```execute-2
-kubectl port-forward service/dev-cat-service 8080:8080 -n dev
+kubectl port-forward service/dev-cat-service 8080:8080 -n $(session_namespace)-dev
 ```
 
 In terminal 1, send a couple of requests to the application.
