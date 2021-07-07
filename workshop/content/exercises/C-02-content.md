@@ -192,7 +192,7 @@ Stop the port-forwarding process.
 
 To delete the dev deployment, run:
 ```execute-1
-kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl delete -f
+kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl delete -f -
 ```
 
 #### Deploy to prod
