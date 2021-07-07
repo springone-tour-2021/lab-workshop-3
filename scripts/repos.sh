@@ -1,5 +1,11 @@
 #!/usr/bin/bash
 
+echo "Configuring git global settings"
+git config --global hub.protocol https
+git config --global credential.helper cache
+git config --global user.email "guest@example.com"
+git config --global user.name "Guest User"
+
 repos=('cat-service' 'cat-service-release' 'cat-service-release-ops')
 
 # Check to see if repositories exist in the GitHub org specified as ${GITHUB_ORG}
@@ -50,15 +56,18 @@ fi
 echo -e "\nClone, fork and modify repo: cat-service"
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service && cd cat-service
 hub fork --remote-name origin
+git remote remove upstream
 git branch --set-upstream-to origin/main
 sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
-sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
+sed -i "s/mvn clean deploy/mvn clean verify/g" .github/workflows/deploy.sh
 git add .github/workflows/deploy.sh
 echo -e "\nPushing changes to repo: cat-service"
 git diff
 echo
 git commit -m "Update GitHub org. Use mvn package instead of deploy."
 git push --set-upstream origin main
+echo -e "\nRemove non-main branches"
+git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..
 
 echo -e "\nInitialize repo: cat-service-release"
@@ -70,16 +79,26 @@ rm -rf cat-service-release
 echo -e "\nClone, fork and modify repo: cat-service-release-ops"
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops && cd cat-service-release-ops
 hub fork --remote-name origin
+git remote remove upstream
 git branch --set-upstream-to origin/main
 rm *.sh
 rm manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
 rm manifests/overlays/prod/.argocd-source-prod-cat-service.yaml
 find . -name *.yaml -exec sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" {} +
 find . -name *.yaml -exec sed -i "s/gcr\.io\/pgtm-jlong/${REGISTRY_HOST}/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPACE}-dev/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: kpack/namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: argocd/namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
+#sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres-store.yaml
+sed -i "s/  - postgres-store.yaml//g" manifests/base/db/kustomization.yaml
+rm manifests/base/db/postgres-store.yaml
 git add -A
 echo -e "\nPushing changes to repo: cat-service-release-ops"
 git diff
 echo
 git commit -m "Update GitHub org and Docker registry. Remove unnecessary files."
 git push --set-upstream origin main
+echo -e "\nRemove non-main branches"
+git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..

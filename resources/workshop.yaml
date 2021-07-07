@@ -13,10 +13,19 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
+    config:
+      vars:
+        - name: GITHUB_ORG
+          value: undefined
     namespaces:
-      budget: small
+      budget: large
       secondary:
-          - name: $(session_namespace)-dev
+        - name: $(session_namespace)-dev
+        - name: $(session_namespace)-prod
+        - name: $(session_namespace)-kpack
+        - name: $(session_namespace)-argocd
+#    resources:
+#      memory: 1.7Gi
     applications:
       terminal:
         enabled: true
@@ -29,3 +38,71 @@ spec:
         enabled: true
       docker:
         enabled: true
+    objects:
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: Role
+        metadata:
+          name: kpack-user
+        rules:
+          - apiGroups:
+              - kpack.io
+            resources:
+              - clusterbuilders
+              - clusterstacks
+              - clusterstores
+              - builders
+              - builds
+              - images
+              - sourceresolvers
+            verbs:
+              - get
+              - list
+              - watch
+              - create
+              - delete
+              - patch
+              - update
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
+        metadata:
+          name: kpack-user
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: Role
+          name: kpack-user
+        subjects:
+          - kind: ServiceAccount
+#              namespace: $(workshop_namespace)
+            namespace: $(session_namespace)-kpack
+            name: $(service_account)
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: Role
+        metadata:
+          name: argocd-user
+        rules:
+          - apiGroups:
+              - argoproj.io
+            resources:
+              - applications
+              - appprojects
+            verbs:
+              - get
+              - list
+              - watch
+              - create
+              - delete
+              - patch
+              - update
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
+        metadata:
+          name: argocd-user
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: Role
+          name: argocd-user
+        subjects:
+          - kind: ServiceAccount
+            #              namespace: $(workshop_namespace)
+            namespace: $(session_namespace)-argocd
+            name: $(service_account)

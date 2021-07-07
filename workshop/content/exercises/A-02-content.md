@@ -25,7 +25,8 @@ drwxr-xr-x 4 eduk8s root  4096 Jul  6 18:10 src
 ```
 
 Start a postgres database.
-```execute-2
+The container will run on docker in detached mode (aka in the background).
+```execute-1
 docker run -d --rm --name my-postgres \
        -p 5432:5432 \
        -e POSTGRES_USER=bk \
@@ -34,10 +35,16 @@ docker run -d --rm --name my-postgres \
        postgres:latest
 ```
 
-Start the app.
+In the second terminal, start the app.
+App startup may take a couple of minutes as Java dependencies are downloaded for the first time.
 ```execute-2
 ./mvnw spring-boot:run \
       -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
+```
+
+When the app has started, you will see the last line of logging as follows:
+```
+Application availability state ReadinessState changed to ACCEPTING_TRAFFIC
 ```
 
 Send a request.

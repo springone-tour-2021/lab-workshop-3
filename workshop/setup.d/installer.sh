@@ -1,13 +1,6 @@
 #!/bin/bash -x
 exec 1>installer.log 2>&1
 
-echo -e "\n### Configuring git global settings"
-git config --global hub.protocol https
-git config --global credential.helper cache
-git config --global user.email "guest@example.com"
-git config --global user.name "Guest User"
-echo "### Finished configuring git global settings"
-
 mkdir -p /home/eduk8s/bin
 
 echo -e "\n### Installing hub CLI"
