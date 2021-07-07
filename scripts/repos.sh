@@ -90,7 +90,9 @@ find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPAC
 find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: kpack/namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: argocd/namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
-sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres.yaml
+#sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres-store.yaml
+sed -i "s/  - postgres-store.yaml//g" manifests/base/db/kustomization.yaml
+rm manifests/base/db/postgres-store.yaml
 git add -A
 echo -e "\nPushing changes to repo: cat-service-release-ops"
 git diff
