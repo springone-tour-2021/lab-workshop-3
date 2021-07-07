@@ -167,6 +167,11 @@ Wait until the dev-cat-service pod is "Running" and the Ready coulmn specifies "
 kubectl -n $SESSION_NAMESPACE-dev get pods --watch
 ```
 
+When the cat-service pod is ready (STATUS=Running and READY=1/1), stop the watch process.
+```execute-1
+<ctrl-c>
+```
+
 #### Test the dev deployment
 
 In terminal 2, start a port-forwarding process so that you can send a request to the running application.
