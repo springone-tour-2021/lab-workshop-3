@@ -14,9 +14,9 @@ You can skip tests since you already verified that tests pass in the previous ex
 ./mvnw spring-boot:build-image -DskipTests
 ```
 
-Scroll through the output in the console until you find the following line.
-We won't go into the meaning of this line now, but make a mental note of it.
-We will come back to it in a later exercise.
+Notice the following line in the  output in the console.
+Make a mental note of it.
+We will come back to it later in the workshop.
 ```
 [INFO]  > Pulling builder image 'docker.io/paketobuildpacks/builder:base' 100%
 ```
