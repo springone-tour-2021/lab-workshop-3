@@ -77,10 +77,10 @@ rm manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
 rm manifests/overlays/prod/.argocd-source-prod-cat-service.yaml
 find . -name *.yaml -exec sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" {} +
 find . -name *.yaml -exec sed -i "s/gcr\.io\/pgtm-jlong/${REGISTRY_HOST}/g" {} +
-find . -name *.yaml -exec sed -i "s/namespace: /namespace: ${SESSION_NAMESPACE}-dev/g" {} +
-find . -name *.yaml -exec sed -i "s/namespace: /namespace: ${SESSION_NAMESPACE}-prod/g" {} +
-find . -name *.yaml -exec sed -i "s/namespace: /namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
-find . -name *.yaml -exec sed -i "s/namespace: /namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPACE}-dev/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: kpack/namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
+find . -name *.yaml -exec sed -i "s/namespace: argocd/namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
 git add -A
 echo -e "\nPushing changes to repo: cat-service-release-ops"
 git diff
