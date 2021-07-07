@@ -59,7 +59,7 @@ hub fork --remote-name origin
 git remote remove upstream
 git branch --set-upstream-to origin/main
 sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
-sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
+sed -i "s/mvn clean deploy/mvn clean verify/g" .github/workflows/deploy.sh
 git add .github/workflows/deploy.sh
 echo -e "\nPushing changes to repo: cat-service"
 git diff
