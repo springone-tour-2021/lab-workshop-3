@@ -112,6 +112,10 @@ url: https://github.com/{{ github_org }}/cat-service-release-ops/blob/main/manif
 url: https://github.com/{{ GITHUB_ORG }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
 ```
 
+```dashboard:open-url
+url: https://github.com/{{ ENV_GITHUB_ORG }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
+```
+
 Click the pencil icon on the right to edit the file.
 Change the value of the replicas count by 1 (from 1 to 2, or 2 to 1, as appropriate).
 Leave the default option to "Commit directly to the main branch." and click on the "Commit changes" button.
