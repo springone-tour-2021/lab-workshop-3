@@ -10,7 +10,7 @@
 ### Review GitHub Actions definitions
 
 Key to automate:
-test and ensure app builds (mvn clean package)
+test and ensure app builds (mvn clean verify)
 and container builds (could do spring-boot:build-image, but will do it with a more specialized tool in the next exercise)
 
 Dilema:
@@ -37,6 +37,20 @@ The last configuration detail to set up is adding credentials to `cat-service` s
 - Navigate to Settings -> Secrets -> New repository secret.
 - Create a secret called GIT_USERNAME with your GitHub username as the value
 - Create another secret called GIT_PASSWORD with your access token as the value
+
+```dashboard:open-url
+url: https://github.com/{{ ENV_GITHUB_USER }}/cat-service/settings/secrets/actions
+```
+```dashboard:open-url
+url: https://github.com/{{ GITHUB_USER }}/cat-service/settings/secrets/actions
+```
+```dashboard:open-url
+url: https://github.com/{{ env_github_user }}/cat-service/settings/secrets/actions
+```
+```dashboard:open-url
+url: https://github.com/{{ github_user }}/cat-service/settings/secrets/actions
+```
+
 
 ### Try it out
 
