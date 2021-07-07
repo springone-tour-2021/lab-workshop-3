@@ -39,16 +39,16 @@ The last configuration detail to set up is adding credentials to `cat-service` s
 - Create another secret called GIT_PASSWORD with your access token as the value
 
 ```dashboard:open-url
-url: https://github.com/${GITHUB_USER}/cat-service/settings/secrets/actions
+url: https://github.com/{{GITHUB_USER}}/cat-service/settings/secrets/actions
 ```
 ```dashboard:open-url
-url: https://github.com/${GITHUB_USER}/cat-service/settings/secrets/actions
+url: https://github.com/{{GITHUB_USER}}/cat-service/settings/secrets/actions
 ```
 ```dashboard:open-url
-url: https://github.com/${GITHUB_USER}/cat-service/settings/secrets/actions
+url: https://github.com/{{GITHUB_USER}}/cat-service/settings/secrets/actions
 ```
 ```dashboard:open-url
-url: https://github.com/${GITHUB_USER}/cat-service/settings/secrets/actions
+url: https://github.com/{{GITHUB_USER}}/cat-service/settings/secrets/actions
 ```
 
 ## Enable GitHub Actions
