@@ -3,8 +3,8 @@
 echo "Configuring git global settings"
 git config --global hub.protocol https
 git config --global credential.helper cache
-git config --global user.email "guest@example.com"
-git config --global user.name "Guest User"
+git config --global user.email "<>"
+git config --global user.name "Booternetes Workshop User"
 
 repos=('cat-service' 'cat-service-release' 'cat-service-release-ops')
 
