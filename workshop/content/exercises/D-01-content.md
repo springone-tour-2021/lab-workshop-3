@@ -40,17 +40,9 @@ The last configuration detail to set up is adding credentials to `cat-service` s
 
 (may also be able to do this with gh CLI)
 
-```dashboard:open-url
-url: https://github.com/{{ ENV_GITHUB_USER }}/cat-service/settings/secrets/actions
-```
-```dashboard:open-url
-url: https://github.com/{{ GITHUB_USER }}/cat-service/settings/secrets/actions
-```
-```dashboard:open-url
-url: https://github.com/{{ env_github_user }}/cat-service/settings/secrets/actions
-```
-```dashboard:open-url
-url: https://github.com/{{ github_user }}/cat-service/settings/secrets/actions
+Run this command and click on the link in the terminal
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
 ```
 
 ## Enable GitHub Actions
@@ -58,7 +50,10 @@ url: https://github.com/{{ github_user }}/cat-service/settings/secrets/actions
 - In your browser, navigate to the `cat-service` repository
 - Navigate to Actions
 
-https://github.com/ciberkleid/cat-service/actions
+Run this command and click on the link in the terminal
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service/actions
+```
 
 Will see this image:
 ![alt_text](images/github-actions-enable-workflows.png "Enable GitHub Actions workflows")
@@ -71,7 +66,10 @@ Click on the button
 ### Try it out
 
 Show contents of cat-service-release before (empty)
-https://github.com/ciberkleid/cat-service-release
+Run this command and click on the link in the terminal
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service-release
+```
 
 #### Commit a change (can be a + sign in the bump file) and push the change to cat-service.
 
@@ -81,11 +79,17 @@ git commit -m "bump"
 git push
 
 Open again:
-https://github.com/ciberkleid/cat-service/actions
+Run this command and click on the link in the terminal
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service/actions
+```
 
 Drill in to see the logs
 
 #### Show contents of cat-service-release before (not empty)
 
 when the action workflow is done, check the following repo, notice the code was pushed
-https://github.com/ciberkleid/cat-service-release
+Run this command and click on the link in the terminal
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service-release
+```
