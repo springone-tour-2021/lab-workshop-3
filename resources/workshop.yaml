@@ -20,6 +20,10 @@ spec:
         - name: $(session_namespace)-prod
         - name: $(session_namespace)-kpack
         - name: $(session_namespace)-argocd
+    config:
+      vars:
+        - name: GITHUB_ORG
+        value: undefined
     applications:
       terminal:
         enabled: true
