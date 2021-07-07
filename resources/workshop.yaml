@@ -13,10 +13,6 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
-    config:
-      vars:
-        - name: GITHUB_ORG
-          value: undefined
     namespaces:
       budget: large
       secondary:

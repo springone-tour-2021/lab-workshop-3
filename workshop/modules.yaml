@@ -37,7 +37,3 @@ modules:
     workshop-summary:
         name: Workshop Summary
         exit_sign: Finish Workshop
-config:
-    vars:
-    - name: GITHUB_ORG
-    value: undefined
