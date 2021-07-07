@@ -7,6 +7,10 @@ minikube addons enable ingress-dns
 # Install operator
 kubectl apply -k "github.com/eduk8s/eduk8s?ref=master"
 
+# Install add-ons
+source ./install-cluster-add-ons.sh
+install_cluster_add_ons
+
 # Capture minikube ip
 IP=$(minikube ip)
 
