@@ -84,12 +84,19 @@ git branch --set-upstream-to origin/main
 rm *.sh
 rm manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
 rm manifests/overlays/prod/.argocd-source-prod-cat-service.yaml
+rm -rf tooling/kpack/
+rm -rf tooling/argocd/
+rm -rf tooling/argocd-image-installer/
+rm -rf tooling/kpack-config/stack.yaml
+rm -rf tooling/kpack-config/store.yaml
+rm -rf tooling/kpack-config/service-account.yaml
 find . -name *.yaml -exec sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" {} +
 find . -name *.yaml -exec sed -i "s/gcr\.io\/pgtm-jlong/${REGISTRY_HOST}/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPACE}-dev/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: kpack/namespace: ${SESSION_NAMESPACE}-kpack/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: argocd/namespace: ${SESSION_NAMESPACE}-argocd/g" {} +
+find . -name *.yaml -exec sed -i "s/serviceAccount: kpack-bot/serviceAccount: ${SERVICE_ACCOUNT}/g" {} +
 #sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres-store.yaml
 sed -i "s/  - postgres-store.yaml//g" manifests/base/db/kustomization.yaml
 rm manifests/base/db/postgres-store.yaml
