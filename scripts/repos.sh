@@ -1,5 +1,11 @@
 #!/usr/bin/bash
 
+echo "Configuring git global settings"
+git config --global hub.protocol https
+git config --global credential.helper cache
+git config --global user.email "guest@example.com"
+git config --global user.name "Guest User"
+
 repos=('cat-service' 'cat-service-release' 'cat-service-release-ops')
 
 # Check to see if repositories exist in the GitHub org specified as ${GITHUB_ORG}
@@ -50,6 +56,7 @@ fi
 echo -e "\nClone, fork and modify repo: cat-service"
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service && cd cat-service
 hub fork --remote-name origin
+git remote remove upstream
 git branch --set-upstream-to origin/main
 sed -i "s/booternetes-III-springonetour-july-2021/${GITHUB_ORG}/g" .github/workflows/deploy.sh
 sed -i "s/mvn clean deploy/mvn clean package/g" .github/workflows/deploy.sh
@@ -59,6 +66,7 @@ git diff
 echo
 git commit -m "Update GitHub org. Use mvn package instead of deploy."
 git push --set-upstream origin main
+git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..
 
 echo -e "\nInitialize repo: cat-service-release"
@@ -70,6 +78,7 @@ rm -rf cat-service-release
 echo -e "\nClone, fork and modify repo: cat-service-release-ops"
 hub clone https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops && cd cat-service-release-ops
 hub fork --remote-name origin
+git remote remove upstream
 git branch --set-upstream-to origin/main
 rm *.sh
 rm manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
@@ -87,4 +96,5 @@ git diff
 echo
 git commit -m "Update GitHub org and Docker registry. Remove unnecessary files."
 git push --set-upstream origin main
+git branch -r | grep 'origin' | grep -v 'main$' | grep -v HEAD | cut -d/ -f2- | while read line; do git push origin :heads/$line; done;
 cd ..
