@@ -51,6 +51,15 @@ url: https://github.com/{{ env_github_user }}/cat-service/settings/secrets/actio
 url: https://github.com/{{ github_user }}/cat-service/settings/secrets/actions
 ```
 
+## Enable GitHub Actions
+
+- In your browser, navigate to the `cat-service` repository
+- Navigate to Actions
+
+Will see this image:
+![alt_text](images/github-actions-enable-workflows.png "Enable GitHub Actions workflows")
+
+https://github.com/ciberkleid/cat-service/actions
 
 ### Try it out
 
