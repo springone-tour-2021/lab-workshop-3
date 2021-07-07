@@ -12,12 +12,12 @@ ArgoCD runs on Kubernetes. You will install it and configure it to ensure that t
 
 Install ArgoCD to the kubernetes cluster.
 ```execute-1
-kubectl apply -n $(session_namespace)-argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.0.4/manifests/install.yaml
+kubectl apply -n {{ session_namespace }}-argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.0.4/manifests/install.yaml
 ```
 
 You can use the following command to validate that the ArgoCD API server is ready.
 ```execute-1
-kubectl rollout status deployment/argocd-server -n $(session_namespace)-argocd
+kubectl rollout status deployment/argocd-server -n {{ session_namespace }}-argocd
 ```
 
 Take a look at the Custom Resource Definitions (CRDs) that ArgoCD has added to your cluster.
@@ -36,7 +36,7 @@ url: http://{{ session_namespace }}-argocd.{{ ingress_domain }}/
 Log in to the UI using the username `admin`.
 To retrieve the default admin password, run:
 ```execute-1
-ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n $(session_namespace)-argocd -o jsonpath="{.data.password}" | base64 -d)
+ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n {{ session_namespace }}-argocd -o jsonpath="{.data.password}" | base64 -d)
 echo $ARGOCD_PW
 ```
 
@@ -47,7 +47,7 @@ To enable it within ArgoCD, run the following command.
 ```execute-1
 yq eval \
   '.data."kustomize.buildOptions" = "--load_restrictor LoadRestrictionsNone"' \
-  <(kubectl get cm argocd-cm -o yaml -n $(session_namespace)-argocd) \
+  <(kubectl get cm argocd-cm -o yaml -n {{ session_namespace }}-argocd) \
   | kubectl apply -f -
 ```
 
@@ -112,7 +112,7 @@ Return to the ArgoCD UI and watch ArgoCD automatically apply the change to the c
 
 Now try deleting the cat-service deployment in the dev namespace.
 ```execute-1
-kubectl delete deployment dev-cat-service -n $(session_namespace)-dev
+kubectl delete deployment dev-cat-service -n {{ session_namespace }}-dev
 ```
 
 After a few moments, ArgoCD will notice that the current state is out of sync with the declared state.
