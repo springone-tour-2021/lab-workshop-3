@@ -94,7 +94,7 @@ find . -name *.yaml -exec sed -i "s/namespace: dev/namespace: ${SESSION_NAMESPAC
 find . -name *.yaml -exec sed -i "s/namespace: prod/namespace: ${SESSION_NAMESPACE}-prod/g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: kpack//g" {} +
 find . -name *.yaml -exec sed -i "s/namespace: argocd//g" {} +
-find . -name *.yaml -exec sed -i "s/serviceAccount: kpack-bot/serviceAccount: ${SERVICE_ACCOUNT}/g" {} +
+find . -name *.yaml -exec sed -i "s/serviceAccount: kpack-bot/serviceAccount: default/g" {} +
 find . -name *.yaml -exec sed -i "s/booternetes-stack/${SESSION_NAMESPACE}-stack/g" {} +
 find . -name *.yaml -exec sed -i "s/booternetes-store/${SESSION_NAMESPACE}-store/g" {} +
 #sed -i "s/storage: 5Gi/storage: 1Gi/g" manifests/base/db/postgres-store.yaml

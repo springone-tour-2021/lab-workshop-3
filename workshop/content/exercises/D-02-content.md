@@ -64,16 +64,14 @@ Clusterbuilders can be used by image resources across the cluster, and namespace
 In this step, you will create a namespaced builder.
 
 Examine the manifest for the builder.
-Notice the tag and the service account.
-This service account gives kpack access to publish to the container registry specified in the `tag`.
+Notice the tag.
+kpack will assemble a builder image and publish it using the information specified in the `tag`.
+> Note: Notice also the serviceAccount is set to "default."
+> In your workshop session, this service account has already been granted write access to publish images to the container registry specified in the tag.
  ```editor:select-matching-text
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
 text: tag:
 ```
-
-Notice also the source image url and revision in the same file.
-This tells kpack poll the `cat-service-release` repo's release branch for changes.
-Any new commits to this repo will trigger kpack to build and publish an image. 
 
 Apply the builder manifest to instruct kpack to create the builder.
 ```execute-1
