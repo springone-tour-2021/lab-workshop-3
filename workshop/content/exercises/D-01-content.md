@@ -78,7 +78,7 @@ file: ~/cat-service/.github/workflows/deploy.yaml
 text: "cache@v1"
 ```
 
-To set the workflow to use JDK 11 with the action `actions/setup-java@v1`:
+To set the workflow to use JDK 11 with the action use `actions/setup-java@v1`:
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "actions/setup-java@v1"
