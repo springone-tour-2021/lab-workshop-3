@@ -18,8 +18,6 @@ spec:
       secondary:
         - name: $(session_namespace)-dev
         - name: $(session_namespace)-prod
-        - name: $(session_namespace)-kpack
-        - name: $(session_namespace)-argocd
 #    resources:
 #      memory: 1.7Gi
     applications:
@@ -35,6 +33,32 @@ spec:
       docker:
         enabled: true
     objects:
+#    - apiVersion: v1
+#      kind: ServiceAccount
+#      metadata:
+#        name: kpack-bot
+#        namespace: $(session_namespace)-kpack
+#      imagePullSecrets:
+#        - $(registry_secret)
+#    - apiVersion: kpack.io/v1alpha1
+#      kind: Builder
+#      metadata:
+#        name: booternetes-builder
+#        namespace: $(session_namespace)-kpack
+#      spec:
+#        tag: gcr.io/pgtm-jlong/booternetes-builder
+#        serviceAccount: kpack-bot
+#        stack:
+#          name: $(workshop_namespace)-stack
+#          kind: ClusterStack
+#        store:
+#          name: $(workshop_namespace)-store
+#          kind: ClusterStore
+#        order:
+#          - group:
+#              - id: paketo-buildpacks/java
+#          - group:
+#              - id: paketo-buildpacks/nodejs
       - apiVersion: rbac.authorization.k8s.io/v1
         kind: Role
         metadata:
@@ -68,8 +92,19 @@ spec:
           name: kpack-user
         subjects:
           - kind: ServiceAccount
-#              namespace: $(workshop_namespace)
-            namespace: $(session_namespace)-kpack
+            namespace: $(workshop_namespace)
+            name: $(service_account)
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
+        metadata:
+          name: kpack-user
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: $(workshop_namespace)-role
+        subjects:
+          - kind: ServiceAccount
+            namespace: $(workshop_namespace)
             name: $(service_account)
       - apiVersion: rbac.authorization.k8s.io/v1
         kind: Role
@@ -99,6 +134,42 @@ spec:
           name: argocd-user
         subjects:
           - kind: ServiceAccount
-            #              namespace: $(workshop_namespace)
-            namespace: $(session_namespace)-argocd
+            namespace: $(workshop_namespace)
             name: $(service_account)
+  environment.objects:
+    - apiVersion: kpack.io/v1alpha1
+      kind: ClusterStore
+      metadata:
+        name: $(workshop_namespace)-store
+      spec:
+        sources:
+          - image: paketobuildpacks/builder:base
+    - apiVersion: kpack.io/v1alpha1
+      kind: ClusterStack
+      metadata:
+        name: $(workshop_namespace)-stack
+      spec:
+        id: "io.buildpacks.stacks.bionic"
+        buildImage:
+          image: "paketobuildpacks/build:base-cnb"
+        runImage:
+          image: "paketobuildpacks/run:base-cnb"
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-role
+      rules:
+        - apiGroups:
+            - kpack.io
+          resources:
+            - clusterbuilders
+            - clusterstacks
+            - clusterstores
+          verbs:
+            - use
+            - get
+            - list
+            - watch
+          resourceNames:
+            - $(workshop_namespace)-store
+            - $(workshop_namespace)-stack
