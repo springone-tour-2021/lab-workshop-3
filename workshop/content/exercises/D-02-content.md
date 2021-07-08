@@ -13,12 +13,7 @@ This tutorial environment hosts many user sessions in the same Kubernetes cluste
 Therefore, kpack has already been installed.
 If you are interested in installation instructions, read [this](https://github.com/pivotal/kpack/blob/main/docs/install.md).
 
-You can use the following commands to check the installation.
-```execute-1
-kubectl get deployments -n kpack
-```
-
-You can also list the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
+List the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
 ```execute-1
 kubectl api-resources | grep kpack
 ```

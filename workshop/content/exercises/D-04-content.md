@@ -19,24 +19,12 @@ kustomize:
 
 At this point, ArgoCD will detect the change to the ops repo and re-apply the manifests.
 
-### Install ArgoCD Image Updater
+### Review ArgoCD Image Updater installation
 
-Install argocd-image-updater to the kubernetes cluster.
-```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f ~/cat-service-release-ops/tooling/argocd-image-updater/install.yaml
-```
+Again, because this tutorial hosts many sessions in a single cluster, Argo CD Image Updater has already been installed.
+If you are interested in installation instructions, read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace).
 
-You can use the following command to validate that the installation has completed.
-```execute-1
-kubectl rollout status deploy/argocd-image-updater -n $SESSION_NAMESPACE-argocd
-```
-
-In case you need to troubleshoot, set logging to debug (the default is info).
-```execute-1
-yq eval '.data."log.level" = "debug"' \
-     <(kubectl get cm argocd-image-updater-config -o yaml -n $SESSION_NAMESPACE-argocd) \
-     | kubectl apply -f -
-```
+ArgoCD does not add any CRDs to the cluster.
 
 ### Additional configuration
 
