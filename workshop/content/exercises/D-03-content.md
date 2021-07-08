@@ -8,24 +8,19 @@ However, there is an alternate tool that is purpose-built for managing deploymen
 
 ArgoCD runs on Kubernetes. You will install it and configure it to ensure that the cat-service deployment in Kubernetes always matches the declared state in the cat-service-release-ops repo.
 
-### Install Argo CD
+### Review Argo CD installation
 
-Install ArgoCD to the kubernetes cluster.
-```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f ~/cat-service-release-ops/tooling/argocd/install.yaml
-```
+As with kpack, since this tutorial environment hosts many user sessions in the same cluster and there can only be one installation of argocd per cluster, argocd has already been installed.
+If you are interested in installation instructions, read [this](https://argo-cd.readthedocs.io/en/stable/getting_started).
 
-You can use the following command to validate that the ArgoCD API server is ready.
-```execute-1
-kubectl rollout status deployment/argocd-server -n $SESSION_NAMESPACE-argocd
-```
-
-Take a look at the Custom Resource Definitions (CRDs) that ArgoCD has added to your cluster.
+List the Custom Resource Definitions (CRDs) that argocd has added to your cluster.
 ```execute-1
 kubectl api-resources | grep argo
 ```
 
 Shortly, you will create two application resources, one for dev and the other for prod.
+
+### Argo CD UI
 
 At this point, you can also browse through the ArgoCD UI to get a visual sense for what it does.
 > TODO: Figure out argocd UI url.
@@ -36,7 +31,7 @@ url: http://{{ session_namespace }}-argocd.{{ ingress_domain }}/
 Log in to the UI using the username `admin`.
 To retrieve the default admin password, run:
 ```execute-1
-ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n $SESSION_NAMESPACE-argocd -o jsonpath="{.data.password}" | base64 -d)
+ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 echo $ARGOCD_PW
 ```
 
@@ -47,7 +42,7 @@ To enable it within ArgoCD, run the following command.
 ```execute-1
 yq eval \
   '.data."kustomize.buildOptions" = "--load_restrictor LoadRestrictionsNone"' \
-  <(kubectl get cm argocd-cm -o yaml -n $SESSION_NAMESPACE-argocd) \
+  <(kubectl get cm argocd-cm -o yaml -n argocd) \
   | kubectl apply -f -
 ```
 

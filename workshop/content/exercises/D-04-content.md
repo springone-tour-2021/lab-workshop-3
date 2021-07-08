@@ -19,24 +19,12 @@ kustomize:
 
 At this point, ArgoCD will detect the change to the ops repo and re-apply the manifests.
 
-### Install ArgoCD Image Updater
+### Review ArgoCD Image Updater installation
 
-Install argocd-image-updater to the kubernetes cluster.
-```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f ~/cat-service-release-ops/tooling/argocd-image-updater/install.yaml
-```
+Again, because this tutorial hosts many sessions in a single cluster, Argo CD Image Updater has already been installed.
+If you are interested in installation instructions, read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace).
 
-You can use the following command to validate that the installation has completed.
-```execute-1
-kubectl rollout status deploy/argocd-image-updater -n $SESSION_NAMESPACE-argocd
-```
-
-In case you need to troubleshoot, set logging to debug (the default is info).
-```execute-1
-yq eval '.data."log.level" = "debug"' \
-     <(kubectl get cm argocd-image-updater-config -o yaml -n $SESSION_NAMESPACE-argocd) \
-     | kubectl apply -f -
-```
+ArgoCD does not add any CRDs to the cluster.
 
 ### Additional configuration
 
@@ -54,7 +42,7 @@ Create a new account in ArgoCD called "image-updater" and grant it the "apiKey" 
 This capability allows generating authentication tokens for API access.
 ```execute-1
 yq eval '.data."accounts.image-updater" = "apiKey"' \
-     <(kubectl get cm argocd-cm -o yaml -n $SESSION_NAMESPACE-argocd) \
+     <(kubectl get cm argocd-cm -o yaml -n argocd) \
      | kubectl apply -f -
 ```
 
@@ -62,7 +50,7 @@ Create roles for new account.
 You can add RBAC permissions to Argo CD's argocd-rbac-cm ConfigMap and Argo CD will pick them up automatically.
 
 ```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
+kubectl apply -n argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
 ```
 
 Generate the API token.
@@ -81,12 +69,12 @@ Create a secret from the token generated above.
 ```execute-1
 kubectl create secret generic argocd-image-updater-secret \
     --from-literal argocd.token=$ARGOCD_API_TOKEN \
-    --dry-run=client -o yaml | kubectl apply -f - -n $SESSION_NAMESPACE-argocd
+    --dry-run=client -o yaml | kubectl apply -f - -n argocd
 ```
 
 Restart the argocd-image-updater pod.
 ```execute-1
-kubectl rollout restart deployment argocd-image-updater -n $SESSION_NAMESPACE-argocd
+kubectl rollout restart deployment argocd-image-updater -n argocd
 ```
 
 #### Provide GitHub write access to ArgoCD Image Updater
@@ -100,7 +88,7 @@ Create a secret to enable ArgoCD Image Updater to push to your GitHub ops reposi
 kubectl create secret generic gitcred \
     --from-literal=username=$GITHUB_USER \
     --from-literal=password=$GITHUB_TOKEN \
-    -n $SESSION_NAMESPACE-argocd
+    -n argocd
 ```
 
 ### Enable monitoring for the `cat-service` dev and prod applications

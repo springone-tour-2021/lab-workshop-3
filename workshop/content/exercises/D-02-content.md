@@ -13,19 +13,14 @@ This tutorial environment hosts many user sessions in the same Kubernetes cluste
 Therefore, kpack has already been installed.
 If you are interested in installation instructions, read [this](https://github.com/pivotal/kpack/blob/main/docs/install.md).
 
-You can use the following commands to check the installation.
-```execute-1
-kubectl get deployments -n kpack
-```
-
-You can also list the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
+List the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
 ```execute-1
 kubectl api-resources | grep kpack
 ```
 
 In the next steps, you will create a builder and an image to automate builds for `cat-service-release`.
 
-### Configure kpack
+### Review kpack configuration
 
 Cloud Native Buildpacks require you to specify a "builder". 
 A builder is an image that provides the base image and the logic to build your application image.
@@ -48,21 +43,42 @@ kubectl get clusterstacks,clusterstores
 ```
 
 You can examine the configuration that was applied to create these resources.
-Notice that they are very simple and simply take advantage of the existing Paketo Buildpacks images.
-```execute-1
-kubectl apply view-last-applied clusterstack booternetes-stack -o yaml
-
-kubectl apply view-last-applied clusterstore booternetes-store -o yaml
+Notice that they take advantage of the existing Paketo Buildpacks images.
+```editor:open-file
+file: ~/cat-service-release-ops/tooling/kpack-config/stack.yaml
+```
+```editor:open-file
+file: ~/cat-service-release-ops/tooling/kpack-config/store.yaml
 ```
 
-The ops team at your organization could also choose to create a cluster-wide builder, but for the purposes of this workshop, you will create your own.
+### Create a builder
+
+Given a clusterstack and a clusterstore, you can create a builder. Once you have a builder, you can create an image resource for `cat-service-release`.
+
+Notice in the list of api-resources there are two kinds of builder:
+- clusterbuilders
+- builders
+
+Clusterbuilders can be used by image resources across the cluster, and namespaced builders can only be used by image resources in the same namespace.
+
+In this step, you will create a namespaced builder.
 
 Examine the manifest for the builder.
 Notice the tag and the service account.
-This service account gives kpack access to publish to the container registry specified in the `tag`.
- ```editor:select-matching-text
+kpack will assemble a builder image and publish it using the information specified in the `tag`.
+The specified service account has already been granted write permissions to the container registry specified in the tag.
+```editor:select-matching-text
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
-text: tag:
+text: 'tag:'
+after: 1
+```
+
+Notice also the `order` configuration.
+The Paketo Buildpacks can handle applications in a handful of languages, but we are only including the Java and Nodejs buildpacks in this builder.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
+text: 'order:'
+after: 4
 ```
 
 Apply the builder manifest to instruct kpack to create the builder.
@@ -72,7 +88,7 @@ kubectl apply -f ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
 
 Wait for builder to be ready
 ```execute-1
-kubectl get bldr booternetes-builder -n $SESSION_NAMESPACE-kpack -w
+kubectl get bldr booternetes-builder -w
 ```
 
 When the output shows a reference to a builder, run the following command to verify the new builder image is in the Docker registry.
@@ -100,13 +116,13 @@ kubectl apply ~/cat-service-release-ops/build/kpack-image.yaml
 You should immediately see a build resource for the first build of cat-service-release, as well as a pod, which is where the actual assembly of the image will be carried out.
 Check for both builds and pods.
 ```execute-1
-kubectl get builds,pods -n $SESSION_NAMESPACE-kpack
+kubectl get builds,pods
 ```
 
 Wait until the build returns `SUCCEEDED=True`.
 At that point you will also see the image reference in the output.
 ```execute-1
-kubectl get builds -n $SESSION_NAMESPACE-kpack -w
+kubectl get builds -w
 ```
 
 At this point, you can also check the Docker registry to confirm that the app image has been published.
