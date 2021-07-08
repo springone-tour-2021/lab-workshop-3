@@ -1,16 +1,28 @@
 #!/usr/local/bin/bash
 
+# Get Minikube IP (getting from file so it works across terminal sessions)
+test -f local-eduk8s-start.env && source local-eduk8s-start.env
 if [[ "${EDUCATES_MINIKUBE_IP}" == "" ]]; then
   printf "\nGetting Minikube IP\n"
   minikube start
-  EDUCATES_MINIKUBE_IP=$(minikube ip)
-  export EDUCATES_MINIKUBE_IP
+  echo "export EDUCATES_MINIKUBE_IP=$(minikube ip)" > local-eduk8s-start.env
+  source local-eduk8s-start.env
   minikube stop
 fi
 
 printf "\nStarting Minikube\n"
+minikube start --vm=true --insecure-registry="${EDUCATES_MINIKUBE_IP}"/24 --cpus=4 --memory=8g
 
-minikube start --insecure-registry=${EDUCATES_MINIKUBE_IP}/24 --cpus=4 --memory=8g --vm
+# Capture minikube ip
+IP=$(minikube ip)
+# Check that the value is correct
+if [[ "${EDUCATES_MINIKUBE_IP}" != "${IP}" ]]; then
+  printf "\nMinikube IP for insecure registry does not match actual Minikube IP\n"
+  echo "Updating record of Minikube IP\n"
+  echo "export EDUCATES_MINIKUBE_IP=$(minikube ip)" > local-eduk8s-start.env
+  echo "Please re-run this script!"
+  exit
+fi
 
 minikube addons enable ingress
 minikube addons enable ingress-dns
@@ -23,17 +35,6 @@ kubectl apply -k "github.com/eduk8s/eduk8s?ref=master"
 printf "\nInstalling add-ons\n"
 source ./install-cluster-add-ons.sh
 install_cluster_add_ons
-
-# Capture minikube ip
-IP=$(minikube ip)
-# Check that the value is correct
-if [[ "${EDUCATES_MINIKUBE_IP}" != "${IP}" ]]; then
-  printf "\nUpdating Minikube IP\n"
-  echo "Please re-run this script!"
-  EDUCATES_MINIKUBE_IP=$(minikube ip)
-  export EDUCATES_MINIKUBE_IP
-  minikube stop
-fi
 
 printf "\nConfiguring Educates\n"
 # Configure operator with domain name

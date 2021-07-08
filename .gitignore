@@ -11,3 +11,4 @@
 .webdav
 .yarn
 *.swp
+local-eduk8s-start.env
