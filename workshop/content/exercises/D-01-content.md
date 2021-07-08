@@ -51,9 +51,6 @@ Now take a look at the YAML workflow file. You can ignore the Artifactory env va
 
 ... , sets up JDK 11, and lastly, calls the `deploy.sh` script.
 > TODO: should we just remove Artifactory?
-```editor:open-file
-file: ~/cat-service/.github/workflows/deploy.yaml
-```
 
 The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. 
 ```editor:select-matching-text
@@ -62,11 +59,35 @@ text: "on"
 after: 5
 ```
 
-The `jobs` section checks out the code ...
+The `jobs` section executes all the tasks triggered by `on`.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "jobs"
 after: 22
+```
+
+The action `checkout@v2` checks-out your repo so your workflow can access it.
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "checkout@v2"
+```
+
+The next action `cache@v1` caches everything from your maven repository `~/.m2` to speed up subsequent builds.
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "cache@v1"
+```
+
+To set the workflow to use JDK 11 with the action `actions/setup-java@v1`:
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "actions/setup-java@v1"
+```
+
+To `run:` is used to run the `deploy.sh` script that we just looked at.
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "run"
 ```
 
 ### GitHub Actions secrets
