@@ -20,7 +20,7 @@ kubectl api-resources | grep kpack
 
 In the next steps, you will create a builder and an image to automate builds for `cat-service-release`.
 
-### Configure kpack
+### Review kpack configuration
 
 Cloud Native Buildpacks require you to specify a "builder". 
 A builder is an image that provides the base image and the logic to build your application image.
@@ -43,14 +43,25 @@ kubectl get clusterstacks,clusterstores
 ```
 
 You can examine the configuration that was applied to create these resources.
-Notice that they are very simple and simply take advantage of the existing Paketo Buildpacks images.
-```execute-1
-kubectl apply view-last-applied clusterstack booternetes-stack -o yaml
-
-kubectl apply view-last-applied clusterstore booternetes-store -o yaml
+Notice that they take advantage of the existing Paketo Buildpacks images.
+```editor:open-file
+file: ~/cat-service-release-ops/tooling/kpack-config/stack.yaml
+```
+```editor:open-file
+file: ~/cat-service-release-ops/tooling/kpack-config/store.yaml
 ```
 
-The ops team at your organization could also choose to create a cluster-wide builder, but for the purposes of this workshop, you will create your own.
+### Create a builder
+
+Given a clusterstack and a clusterstore, you can create a builder. Once you have a builder, you can create an image resource for `cat-service-release`.
+
+Notice in the list of api-resources there are two kinds of builder:
+- clusterbuilders
+- builders
+
+Clusterbuilders can be used by image resources across the cluster, and namespaced builders can only be used by image resources in the same namespace.
+
+In this step, you will create a namespaced builder.
 
 Examine the manifest for the builder.
 Notice the tag and the service account.
@@ -59,6 +70,10 @@ This service account gives kpack access to publish to the container registry spe
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
 text: tag:
 ```
+
+Notice also the source image url and revision in the same file.
+This tells kpack poll the `cat-service-release` repo's release branch for changes.
+Any new commits to this repo will trigger kpack to build and publish an image. 
 
 Apply the builder manifest to instruct kpack to create the builder.
 ```execute-1
