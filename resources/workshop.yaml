@@ -13,19 +13,13 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=develop-ivan
   session:
-    config:
-      vars:
-      - name: GITHUB_USER
-      value: undefined
     namespaces:
       budget: large
       secondary:
         - name: $(session_namespace)-dev
         - name: $(session_namespace)-prod
-        - name: $(session_namespace)-kpack
-        - name: $(session_namespace)-argocd
-#    resources:
-#      memory: 1.7Gi
+    #    resources:
+    #      memory: 1.7Gi
     applications:
       terminal:
         enabled: true
@@ -39,70 +33,82 @@ spec:
       docker:
         enabled: true
     objects:
-      - apiVersion: rbac.authorization.k8s.io/v1
-        kind: Role
-        metadata:
-          name: kpack-user
-        rules:
-          - apiGroups:
-              - kpack.io
-            resources:
-              - clusterbuilders
-              - clusterstacks
-              - clusterstores
-              - builders
-              - builds
-              - images
-              - sourceresolvers
-            verbs:
-              - get
-              - list
-              - watch
-              - create
-              - delete
-              - patch
-              - update
-      - apiVersion: rbac.authorization.k8s.io/v1
-        kind: RoleBinding
-        metadata:
-          name: kpack-user
-        roleRef:
-          apiGroup: rbac.authorization.k8s.io
-          kind: Role
-          name: kpack-user
-        subjects:
-          - kind: ServiceAccount
-#              namespace: $(workshop_namespace)
-            namespace: $(session_namespace)-kpack
-            name: $(service_account)
-      - apiVersion: rbac.authorization.k8s.io/v1
-        kind: Role
-        metadata:
-          name: argocd-user
-        rules:
-          - apiGroups:
-              - argoproj.io
-            resources:
-              - applications
-              - appprojects
-            verbs:
-              - get
-              - list
-              - watch
-              - create
-              - delete
-              - patch
-              - update
-      - apiVersion: rbac.authorization.k8s.io/v1
-        kind: RoleBinding
-        metadata:
-          name: argocd-user
-        roleRef:
-          apiGroup: rbac.authorization.k8s.io
-          kind: Role
-          name: argocd-user
-        subjects:
-          - kind: ServiceAccount
-            #              namespace: $(workshop_namespace)
-            namespace: $(session_namespace)-argocd
-            name: $(service_account)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: $(session_namespace)-kpack-user-ro
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(workshop_namespace)-kpack-ro
+      subjects:
+        - kind: ServiceAccount
+          namespace: $(workshop_namespace)
+          name: $(service_account)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: $(session_namespace)-kpack-user-rw
+        namespace: $(session_namespace)
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(workshop_namespace)-kpack-rw
+      subjects:
+        - kind: ServiceAccount
+          namespace: $(workshop_namespace)
+          name: $(service_account)
+  environment:
+    objects:
+    - apiVersion: kpack.io/v1alpha1
+      kind: ClusterStore
+      metadata:
+        name: $(workshop_namespace)-store
+      spec:
+        sources:
+          - image: paketobuildpacks/builder:base
+    - apiVersion: kpack.io/v1alpha1
+      kind: ClusterStack
+      metadata:
+        name: $(workshop_namespace)-stack
+      spec:
+        id: "io.buildpacks.stacks.bionic"
+        buildImage:
+          image: "paketobuildpacks/build:base-cnb"
+        runImage:
+          image: "paketobuildpacks/run:base-cnb"
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-kpack-ro
+      rules:
+        - apiGroups:
+            - kpack.io
+          resources:
+            - clusterbuilders
+            - clusterstacks
+            - clusterstores
+          verbs:
+            - get
+            - list
+            - watch
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-kpack-rw
+      rules:
+        - apiGroups:
+            - kpack.io
+          resources:
+            - builders
+            - builds
+            - images
+            - sourceresolvers
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - delete
+            - patch
+            - update

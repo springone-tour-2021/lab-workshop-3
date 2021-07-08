@@ -11,6 +11,7 @@ Spring Boot includes native support for generating images via the Spring Boot [m
 Generate an image for cat-service.
 You can skip tests since you already verified that tests pass in the previous exercises.
 ```execute-1
+cd ~/cat-service
 ./mvnw spring-boot:build-image -DskipTests
 ```
 
