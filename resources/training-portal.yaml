@@ -10,5 +10,5 @@ spec:
   - name: lab-workshop-3
     reserved: 0
     capacity: 1
-    expires: 460m
-    orphaned: 45m
+    expires: 60m
+    orphaned: 10m

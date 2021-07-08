@@ -31,7 +31,7 @@ url: http://{{ session_namespace }}-argocd.{{ ingress_domain }}/
 Log in to the UI using the username `admin`.
 To retrieve the default admin password, run:
 ```execute-1
-ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n $SESSION_NAMESPACE-argocd -o jsonpath="{.data.password}" | base64 -d)
+ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 echo $ARGOCD_PW
 ```
 
@@ -42,7 +42,7 @@ To enable it within ArgoCD, run the following command.
 ```execute-1
 yq eval \
   '.data."kustomize.buildOptions" = "--load_restrictor LoadRestrictionsNone"' \
-  <(kubectl get cm argocd-cm -o yaml -n $SESSION_NAMESPACE-argocd) \
+  <(kubectl get cm argocd-cm -o yaml -n argocd) \
   | kubectl apply -f -
 ```
 

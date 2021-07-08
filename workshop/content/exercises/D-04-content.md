@@ -42,7 +42,7 @@ Create a new account in ArgoCD called "image-updater" and grant it the "apiKey" 
 This capability allows generating authentication tokens for API access.
 ```execute-1
 yq eval '.data."accounts.image-updater" = "apiKey"' \
-     <(kubectl get cm argocd-cm -o yaml -n $SESSION_NAMESPACE-argocd) \
+     <(kubectl get cm argocd-cm -o yaml -n argocd) \
      | kubectl apply -f -
 ```
 
@@ -50,7 +50,7 @@ Create roles for new account.
 You can add RBAC permissions to Argo CD's argocd-rbac-cm ConfigMap and Argo CD will pick them up automatically.
 
 ```execute-1
-kubectl apply -n $SESSION_NAMESPACE-argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
+kubectl apply -n argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
 ```
 
 Generate the API token.
@@ -69,12 +69,12 @@ Create a secret from the token generated above.
 ```execute-1
 kubectl create secret generic argocd-image-updater-secret \
     --from-literal argocd.token=$ARGOCD_API_TOKEN \
-    --dry-run=client -o yaml | kubectl apply -f - -n $SESSION_NAMESPACE-argocd
+    --dry-run=client -o yaml | kubectl apply -f - -n argocd
 ```
 
 Restart the argocd-image-updater pod.
 ```execute-1
-kubectl rollout restart deployment argocd-image-updater -n $SESSION_NAMESPACE-argocd
+kubectl rollout restart deployment argocd-image-updater -n argocd
 ```
 
 #### Provide GitHub write access to ArgoCD Image Updater
@@ -88,7 +88,7 @@ Create a secret to enable ArgoCD Image Updater to push to your GitHub ops reposi
 kubectl create secret generic gitcred \
     --from-literal=username=$GITHUB_USER \
     --from-literal=password=$GITHUB_TOKEN \
-    -n $SESSION_NAMESPACE-argocd
+    -n argocd
 ```
 
 ### Enable monitoring for the `cat-service` dev and prod applications
