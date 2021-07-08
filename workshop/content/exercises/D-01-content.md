@@ -20,21 +20,53 @@ There are some key tasks to automate:
 
 Triggering `mvn clean build` on a git commit would do all of these tasks. However, we do not want to build containers if the tests fail. We need a way to decouple these parts of the workflow. 
 
-This can be done in different ways. We're first going to use `mvn clean verify` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
+This can be done in different ways. We're first going to use `mvn clean deploy` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
 
 > TODO: improve this description
 Now take a look at the deployment script. This script calls `mvn clean verify`, initializes the `cat-service-release` as a git respository, and pushes the code if and only if `mvn clean verify` passes. 
 ```editor:open-file
-file: ~/cat-service/.github/workflows/deploy.sh
+file: ~/cat-service/.github/workflows/deploy.sh 
 ```
 
-Now take a look at the YAML workflow file. You can ignore the Artifactory env variables as they're not used in this workshop. You'll be storing your GitHub username and access token in the next step. The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. The `jobs` section checks out the code ...
+First you pull the cat-service and it will test the code and it will be pushing the cat-service code into cat-service-release.
+
+This first part of the script sets the `user.email` and  `user.name` to set the Author as `Booternetes CI Bot` and the email as `<>` in the commit. 
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.sh
+text: "user.name"
+before: 1
+```
+
+- creates a couple of directories
+- clones SpringOne Tour Booternetes catservice-release
+- it takes out `.git` to preverve it 
+- It's copying from cat-service into the directory
+- It copies the upstream booternetes catservice-release
+
+
+Now take a look at the YAML workflow file. You can ignore the Artifactory env variables as they're not used in this workshop. You'll be storing your GitHub username and access token in the next step. 
+
+
 > TODO: insert thing about the cache
 
 ... , sets up JDK 11, and lastly, calls the `deploy.sh` script.
 > TODO: should we just remove Artifactory?
 ```editor:open-file
 file: ~/cat-service/.github/workflows/deploy.yaml
+```
+
+The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. 
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "on"
+after: 5
+```
+
+The `jobs` section checks out the code ...
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "jobs"
+after: 22
 ```
 
 ### GitHub Actions secrets
