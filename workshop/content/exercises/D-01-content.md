@@ -73,7 +73,7 @@ after: 22
 
 The last configuration detail to set up is to add credentials to `cat-service` so that the GitHub Actions in `cat-service` can push a copy of the tested code to `cat-service-release`. 
  To do this:
-- Run this command and click on the link in in terminal 1 to get to the `cat-service` repository's secrets
+- Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets
     ```execute-1
     echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
     ```
@@ -82,7 +82,7 @@ The last configuration detail to set up is to add credentials to `cat-service` s
 
 ## Enable GitHub Actions
 
-Run this command and click on the link in in terminal 1 navigate to the `cat-service` repository's actions page:
+Run this command and click on the link in terminal 1 navigate to the `cat-service` repository's actions page:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
 ```
@@ -93,7 +93,7 @@ Click on the button to enable GitHub Actions workflows.
 ### Try it out
 
 Take a look at the contents of `cat-service-release`. It will be empty.
-Run this command and click on the link in in terminal 1
+Run this command and click on the link in terminal 1
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service-release
 ```
@@ -109,7 +109,7 @@ git push
 ```
 
 Now check out the logs by clicking on the Action's name and then build. You'll see a log for setting up the job, running through each of the actions in the workflow file, post logs, and completing the job. Click on any of them to check out the logs.
-Run this command and click on the link in in terminal 1:
+Run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
 ```
@@ -120,7 +120,7 @@ echo https://github.com/$GITHUB_ORG/cat-service/actions
 #### Check contents of cat-service-release
 
 Once the action workflow is done, check the `cat-service-release` repository again.You should now see pushed code!
-Run this command and click on the link in in terminal 1:
+Run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service-release
 ```
