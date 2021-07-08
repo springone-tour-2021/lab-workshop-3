@@ -64,13 +64,21 @@ Clusterbuilders can be used by image resources across the cluster, and namespace
 In this step, you will create a namespaced builder.
 
 Examine the manifest for the builder.
-Notice the tag.
+Notice the tag and the service account.
 kpack will assemble a builder image and publish it using the information specified in the `tag`.
-> Note: Notice also the serviceAccount is set to "default."
-> In your workshop session, this service account has already been granted write access to publish images to the container registry specified in the tag.
- ```editor:select-matching-text
+The specified service account has already been granted write permissions to the container registry specified in the tag.
+```editor:select-matching-text
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
 text: tag:
+after: 1
+```
+
+Notice also the `order` configuration.
+The Paketo Buildpacks can handle applications in a handful of languages, but we are only including the Java and Nodejs buildpacks in this builder.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
+text: order:
+after: 4
 ```
 
 Apply the builder manifest to instruct kpack to create the builder.
