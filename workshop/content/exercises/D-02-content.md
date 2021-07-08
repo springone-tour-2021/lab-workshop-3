@@ -69,7 +69,7 @@ kpack will assemble a builder image and publish it using the information specifi
 The specified service account has already been granted write permissions to the container registry specified in the tag.
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
-text: tag:
+text: 'tag:'
 after: 1
 ```
 
@@ -77,7 +77,7 @@ Notice also the `order` configuration.
 The Paketo Buildpacks can handle applications in a handful of languages, but we are only including the Java and Nodejs buildpacks in this builder.
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
-text: order:
+text: 'order:'
 after: 4
 ```
 
