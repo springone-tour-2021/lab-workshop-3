@@ -35,17 +35,6 @@ ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath
 echo $ARGOCD_PW
 ```
 
-### Configure ArgoCD
-
-The way in which the kustomize base and overlay files are arranged in the cat-service-release-ops repo requires that a certain kustomize build option be enabled.
-To enable it within ArgoCD, run the following command.
-```execute-1
-yq eval \
-  '.data."kustomize.buildOptions" = "--load_restrictor LoadRestrictionsNone"' \
-  <(kubectl get cm argocd-cm -o yaml -n argocd) \
-  | kubectl apply -f -
-```
-
 ### Configure ArgoCD for cat-service dev deployment
 
 There are several ways to configure an application in ArgoCD.
@@ -77,7 +66,7 @@ text: |
     project: default
     source:
     path: manifests/overlays/dev
-    repoURL: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops.git
+    repoURL: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release-ops.git
     targetRevision: main
     syncPolicy:
     syncOptions:
@@ -85,6 +74,12 @@ text: |
     #    automated: {}
         automated:
           prune: true
+```
+
+Make sure to replace the org placeholder ith your GitHub org name.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/argocd/application-dev.yaml
+text: '<YOUR_GITHUB_ORG_HERE>'
 ```
 
 Apply the application manifest.
@@ -125,7 +120,7 @@ text: |
       project: default
       source:
         path: manifests/overlays/prod
-        repoURL: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops.git
+        repoURL: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release-ops.git
         targetRevision: main
       syncPolicy:
         syncOptions:
@@ -133,6 +128,12 @@ text: |
         #    automated: {}
         automated:
           prune: true
+```
+
+Make sure to replace the org placeholder ith your GitHub org name.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/argocd/application-prod.yaml
+text: '<YOUR_GITHUB_ORG_HERE>'
 ```
 
 Then, apply it and check the UI to see the effect.
@@ -189,3 +190,22 @@ Click the option in UIto re-sync the application, and ArgoCD will re-apply the m
 ## Next Steps
 
 In the next exercise, you will create the final link so that ArgoCD applies new app images created by kpack.
+
+
+
+---
+---
+---
+
+### Things we don't need any more but can talk about whetherto show
+
+### Configure ArgoCD
+
+The way in which the kustomize base and overlay files are arranged in the cat-service-release-ops repo requires that a certain kustomize build option be enabled.
+To enable it within ArgoCD, run the following command.
+```execute-1
+yq eval \
+  '.data."kustomize.buildOptions" = "--load_restrictor LoadRestrictionsNone"' \
+  <(kubectl get cm argocd-cm -o yaml -n argocd) \
+  | kubectl apply -f -
+```

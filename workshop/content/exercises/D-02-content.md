@@ -96,13 +96,13 @@ text: |
     metadata:
       name: booternetes-builder
     spec:
-      tag: lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com/booternetes-builder
+      tag: {{registry_host}}/booternetes-builder
       serviceAccount: default
       stack:
-        name: lab-workshop-3-w02-stack
+        name: {{workshop_namespace}}-stack
         kind: ClusterStack
       store:
-        name: lab-workshop-3-w02-store
+        name: {{workshop_namespace}}-store
         kind: ClusterStore
       order:
         - group:
@@ -170,9 +170,9 @@ text: |
       # cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
       source:
         git:
-          url: https://github.com/ciberkleid/cat-service-release.git
+          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release.git
           revision: release
-      tag: lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com/cat-service
+      tag: {{registry_host}}/cat-service
 ```
 
 Make sure to replace the org placeholder ith your GitHub org name.
@@ -217,11 +217,11 @@ text: |
     metadata:
       name: registry-credentials
       annotations:
-        kpack.io/docker : lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com
+        kpack.io/docker : {{registry_host}}
     type: kubernetes.io/basic-auth
     stringData:
-      username: lab-workshop-3-w02-s003
-      password: TFfSyjzQA6maH1RtqJIV24Nb3BpMiPkD
+      username: {{registry_username}}
+      password: {{registry_password}}
 ```
 
 Apply the manifests you just created.
