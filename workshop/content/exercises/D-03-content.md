@@ -41,6 +41,11 @@ There are several ways to configure an application in ArgoCD.
 You can use the UI, the `argocd` CLI, or you can use `kubectl` to apply a manifest describing the ArgoCD application resource.
 You will use the declarative approach here, meaning, use `kubectl` to apply a yaml manifest.
 
+Create a directory for argocd manifests.
+```execute-1
+mkdir argocd
+```
+
 Create the application manifest for the dev deployment.
 Notice that you are instructing ArgoCD to poll the main branch of the cat-service-release-ops repository on GitHub for any changes to `manifests/overlays/dev` (and any relevant base files).
 > Note: Ignore the annotations for now.
@@ -51,27 +56,27 @@ text: |
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
-    annotations:
-    argocd-image-updater.argoproj.io/image-list: cat-service-image=gcr.io/pgtm-jlong/cat-service
-    argocd-image-updater.argoproj.io/cat-service-image.update-strategy: latest
-    argocd-image-updater.argoproj.io/cat-service-image.allow-tags: regexp:^b\d*\.\d{8}\.\d{6}$
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: cat-service-image=gcr.io/pgtm-jlong/cat-service
+        argocd-image-updater.argoproj.io/cat-service-image.update-strategy: latest
+        argocd-image-updater.argoproj.io/cat-service-image.allow-tags: regexp:^b\d*\.\d{8}\.\d{6}$
     #    argocd-image-updater.argoproj.io/cat-service-image.ignore-tags: *
-    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitcred
-    name: dev-cat-service
-    namespace: argocd
+        argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitcred
+      name: dev-cat-service
+      namespace: argocd
     spec:
-    destination:
-    namespace: dev
-    server: https://kubernetes.default.svc
-    project: default
-    source:
-    path: manifests/overlays/dev
-    repoURL: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release-ops.git
-    targetRevision: main
-    syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-    #    automated: {}
+      destination:
+        namespace: prod
+        server: https://kubernetes.default.svc
+      project: default
+      source:
+        path: manifests/overlays/dev
+        repoURL: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release-ops.git
+        targetRevision: main
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        #    automated: {}
         automated:
           prune: true
 ```
