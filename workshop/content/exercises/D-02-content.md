@@ -110,7 +110,7 @@ file: ~/cat-service-release-ops/build/kpack-image.yaml
 
 Apply the image manifest.
 ```execute-1
-kubectl apply ~/cat-service-release-ops/build/kpack-image.yaml
+kubectl apply -f ~/cat-service-release-ops/build/kpack-image.yaml
 ```
 
 You should immediately see a build resource for the first build of cat-service-release, as well as a pod, which is where the actual assembly of the image will be carried out.
