@@ -52,12 +52,39 @@ There are several ways to configure an application in ArgoCD.
 You can use the UI, the `argocd` CLI, or you can use `kubectl` to apply a manifest describing the ArgoCD application resource.
 You will use the declarative approach here, meaning, use `kubectl` to apply a yaml manifest.
 
-Review the application manifest for the dev deployment.
+Create the application manifest for the dev deployment.
 Notice that you are instructing ArgoCD to poll the main branch of the cat-service-release-ops repository on GitHub for any changes to `manifests/overlays/dev` (and any relevant base files).
 > Note: Ignore the annotations for now.
 > We will talk about this in an upcoming exercise.
-```editor:open-file
-file: ~/cat-service-release-ops/deploy/argocd-app-dev.yaml
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/argocd/application-dev.yaml
+text: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+    annotations:
+    argocd-image-updater.argoproj.io/image-list: cat-service-image=gcr.io/pgtm-jlong/cat-service
+    argocd-image-updater.argoproj.io/cat-service-image.update-strategy: latest
+    argocd-image-updater.argoproj.io/cat-service-image.allow-tags: regexp:^b\d*\.\d{8}\.\d{6}$
+    #    argocd-image-updater.argoproj.io/cat-service-image.ignore-tags: *
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitcred
+    name: dev-cat-service
+    namespace: argocd
+    spec:
+    destination:
+    namespace: dev
+    server: https://kubernetes.default.svc
+    project: default
+    source:
+    path: manifests/overlays/dev
+    repoURL: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops.git
+    targetRevision: main
+    syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    #    automated: {}
+        automated:
+          prune: true
 ```
 
 Apply the application manifest.
@@ -76,15 +103,42 @@ You will be able to see the health of the various resources, and also see if the
 
 Repeat these steps for the prod deployment.
 
-First, review the manifest.
-```editor:open-file
-file: ~/cat-service-release-ops/deploy/argocd-app-prod.yaml
+First, create the manifest.
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/argocd/application-prod.yaml
+text: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: cat-service-image=gcr.io/pgtm-jlong/cat-service
+        argocd-image-updater.argoproj.io/cat-service-image.update-strategy: latest
+        argocd-image-updater.argoproj.io/cat-service-image.allow-tags: regexp:^b\d*\.\d{8}\.\d{6}$
+    #    argocd-image-updater.argoproj.io/cat-service-image.ignore-tags: *
+        argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitcred
+      name: prod-cat-service
+      namespace: argocd
+    spec:
+      destination:
+        namespace: prod
+        server: https://kubernetes.default.svc
+      project: default
+      source:
+        path: manifests/overlays/prod
+        repoURL: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops.git
+        targetRevision: main
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        #    automated: {}
+        automated:
+          prune: true
 ```
 
 Then, apply it and check the UI to see the effect.
 You should see a second Application, with all the corresponding resources.
 ```execute-1
-kubectl apply -f ~/cat-service-release-ops/deploy/argocd-app-prod.yaml
+kubectl apply -f ~/cat-service-release-ops/argocd/application-prod.yaml
 ```
 
 ## Explore ArgoCD
@@ -94,21 +148,9 @@ kubectl apply -f ~/cat-service-release-ops/deploy/argocd-app-prod.yaml
 ArgoCD is monitoring the manifests on GitHub.
 Try changing a value and seeing how ArgoCD responds.
 
-For example, open the prod kustomization.yaml file.
-```dashboard:open-url
-url: https://github.com/{{ env_github_org }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
-```
-
-```dashboard:open-url
-url: https://github.com/{{ github_org }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
-```
-
-```dashboard:open-url
-url: https://github.com/{{ GITHUB_ORG }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
-```
-
-```dashboard:open-url
-url: https://github.com/{{ ENV_GITHUB_ORG }}/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
+Execute the folloing action block, then click on the url in the terminal to open the prod kustomization.yaml file.
+```execute-1
+echo https://github.com/$GITHUB_ORG/cat-service-release-ops/blob/main/manifests/overlays/prod/kustomization.yaml
 ```
 
 Click the pencil icon on the right to edit the file.
@@ -135,7 +177,7 @@ ArgoCD has three components to its sync policies. For the cat-service dev and pr
 
 Review the dev application definition.
  ```editor:select-matching-text
- file: ~/cat-service-release-ops/deploy/argocd-app-dev.yaml
+ file: ~/cat-service-release-ops/argocd/application-dev.yaml
  text: syncPolicy
  after: 5
  ```
