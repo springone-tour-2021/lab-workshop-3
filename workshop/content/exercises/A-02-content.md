@@ -29,11 +29,13 @@ The container will run on docker in detached mode (aka in the background).
 ```execute-1
 docker run -d --rm --name my-postgres \
        -p 5432:5432 \
-       -e POSTGRES_USER=bk \
-       -e PGUSER=bk \
-       -e POSTGRES_PASSWORD=bk \
-       postgres:latest
+       -e POSTGRESQL_USERNAME=bk \
+       -e POSTGRESQL_DATABASE=bk \
+       -e POSTGRESQL_PASSWORD=bk \
+       bitnami/postgresql:latest
 ```
+
+-e POSTGRESQL_USERNAME=bk -e POSTGRESQL_DATABASE=bk -e POSTGRESQL_PASSWORD=bk bitnami/postgresql:latest
 
 In the second terminal, start the app.
 App startup may take a couple of minutes as Java dependencies are downloaded for the first time.

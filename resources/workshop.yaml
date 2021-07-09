@@ -13,6 +13,11 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
+    ingresses:
+      - name: argocd
+        protocol: http
+        host: argocd-server.argocd.svc.cluster.local
+        port: 80
     namespaces:
       budget: large
       secondary:
@@ -71,8 +76,34 @@ spec:
         - kind: ServiceAccount
           namespace: $(workshop_namespace)
           name: $(service_account)
+    - kind: RoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: $(session_namespace)-argocd-secret
+        namespace: argocd
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(workshop_namespace)-argocd-secret
+      subjects:
+        - kind: ServiceAccount
+          name: $(service_account)
+          namespace: $(workshop_namespace)
   environment:
     objects:
+    - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: $(workshop_namespace)-argocd-secret
+        rules:
+          - apiGroups:
+              - ""
+            resources:
+              - secrets
+            resourceNames:
+              - argocd-initial-admin-secret
+            verbs:
+              - get
     - apiVersion: kpack.io/v1alpha1
       kind: ClusterStore
       metadata:
