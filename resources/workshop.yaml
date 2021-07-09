@@ -105,31 +105,31 @@ spec:
   environment:
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
-        kind: ClusterRole
-        metadata:
-          name: $(workshop_namespace)-argocd-secret
-        rules:
-          - apiGroups:
-              - ""
-            resources:
-              - secrets
-            resourceNames:
-              - argocd-initial-admin-secret
-            verbs:
-              - get
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-argocd-secret
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - secrets
+          resourceNames:
+            - argocd-initial-admin-secret
+          verbs:
+            - get
     - apiVersion: rbac.authorization.k8s.io/v1
-        kind: ClusterRole
-        metadata:
-          name: $(workshop_namespace)-argocd-server
-        rules:
-          - apiGroups:
-              - ""
-            resources:
-              - services
-            resourceNames:
-              - argocd-server
-            verbs:
-              - get
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-argocd-server
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - services
+          resourceNames:
+            - argocd-server
+          verbs:
+            - get
     - apiVersion: kpack.io/v1alpha1
       kind: ClusterStore
       metadata:
