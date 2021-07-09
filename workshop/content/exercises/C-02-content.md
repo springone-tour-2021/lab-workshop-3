@@ -27,7 +27,10 @@ Navigate into the `cat-service-release-ops` repo that you cloned & forked earlie
 cd ~/cat-service-release-ops
 ```
 
-List the files in this directory
+List the files in this directory.
+The files are organized into two main directories, `base` and `overlays`.
+The files in `base` describe the basic application deployment.
+The files in `overlays` describe environment-specific configuration changes.
 ```execute-1
 tree manifests
 ```
@@ -53,60 +56,28 @@ manifests/
         └── patch-env.yaml
 ```
 
-Notice that the files are organized into two main directories, `base` and `overlays`.
-The files in `base` describe the basic application deployment.
-The files in `overlays` describe environment-specific configuration changes for the dev and prod environments.
+Notice that each directory contains a file called `kustomization.yaml`.
+These enable the use of [kustomize](https://kustomize.io), a tool for composing and customizing yaml configuration.
 
-You can see that each directory contains a file called `kustomization.yaml`.
-These enable the use of [kustomize](https://kustomize.io), a tool for composing an customizing yaml configuration.
-
-For clarity and simplicity, start by focusing only on the `manifests/base/app` directory.
-```execute-all
-tree manifests/base/app
-```
-
-The deployment and service yaml files are the typical manifests for app deployments.
+Let's focus on the `manifests/base/app` directory.
+- This directory contains the typical deployment and service manifests.
 The deployment resource will deploy and manage the pod in which the application will run, and the service will make the application accessible outside the cluster.
+- You can also see the application's properties file.
+This file will be converted into a ConfigMap that the app can read from at startup.
+- The kustomization.yaml file ties it all together. It tells kustomize which files to use and what further modifications to make so that kustomize can produce the yaml you want to apply.
 
-In addition, you can see the application.properties file from the app repo has been copied here.
-It is good practice to externalize configuration from the application, so that the configuration can be changed for different environments or updated ithout rebuilding the application.
-Kubernetes provides a way to make that configuration available to the running application via a ConfigMap.
-In order to deploy this application to Kubernetes, you need to convert the `application.properties` file to a ConfigMap, and then use `kubectl` to apply the resulitng ConfigMap manifest, the deployment manifest, and the service manifest. Luckily, `kustomize` can automatically do all of these things for you.
-
-Take a look at the file `kustomization.yaml`.
-```execute-1
-cat manifests/base/app/kustomization.yaml
+Take a look at the `kustomization.yaml` file.
+```editor:open-file
+file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 ```
 
-Your output will look like this:
-```yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - deployment.yaml
-  - service.yaml
-
-configMapGenerator:
-  - name: cat-service-config
-    files:
-      - application.properties
-
-images:
-  - name: $REGISTRY_HOST/cat-service # used for Kustomize matching
-    newTag: latest
-```
-
-Notice that kustomize will include the two basic resource files, deployment and service, and generate a ConfigMap from the application.properties file. It will also overwrite the image tag in `deployment.yaml` with `latest`, which matches the tag you used when you pushed the cat-service image to the Docker repository in the previous exercise.
-
-To see this in action, use `kubectl apply` with the `-k` flag, which provides native support for kustomize.
-Also, use the `--dry-run` flag so that the resulting yaml is not applied to Kubernetes.
-You will be doing that shortly.
+To see this in action, use the `kustomize` CLI to generate the final yaml.
+> Note: This command just produces yaml; it does not apply it to the cluster.
 ```execute-1
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/base/app/
 ```
 
-Examine the output of the last command and compare it to the contents of the source files. You can use the `cat` command in terminal 2 to view the output of the source resources, or you can view the files in the Editor (click on the `Editor` tab).
+Compare the output to the contents of the source files. Notice that a ConfigMap was generated from the properties file, and the image tag was replaced with `latest`.
 
 ### What about the database?
 
@@ -116,7 +87,7 @@ The postgres deployment is described in the file `manifests/base/db/postgres.yam
 Feel free to look through that file, though that will not be an area of focus in this workshop.
 The only thing worth noting is that the `manifests/base` directory contains a `kustomization.yaml` file that combines the resources in `manifests/base/app` and `manifests/base/db`, so the database deployment will be included in the base deployment. You can view the `manifests/base/db/*` and `manifests/base/kustomization.yaml` files in the Editor if you wish to examine this in more detail.
 
-### Deploy manually
+### Deployment requirements
 
 The manifest generated from the `manifests/base/app` configuration would deploy resources to the default namespace. The DevOps team has specified that you should use namespaces called dev and prod.
 
@@ -126,43 +97,28 @@ You can use kustomize to meet both requirements.
 
 #### Deploy to dev
 
-Examine the contents of the `manifests/overlays/dev/kustomization.yaml` file.
+Examine the dev kustomization configuration.
+```editor:open-file
+file: ~/cat-service-release-ops/manifests/overlays/dev/kustomization.yaml
+```
+
+Preview the yaml that will be generated using the dev overlay.
 ```execute-1
-cat manifests/overlays/dev/kustomization.yaml
-```
-
-Your output will show:
-```yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - ../../base/
-
-namespace: $SESSION_NAMESPACE-dev
-namePrefix: dev-
-```
-
-In terminal 2, preview the yaml that will be generated using the dev overlay.
-```execute-2
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/
 ```
 
-Compare the output to the output generated by the base/app manifests in terminal 1, earlier in this exercise.
-You should see three key differences:
-1. All resource names in the overlay deployment are prefixed with "dev"
-2. All resources in the overlay deployment  specify the namespace "dev"
-3. The overlay deployment includes the postgres resources
+In this case, you should see three key differences:
+1. All resource names are prefixed with "dev"
+2. All resources specify the namespace "dev"
+3. The overlay includes the database manifest
 
 Deploy the application to the dev environment:
 ```execute-1
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl apply -f -
 ```
 
-Watch the pods until the dev-cat.
-Wait until the dev-cat-service pod is "Running" and the Ready coulmn specifies "1/1".
-> Note: the dev-cat-service pod may need to restart a few times.
-> This is because it fails when it cannot connect to the database, and since we are deploying both at the same time this first time, the app needs to wait until the database is ready before it can successfully start up.
+Wait until the dev-cat-service pod is "Running" and the Ready column specifies "1/1".
+> Note: the database must complete startup before the app can start successfully, so you will likely see the app restart a few times before it finaly succeeds.
 ```execute-1
 kubectl -n $SESSION_NAMESPACE-dev get pods --watch
 ```
@@ -179,7 +135,8 @@ In terminal 2, start a port-forwarding process so that you can send a request to
 kubectl port-forward service/dev-cat-service 8080:8080 -n $SESSION_NAMESPACE-dev
 ```
 
-In terminal 1, send a couple of requests to the application.
+Send a couple of requests to the application.
+You should see successful responses.
 ```execute-1
 http :8080/actuator/health
 ```
@@ -202,7 +159,7 @@ kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ |
 
 #### Deploy to prod
 
-Optionally, you can repeat the steps in this exercise, using the prod namespace and the prod overlay.
+Optionally, you can repeat the steps in this exercise, using the prod namespace and overlay.
 
 ## Next Steps
 In the next steps, you will automate the test, build, and deployment of the application.

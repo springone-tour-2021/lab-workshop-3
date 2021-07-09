@@ -1,6 +1,6 @@
 ## Automate deployment
 
-Earlier in this workshop you deployed an image manually to Kubernetes using `kubectl apply -k ...`.
+Earlier in this workshop you deployed an image manually to Kubernetes using `kubectl apply...`.
 
 One option to automate deployment would be to include this command in a shell script executed by an automation toolchain like Github Actions, Jenkins, and so on.
 
