@@ -58,6 +58,19 @@ spec:
         - kind: ServiceAccount
           namespace: $(workshop_namespace)
           name: $(service_account)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: $(session_namespace)-argo-user-rw
+        namespace: $(session_namespace)
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(workshop_namespace)-argo-rw
+      subjects:
+        - kind: ServiceAccount
+          namespace: $(workshop_namespace)
+          name: $(service_account)
   environment:
     objects:
     - apiVersion: kpack.io/v1alpha1
@@ -104,6 +117,24 @@ spec:
             - builds
             - images
             - sourceresolvers
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - delete
+            - patch
+            - update
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: $(workshop_namespace)-argo-rw
+      rules:
+        - apiGroups:
+            - argoproj.io
+          resources:
+            - applications
+            - appprojects
           verbs:
             - get
             - list
