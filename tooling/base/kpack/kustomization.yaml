@@ -1,0 +1,5 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - https://github.com/pivotal/kpack/releases/download/v0.3.1/release-0.3.1.yaml
