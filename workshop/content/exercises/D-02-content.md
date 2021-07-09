@@ -39,7 +39,7 @@ The building blocks of builders are stacks (OS file system) and stores (buildpac
 Notice in the list of _kpack api-resources_ that stacks and stores are cluster-scoped only, while builders can be namespaced.
 Because of this, the stack and the store have also been created already.
 ```execute-1
-kubectl get clusterstacks,clusterstores
+kubectl get clusterstacks,clusterstores | grep $WORKSHOP_NAMESPACE
 ```
 
 You can examine the configuration that was applied to create these resources.
@@ -92,6 +92,9 @@ kubectl get bldr booternetes-builder -w
 ```
 
 When the output shows a reference to a builder, run the following command to verify the new builder image is in the Docker registry.
+```execute-1
+<ctrl-c>
+```
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
