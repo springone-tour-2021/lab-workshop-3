@@ -39,16 +39,35 @@ The building blocks of builders are stacks (OS file system) and stores (buildpac
 Notice in the list of _kpack api-resources_ that stacks and stores are cluster-scoped only, while builders can be namespaced.
 Because of this, the stack and the store have also been created already.
 ```execute-1
-kubectl get clusterstacks,clusterstores
+kubectl get clusterstacks,clusterstores | grep $WORKSHOP_NAMESPACE
 ```
 
-You can examine the configuration that was applied to create these resources.
+Examine the configuration that was applied to create these resources.
 Notice that they take advantage of the existing Paketo Buildpacks images.
-```editor:open-file
-file: ~/cat-service-release-ops/tooling/kpack-config/stack.yaml
+
+The stack:
 ```
-```editor:open-file
-file: ~/cat-service-release-ops/tooling/kpack-config/store.yaml
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: {{workshop_namespace}}-stack
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "paketobuildpacks/build:base-cnb"
+  runImage:
+    image: "paketobuildpacks/run:base-cnb"
+```
+
+The store:
+```
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStore
+metadata:
+  name: {{workshop_namespace}}-store
+spec:
+  sources:
+    - image: paketobuildpacks/builder:base
 ```
 
 ### Create a builder
@@ -63,12 +82,41 @@ Clusterbuilders can be used by image resources across the cluster, and namespace
 
 In this step, you will create a namespaced builder.
 
+Create a directory for kpack manifests.
+```execute-1
+mkdir kpack
+```
+
+Create the builder manifest.
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/kpack/builder.yaml
+text: |
+    apiVersion: kpack.io/v1alpha1
+    kind: Builder
+    metadata:
+      name: booternetes-builder
+    spec:
+      tag: {{registry_host}}/booternetes-builder
+      serviceAccount: default
+      stack:
+        name: {{workshop_namespace}}-stack
+        kind: ClusterStack
+      store:
+        name: {{workshop_namespace}}-store
+        kind: ClusterStore
+      order:
+        - group:
+            - id: paketo-buildpacks/java
+        - group:
+            - id: paketo-buildpacks/nodejs
+```
+
 Examine the manifest for the builder.
 Notice the tag and the service account.
 kpack will assemble a builder image and publish it using the information specified in the `tag`.
 The specified service account has already been granted write permissions to the container registry specified in the tag.
 ```editor:select-matching-text
-file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
+file: ~/cat-service-release-ops/kpack/builder.yaml
 text: 'tag:'
 after: 1
 ```
@@ -76,14 +124,14 @@ after: 1
 Notice also the `order` configuration.
 The Paketo Buildpacks can handle applications in a handful of languages, but we are only including the Java and Nodejs buildpacks in this builder.
 ```editor:select-matching-text
-file: ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
+file: ~/cat-service-release-ops/kpack/builder.yaml
 text: 'order:'
 after: 4
 ```
 
 Apply the builder manifest to instruct kpack to create the builder.
 ```execute-1
-kubectl apply -f ~/cat-service-release-ops/tooling/kpack-config/builder.yaml
+kubectl apply -f ~/cat-service-release-ops/kpack/builder.yaml
 ```
 
 Wait for builder to be ready
@@ -92,6 +140,9 @@ kubectl get bldr booternetes-builder -w
 ```
 
 When the output shows a reference to a builder, run the following command to verify the new builder image is in the Docker registry.
+```execute-1
+<ctrl-c>
+```
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
@@ -102,15 +153,80 @@ This builder can now be used by anyone with access to the registry - presumably 
 
 Next, you need to tell kpack to build the cat-service application using this builder, and to put the resulting app image in the Docker registry.
 
-Review the image definition.
-Notice that you are instructing kpack to poll the cat-service-release repository on GitHub for any new commits on the release branch.
-```editor:open-file
-file: ~/cat-service-release-ops/build/kpack-image.yaml
+Click on the action block to create the image manifest.
+Review its contents and notice that you are instructing kpack to poll the cat-service-release repository for any new commits on the release branch.
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/kpack/image.yaml
+text: |
+    apiVersion: kpack.io/v1alpha1
+    kind: Image
+    metadata:
+      name: cat-service
+    spec:
+      builder:
+        name: booternetes-builder
+        kind: Builder
+      serviceAccount: kpack-builder
+      # cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
+      source:
+        git:
+          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release.git
+          revision: release
+      tag: {{registry_host}}/cat-service
 ```
 
-Apply the image manifest.
+Make sure to replace the org placeholder ith your GitHub org name.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/kpack/image.yaml
+text: '<YOUR_GITHUB_ORG_HERE>'
+```
+
+Validate that the image will be polling your repo.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/kpack/image.yaml
+text: 'url:'
+after: 1
+```
+
+Notice also that the image resource will use a service account.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/kpack/image.yaml
+text: 'serviceAccount: kpack-builder'
+```
+
+You need to create the service account, as well as a secret with credentials for pushing to the registry.
+Create the service account and secret manifests.
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/kpack/service-account.yaml
+text: |
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: kpack-builder
+    secrets:
+    - name: registry-credentials
+    imagePullSecrets:
+    - name: eduk8s-registry-credentials
+```
+
+```editor:append-lines-to-file
+file: ~/cat-service-release-ops/kpack/secret.yaml
+text: |
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: registry-credentials
+      annotations:
+        kpack.io/docker : {{registry_host}}
+    type: kubernetes.io/basic-auth
+    stringData:
+      username: {{registry_username}}
+      password: {{registry_password}}
+```
+
+Apply the manifests you just created.
 ```execute-1
-kubectl apply ~/cat-service-release-ops/build/kpack-image.yaml
+kubectl apply -f ~/cat-service-release-ops/kpack/
 ```
 
 You should immediately see a build resource for the first build of cat-service-release, as well as a pod, which is where the actual assembly of the image will be carried out.
