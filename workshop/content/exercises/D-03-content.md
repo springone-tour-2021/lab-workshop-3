@@ -25,7 +25,7 @@ Shortly, you will create two application resources, one for dev and the other fo
 At this point, you can also browse through the ArgoCD UI to get a visual sense for what it does.
 > TODO: Figure out argocd UI url.
 ```dashboard:open-url
-url: http://{{ session_namespace }}-argocd.{{ ingress_domain }}/
+url: $(INGRESS_PROTOCOL)://$(SESSION_NAMESPACE)-argocd.$(INGRESS_DOMAIN)
 ```
 
 Log in to the UI using the username `admin`.
