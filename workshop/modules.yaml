@@ -5,11 +5,13 @@ modules:
     setup-environment:
         name: Setup Environment
         exit_sign: Start Workshop
+
     # Part A: Into to the app
     exercises/A-01-content:
         name: Prerequisites
     exercises/A-02-content:
         name: App overview
+
     # Part B: Testing
     exercises/B-01-content:
         name: Unit testing
@@ -17,20 +19,23 @@ modules:
         name: Contract testing
     exercises/B-03-content:
         name: Database testing
-    # Part C: Deploy manually to K8s
-    exercises/C-01-content:
-        name: Build container image (manual)
-    exercises/C-02-content:
-        name: Deploy to Kubernetes (manual)
-    # Part D: Automate deployment
     exercises/D-01-content:
         name: Automate testing using GitHub Actions
+
+    # Part C: Build Image
+    exercises/C-01-content:
+        name: Build container image (manual)
     exercises/D-02-content:
         name: Automate build using kpack
+
+    # Part D: Automate deployment
+    exercises/C-02-content:
+        name: Deploy to Kubernetes (manual)
     exercises/D-03-content:
         name: Automate deployment using ArgoCD
     exercises/D-04-content:
         name: Automate container updates using ArgoCD Image Updater
+
     # Part E: Observe the complete automated workflow
     exercises/E-01-content:
         name: Watch it all run!
