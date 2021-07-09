@@ -82,6 +82,11 @@ Clusterbuilders can be used by image resources across the cluster, and namespace
 
 In this step, you will create a namespaced builder.
 
+Create a directory for kpack manifests.
+```execute-1
+mkdir kpack
+```
+
 Create the builder manifest.
 ```editor:append-lines-to-file
 file: ~/cat-service-release-ops/kpack/builder.yaml
@@ -173,13 +178,14 @@ text: |
 
 Validate that the image will be polling your repo.
 ```editor:select-matching-text
-file: ~/cat-service-release-ops/build/kpack-image.yaml
+file: ~/cat-service-release-ops/kpack/image.yaml
 text: 'url:'
+after: 1
 ```
 
 Notice also that the image resource will use a service account.
 ```editor:select-matching-text
-file: ~/cat-service-release-ops/build/kpack-image.yaml
+file: ~/cat-service-release-ops/kpack/image.yaml
 text: 'serviceAccount: kpack-builder'
 ```
 
