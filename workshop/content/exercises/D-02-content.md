@@ -96,13 +96,13 @@ text: |
     metadata:
       name: booternetes-builder
     spec:
-      tag: {{registry_host}}/booternetes-builder
+      tag: lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com/booternetes-builder
       serviceAccount: default
       stack:
-        name: {{workshop_namespace}}-stack
+        name: lab-workshop-3-w02-stack
         kind: ClusterStack
       store:
-        name: {{workshop_namespace}}-store
+        name: lab-workshop-3-w02-store
         kind: ClusterStore
       order:
         - group:
@@ -110,7 +110,6 @@ text: |
         - group:
             - id: paketo-buildpacks/nodejs
 ```
-
 
 Examine the manifest for the builder.
 Notice the tag and the service account.
@@ -168,12 +167,12 @@ text: |
         name: booternetes-builder
         kind: Builder
       serviceAccount: kpack-builder
-      cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
+      # cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
       source:
         git:
-          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release.git
+          url: https://github.com/ciberkleid/cat-service-release.git
           revision: release
-      tag: {{registry_host}}/cat-service
+      tag: lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com/cat-service
 ```
 
 Make sure to replace the org placeholder ith your GitHub org name.
@@ -206,6 +205,8 @@ text: |
       name: kpack-builder
     secrets:
     - name: registry-credentials
+    imagePullSecrets:
+    - name: eduk8s-registry-credentials
 ```
 
 ```editor:append-lines-to-file
@@ -216,11 +217,11 @@ text: |
     metadata:
       name: registry-credentials
       annotations:
-        kpack.io/docker: {{registry_host}}
+        kpack.io/docker : lab-workshop-3-w02-s003-registry.s1tour-prod-new-25cca0b.tanzu-labs.esp.vmware.com
     type: kubernetes.io/basic-auth
     stringData:
-      username: {{registry_username}}
-      password: {{registry_password}}
+      username: lab-workshop-3-w02-s003
+      password: TFfSyjzQA6maH1RtqJIV24Nb3BpMiPkD
 ```
 
 Apply the manifests you just created.
