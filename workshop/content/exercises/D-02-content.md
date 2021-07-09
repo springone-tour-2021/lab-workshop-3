@@ -204,7 +204,7 @@ text: |
     metadata:
       name: registry-credentials
       annotations:
-        kpack.io/docker: {{ingress_protocol}}://{{registry_host}}/v2/
+        kpack.io/docker: {{registry_host}}
     type: kubernetes.io/basic-auth
     stringData:
       username: {{registry_username}}
