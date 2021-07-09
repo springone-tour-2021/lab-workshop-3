@@ -97,7 +97,7 @@ text: |
       name: booternetes-builder
     spec:
       tag: {{registry_host}}/booternetes-builder
-      serviceAccount: kpack-builder
+      serviceAccount: default
       stack:
         name: {{workshop_namespace}}-stack
         kind: ClusterStack
@@ -171,9 +171,15 @@ text: |
       cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
       source:
         git:
-          url: https://github.com/{{github_org}}/cat-service-release.git
+          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release.git
           revision: release
       tag: {{registry_host}}/cat-service
+```
+
+Make sure to replace the org placeholder ith your GitHub org name.
+```editor:select-matching-text
+file: ~/cat-service-release-ops/kpack/image.yaml
+text: '<YOUR_GITHUB_ORG_HERE>'
 ```
 
 Validate that the image will be polling your repo.
@@ -192,7 +198,7 @@ text: 'serviceAccount: kpack-builder'
 You need to create the service account, as well as a secret with credentials for pushing to the registry.
 Create the service account and secret manifests.
 ```editor:append-lines-to-file
-file: ~/cat-service-release-ops/kpack/secret.yaml
+file: ~/cat-service-release-ops/kpack/service-account.yaml
 text: |
     apiVersion: v1
     kind: ServiceAccount
@@ -203,7 +209,7 @@ text: |
 ```
 
 ```editor:append-lines-to-file
-file: ~/cat-service-release-ops/kpack/service-account.yaml
+file: ~/cat-service-release-ops/kpack/secret.yaml
 text: |
     apiVersion: v1
     kind: Secret
