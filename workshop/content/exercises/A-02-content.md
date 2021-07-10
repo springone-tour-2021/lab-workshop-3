@@ -1,8 +1,8 @@
-### Run the app locally
+## Run the app locally
 
 Let's begin by running the application locally to understand its behavior.
 
-In both terminal windows, navigate into the app repo that you cloned & forked earlier.
+In both terminal windows, navigate into the cat-service directory.
 ```execute-all
 cd ~/cat-service
 clear
@@ -39,7 +39,7 @@ http :8080/cats/Toby
 
 You should see a successful response including Tobys' age in months. Toby is the only cat in the database, so you'll get the same response for every request.
 
-### Stop the app
+## Stop the app
 
 Stop the app.
 ```execute-2

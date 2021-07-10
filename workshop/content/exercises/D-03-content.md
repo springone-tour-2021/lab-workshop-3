@@ -18,7 +18,7 @@ List the Custom Resource Definitions (CRDs) that argocd has added to your cluste
 kubectl api-resources | grep argo
 ```
 
-Shortly, you will create "application" resources.
+Shortly, you will create "Application" resources.
 
 ### Argo CD UI && CLI
 
