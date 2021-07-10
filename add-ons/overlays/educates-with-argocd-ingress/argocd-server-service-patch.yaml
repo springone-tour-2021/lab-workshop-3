@@ -1,0 +1,6 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: argocd-server
+  annotations:
+    projectcontour.io/upstream-protocol.h2c: "https,443"
