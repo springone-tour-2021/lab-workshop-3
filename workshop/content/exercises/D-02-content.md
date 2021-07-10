@@ -84,7 +84,7 @@ You are now ready to configure the builder.
 
 Create a directory for kpack manifests.
 ```execute-1
-mkdir kpack
+mkdir ~/cat-service-release-ops/kpack
 ```
 
 Create the builder manifest.
@@ -114,8 +114,9 @@ text: |
 Examine the manifest for the builder.
 Notice the tag and the service account.
 - The tag contains the address of the registry in the tutorial environment.
-kpack will assemble a builder image and publish it using this information.
+  kpack will assemble a builder image and publish it using this information.
 - The service account has already been granted write permissions to the container registry.
+
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/kpack/builder.yaml
 text: 'tag:'
@@ -124,6 +125,7 @@ after: 1
 
 Notice also the `order` configuration.
 Paketo Buildpacks can handle a handful of languages, but we are only including Java and Nodejs in this builder.
+
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/kpack/builder.yaml
 text: 'order:'
@@ -245,12 +247,13 @@ logs -image cat-service -build 1 -namespace ${SESSION_NAMESPACE}
 ```
 
 You can also watch the status of the build.
-```execute-1
+It will be "Unknown" while the build is in progress.
+```execute-2
 kubectl get builds -w
 ```
 
 When the build is ready (`SUCCEEDED=True` and an image reference appears), stop the watch process.
-```execute-1
+```execute-2
 <ctrl-c>
 ```
 
