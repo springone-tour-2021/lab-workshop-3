@@ -8,8 +8,8 @@ configMapGenerator:
   - name: argocd-cm
     behavior: merge
     literals:
-      - accounts.image-updater=apiKey
       - kustomize.buildOptions=--load_restrictor LoadRestrictionsNone
+      - accounts.image-updater=apiKey
   - name: argocd-rbac-cm
     behavior: merge
     literals:
