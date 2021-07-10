@@ -1,12 +1,8 @@
 ## Cats, Cats, Everywhere
 
-Throughout this workshop, you will be using an application that returns cat names and ages.
+Throughout this workshop, you will be using a Spring Boot application called _Cat Service_ that returns cat names and ages. The app uses a postgres database to store cat information.
 
-The application comprises a Spring Boot app and a database:
-- **cat-service** - Exposes an enpoint "/cats/{name}" and returns the cat's name and age in months.
-- **cat-postgres** - Stores the names and birth dates of cats.
-
-## Prerequisites
+#### Prerequisites
 
 You will need a [GitHub account](https://github.com).
 
@@ -14,22 +10,26 @@ You will need a [GitHub account](https://github.com).
 
 Open the GitHub UI in a browser and log in.
 Fork the following two repos.
-- **cat-service** contains the source code for the cat-service application
-- **cat-service-release-ops** - contains manifests for deployment to Kubernetes for cat-service and postgres db
 
+**1. cat-service** - app source code
 ```dashboard:open-url
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 ```
 
+**2. cat-service-release-ops** - app & database deployment files
 ```dashboard:open-url
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
- 
-Copy the following line to the terminal.
-Replace "<my-github-org>" with your org name (the bit in the url after github.com; often the same as your username).
-Storing the org in an environment variable will help generate commands throughout the workshop.
+
+For convenience, store the name of your GitHub org (the bit in the url after github.com; often the same as your username) in an environment variable.
+This will help generate commands throughout the workshop.
+You do not need to provide your password.
+
+Copy the following line to the terminal and replace `my-org` with your org name (the bit in the url after github.com; often the same as your username).
+This will store it in an environment variable and make it easier to generate commands throughout this workshop.
+> Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to enter your password.
 ```copy
-export GITHUB_ORG=<my-github-org>
+export GITHUB_ORG=my-org
 ```
 
 Clone your repos to the workshop environment.
