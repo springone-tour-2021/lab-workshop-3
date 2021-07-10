@@ -6,10 +6,11 @@ Throughout this workshop, you will be using a Spring Boot application called _Ca
 
 You will need a [GitHub account](https://github.com).
 
-### Fork & clone the repos
+## GitHub repo setup
 
-Open the GitHub UI in a browser and log in.
-Fork the following two repos.
+### Fork the GitHub repos
+
+Click on the following GitHub links and use the GitHub UI to fork the following repos:
 
 **1. cat-service** - app source code
 ```dashboard:open-url
@@ -21,22 +22,56 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
 
-Copy/paste the following line to the terminal and **replace `my-org` with your org name** (the bit before the repo name on your newly forked repos; often the same as your username).
-This will store it in an environment variable and make it easier to generate commands throughout this workshop.
+### Set the default branch
+
+For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
+![alt_text](images/github-set-default-branch.png "Set default branch")
+
+> Make sure to update the default branch for both repositories.
+
+### Set your GitHub org
+
+It's easier to auto-generate commands in this tutorial if you store the name of your GitHub org in an environment variable (hint: the org is the bit before the repo name on your newly forked repos; often the same as your username).
 > Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
-```copy
-export GITHUB_ORG=my-org
+
+Run the following command.
+At the prompt, enter your GitHub org name.
+```execute-1
+printf "Enter your GitHub org: " && read GITHUB_ORG
 ```
+
+### Clone the repos
 
 Clone your repos to the workshop environment.
 ```execute-1
 git clone https://github.com/$GITHUB_ORG/cat-service && \
     cd cat-service && \
-    git checkout educates-workshop && \
     cd ..
 
 git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
     cd cat-service-release-ops && \
-    git checkout educates-workshop && \
     cd ..
 ```
+
+You should now see two new directories in the workshop.
+Check out the contents.
+```execute-1
+tree -L 1 cat*
+```
+
+The output will show:
+```
+cat-service
+├── bin
+├── bump
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+└── src
+cat-service-release-ops
+├── manifests
+└── README.md
+```
+
+As you can see, `cat-service` has the structure of a typical Spring Boot application, and `cat-service-release-ops` contains the manifests for deploying to Kubernetes.
