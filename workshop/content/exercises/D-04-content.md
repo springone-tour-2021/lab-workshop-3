@@ -21,8 +21,8 @@ At this point, ArgoCD will detect the change to the ops repo and re-apply the ma
 
 ### Review ArgoCD Image Updater installation
 
-Again, because this tutorial hosts many sessions in a single cluster, Argo CD Image Updater has already been installed.
-If you are interested in installation instructions, read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace).
+Argo CD Image Updater has already been installed into the workshop cluster.
+> Interested in the installation instructions? Read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace).
 
 ArgoCD does not add any CRDs to the cluster.
 

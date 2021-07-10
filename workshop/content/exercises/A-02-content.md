@@ -4,7 +4,7 @@ Let's begin by running the application locally to understand its behavior.
 
 In both terminal windows, navigate into the app repo that you cloned & forked earlier.
 ```execute-all
-cd cat-service
+cd ~/cat-service
 ```
 
 List the contents of the repository.
@@ -34,8 +34,6 @@ docker run -d --rm --name my-postgres \
        -e POSTGRESQL_PASSWORD=bk \
        bitnami/postgresql:latest
 ```
-
--e POSTGRESQL_USERNAME=bk -e POSTGRESQL_DATABASE=bk -e POSTGRESQL_PASSWORD=bk bitnami/postgresql:latest
 
 In the second terminal, start the app.
 App startup may take a couple of minutes as Java dependencies are downloaded for the first time.

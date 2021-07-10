@@ -12,7 +12,7 @@ Applications can be deployed to Kubernetes _imperatively_ or _declaratively_.
     - Manifests express - or declare, as it were - the desired state, serving as a blueprint and "source of truth" for a running system
     - Manifests make it possible to configure any aspect of a given resource
 
-The declarative approach follows the methodology of "infrastructure as code" and enables [GitOps](https://www.gitops.tech) as a methoology for managing deployments. It is the approach you will use here.
+The declarative approach aligns with the idea of "infrastructure as code" and enables [GitOps](https://www.gitops.tech) as a methodology for managing deployments. It is the approach you will use here.
 
 ### Review deployment manifests
 
@@ -28,9 +28,9 @@ cd ~/cat-service-release-ops
 ```
 
 List the files in this directory.
-The files are organized into two main directories, `base` and `overlays`.
-The files in `base` describe the basic application deployment.
-The files in `overlays` describe environment-specific configuration changes.
+The files are organized as `base` and `overlays`.
+- The base files describe the basic application deployment.
+- The overlay files describe environment-specific configuration changes.
 ```execute-1
 tree manifests
 ```
@@ -82,18 +82,9 @@ Compare the output to the contents of the source files. Notice that a ConfigMap 
 ### What about the database?
 
 There are different strategies for managing the deployment of the database.
-For simplicity, we have included the postgres manifests together with the app manifests.
-The postgres deployment is described in the file `manifests/base/db/postgres.yaml`.
-Feel free to look through that file, though that will not be an area of focus in this workshop.
-The only thing worth noting is that the `manifests/base` directory contains a `kustomization.yaml` file that combines the resources in `manifests/base/app` and `manifests/base/db`, so the database deployment will be included in the base deployment. You can view the `manifests/base/db/*` and `manifests/base/kustomization.yaml` files in the Editor if you wish to examine this in more detail.
-
-### Deployment requirements
-
-The manifest generated from the `manifests/base/app` configuration would deploy resources to the default namespace. The DevOps team has specified that you should use namespaces called dev and prod.
-
-In addition, the DevOps team has requested that resource names be prefixed with "dev" and "prod", as appropriate.
-
-You can use kustomize to meet both requirements.
+For simplicity, we have included the postgres manifests together with the app manifests such that the database deployment will be included in the base manifests.
+Feel free to examine the files in `manifests/base/db/*` as well as `manifests/base/kustomization.yaml`.
+However, this will not be an area of focus in this tutorial.
 
 #### Deploy to dev
 
@@ -109,10 +100,9 @@ kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/
 
 In this case, you should see three key differences:
 1. All resource names are prefixed with "dev"
-2. All resources specify the namespace "dev"
-3. The overlay includes the database manifest
+2. The overlay includes the database manifest
 
-Deploy the application to the dev environment:
+Deploy the dev application:
 ```execute-1
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl apply -f -
 ```
@@ -120,7 +110,7 @@ kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ |
 Wait until the dev-cat-service pod is "Running" and the Ready column specifies "1/1".
 > Note: the database must complete startup before the app can start successfully, so you will likely see the app restart a few times before it finaly succeeds.
 ```execute-1
-kubectl -n $SESSION_NAMESPACE-dev get pods --watch
+kubectl get pods --watch
 ```
 
 When the cat-service pod is ready (STATUS=Running and READY=1/1), stop the watch process.
@@ -132,7 +122,7 @@ When the cat-service pod is ready (STATUS=Running and READY=1/1), stop the watch
 
 In terminal 2, start a port-forwarding process so that you can send a request to the running application.
 ```execute-2
-kubectl port-forward service/dev-cat-service 8080:8080 -n $SESSION_NAMESPACE-dev
+kubectl port-forward service/dev-cat-service 8080:8080
 ```
 
 Send a couple of requests to the application.
@@ -157,9 +147,9 @@ To delete the dev deployment, run:
 kustomize build --load-restrictor=LoadRestrictionsNone manifests/overlays/dev/ | kubectl delete -f -
 ```
 
-#### Deploy to prod
+#### Optional: Deploy to prod
 
-Optionally, you can repeat the steps in this exercise, using the prod namespace and overlay.
+As an exercise, you can repeat these steps using the prod overlay.
 
 ## Next Steps
 In the next steps, you will automate the test, build, and deployment of the application.
