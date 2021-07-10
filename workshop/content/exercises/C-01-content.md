@@ -21,12 +21,12 @@ We will come back to it later in the workshop._
 [INFO]  > Pulling builder image 'docker.io/paketobuildpacks/builder:base' 100%
 ```
 
-Check for the resulting image on the local Docker daemon.
+## Push the image
+
+When the build completes, check for the resulting image on the local Docker daemon.
 ```execute-1
 docker images | grep cat-service
 ```
-
-## Push the image
 
 In order to depoy it to Kubernetes, you must push the image to an image registry so Kubernetes can access. A registry is included in your tutorial environment.
 
