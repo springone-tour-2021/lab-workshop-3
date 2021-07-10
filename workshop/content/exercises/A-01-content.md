@@ -21,25 +21,22 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
 
-For convenience, store the name of your GitHub org (the bit in the url after github.com; often the same as your username) in an environment variable.
-This will help generate commands throughout the workshop.
-You do not need to provide your password.
-
-Copy the following line to the terminal and replace `my-org` with your org name (the bit in the url after github.com; often the same as your username).
+Copy/paste the following line to the terminal and **replace `my-org` with your org name** (the bit before the repo name on your newly forked repos; often the same as your username).
 This will store it in an environment variable and make it easier to generate commands throughout this workshop.
-> Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to enter your password.
+> Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
 ```copy
 export GITHUB_ORG=my-org
 ```
 
 Clone your repos to the workshop environment.
 ```execute-1
-git clone https://github.com/$GITHUB_ORG/cat-service
-cd cat-service
-git checkout educates-workshop
+git clone https://github.com/$GITHUB_ORG/cat-service && \
+    cd cat-service && \
+    git checkout educates-workshop && \
+    cd ..
 
-cd ..
-git clone https://github.com/$GITHUB_ORG/cat-service-release-ops
-cd cat-service-release-ops
-git checkout educates-workshop
+git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
+    cd cat-service-release-ops && \
+    git checkout educates-workshop && \
+    cd ..
 ```
