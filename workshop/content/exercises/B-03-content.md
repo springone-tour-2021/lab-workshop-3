@@ -1,6 +1,6 @@
 ## App Integration Tests with Containers
 
-*** Airs getting thin this far up the Cat Test Pyramid
+*** Further Up the Test Pyramid, Cats become meowschievious **
 
 The entrypoint for getting TestContainers working is through pom.xml. Simply add the `testcontainers` dependency to any project under 'test' scope. Lets take a peek at the pom for `cats-service` example:
 
@@ -13,9 +13,9 @@ after: 4
 
 ### Cats love TestContainers
 
-With the dependency in hand, we can issue annotations to our next test class `CatsIntegrationTests`. 
+With the dependency in hand, we can issue configuration to our next test class `CatsIntegrationTests`. 
 
-Now we need to enable Testcontainers and allow Spring Boot to classpath-scan our entity and service objects. This is accomplished with 2 annotations: `@Testcontainers` and `@SpringBootTest`. The former is a JUnit Jupiter extension that activates automatic startup, and shutdown of containers used during a test case. The latter annotation activates Spring Boots Classpath scanning for our Spring-related configuration objects; we want the whole application to find RDBMS and expose REST endpoints for test.
+In this test, we will enable Testcontainers and allow Spring Boot to classpath-scan our entity and service objects. This is accomplished with 2 annotations: `@Testcontainers` and `@SpringBootTest`. The former is a JUnit Jupiter extension that activates automatic startup, and shutdown of containers used during a test case. The latter annotation activates Spring Boots Classpath scanning for our Spring-related configuration objects; we want the whole application to find RDBMS and expose real (heavy, transport-laden) REST endpoints for test.
 
 Click to see configuration in context:
 
