@@ -8,41 +8,38 @@ The application comprises a Spring Boot app and a database:
 
 ## Prerequisites
 
-You will need:
-- A GitHub [account](https://github.com)
-- A GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) (with "repo" and "workflow" access rights)
-  
-Make sure you have those ready before proceeding.
+You will need a [GitHub account](https://github.com).
 
-### Environment variables
+### Fork & clone the repos
 
-Run the following command and enter the appropriate values at the prompts.
-```execute-1
-source scripts/credentials.sh
+Open the GitHub UI in a browser and log in.
+Fork the following two repos.
+- **cat-service** contains the source code for the cat-service application
+- **cat-service-release-ops** - contains manifests for deployment to Kubernetes for cat-service and postgres db
+
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 ```
 
-Make sure the output of the script indicates that the environment variables were properly set.
-
-### GitHub repositories
-
-The workshop requires three GitHub repositories:
-- **cat-service** - source code for the cat application and files to automate testing
-- **cat-service-release** - copy of the cat application source code, once it has passed testing
-- **cat-service-release-ops** - files needed to automate deployment of cat application and postgres db
-
-A script is provided to fork the repos into your own GitHub org and update references to point to your GitHub org and this workshop instance's Docker registry.
-> Note: This script uses the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USER and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
-
-Run the following command.
-```execute-1
-source scripts/repos.sh
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
+```
+ 
+Copy the following line to the terminal.
+Replace "<my-github-org>" with your org name (the bit in the url after github.com; often the same as your username).
+Storing the org in an environment variable will help generate commands throughout the workshop.
+```copy
+export GITHUB_ORG=<my-github-org>
 ```
 
-In a browser, open [GitHub](https://github.com), and navigate to the list of repositories in your org.
-You should see three new repositories:
-- `cat-service` - the application code and testing automation files
-- `cat-service-release` - empty for now; tested code will be copied here
-- `cat-service-release-ops` - deployment files and deployment automation files
+Clone your repos to the workshop environment.
+```execute-1
+git clone https://github.com/$GITHUB_ORG/cat-service
+cd cat-service
+git checkout educates-workshop
 
-You do not need to understand the contents of these repos yet. 
-You will go through them as you proceed through this workshop.
+cd ..
+git clone https://github.com/$GITHUB_ORG/cat-service-release-ops
+cd cat-service-release-ops
+git checkout educates-workshop
+```
