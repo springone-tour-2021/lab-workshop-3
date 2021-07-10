@@ -125,3 +125,78 @@ after: 3
 ```
 
 Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Lets move on to testing the Web Layer.
+
+
+### Testing the CatsService
+
+Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at test here; the JPA tests are complete. Further up the cat test pyramid is where we are.
+
+filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a 'before' method that will get called at the beginning of each test. Take a look at how this works in context:
+
+```editor:select-matching-text
+file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
+text: "void findByNameShouldReturnName()"
+before: 1
+after: 3
+```
+
+Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. lets have a look at the mock setup and test assertion in context:
+
+```editor:select-matching-text
+file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
+text: "void getCatShouldReturnCat() {"
+before: 1
+after: 3
+```
+
+Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Lets move on to testing the Web Layer.
+
+### Cats REST Controller 
+
+Another layer of our testing regimen is the HTTP REST endpoint - web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should - unlike most cats. 
+
+Likewise, This test is still quite low on the pyramid - closer to Integration than Unit tests, but not quite Complete Integration since all resourcs are not available. This means that those resources we aren't testing are going to be mocked.
+
+Lets take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
+
+Click below to see the CatsRestController in context:
+
+```editor:select-matching-text
+file: ~/cat-service/src/main/java/com/example/demo/CatsRestController.java
+text: "@RestController"
+after: 14
+```
+
+What we know is that the the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text - e.g. `/toby`. Furthermore a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
+
+### Cat scratch test REST
+
+Time to model a test after the endpoint behaviour. The test should perform exactly all of the code paths that the Controller will execute in Production. We are not concerned with the wiring of the JPA repository since its been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
+
+Since we are testing the Web Layer, we will ensure Spring wires up the CatRestController and provide some testing facilities to boot. We can do this using the `@WebMVCTest` annotation which `"disable full auto-configuration and instead apply only configuration relevant to MVC tests "`. 
+
+Click below to see the test class configuration in context:
+
+```editor:select-matching-text
+file: ~/cat-service/src/test/java/com/example/demo/CatsControllerTests.java
+text: "@WebMvcTest"
+after: 10
+```
+
+For this test, we also include mock `CatsService` as perscribed earlier. But also we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and an `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes transparently and directly, the framework paths leading to our code - there are no transport logic in our code - which reduces the time necessary to complete tests.
+
+Lets focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Lets see this more in depth.
+
+Click below to see the Controller test case in context:
+
+```editor:select-matching-text
+file: ~/cat-service/src/test/java/com/example/demo/CatsControllerTests.java
+text: "getByNameShouldReturnCat"
+after: 10
+before: 1
+```
+
+This mock performs the task of calling our endpoint controller at `"/cats/Toby"` and receiving it's response. MockMVC proivides all the necessary DSL methods to enable us to control the request and verify the response. Using `MockMvcRequestBuilders` is the preferred way to ensure we build a proper HTTP request, while it's `expect` methods
+enable us to validate all result criteria for HTTP (i.e. status, headers, content etc...).
+
+Now we are ready for full Integration tests using TestContainers to assist our REST service with a real JPA functionality, real CatsService, and actual HTTP server. Lets go!
