@@ -1,16 +1,27 @@
-## Automate building
+As you can see, it's very easy to build a container image using `mvn spring-boot:build-image`.
 
-As you can see, it's quite easy to build a container image using `mvn spring-boot:build-image`.
-Under the covers, Spring Boot employs a technology called [Cloud Native Buildpacks](https://buildpacks.io). 
+Who is doing all the hard work?
 
-The maven plugin is very handy for certain workflows, such as building an image on your local machine, or in an automation toolchain like Github Actions, Jenkins, and so on.
+Under the covers, Spring Boot employs a technology called [Cloud Native Buildpacks](https://buildpacks.io) (CNB). 
+CNB provides a structured way to assemble container images for applications. CNB is all about "how to build an image."
+
+Remember that line from the build log?
+```
+[INFO]  > Pulling builder image 'docker.io/paketobuildpacks/builder:base' 100%
+```
+
+Spring Boot is specifically employing [Paketo Buildpacks](https://paketo.io) to apply the more detailed know-how for specific languages, Java included, of course. 
+Paketo Buildpacks are part of the CNB ecosystem. 
+Buildpacks are all about "what to do with specific app files."
+
+In any case, the maven plugin is very handy for certain workflows, such as building an image on your local machine, or in an automation toolchain like Github Actions, Jenkins, and so on.
 
 However, there is another tool that also employs Cloud Native Buildpacks and provides a more robust set of features for building images at scale. 
 This tool is called [kpack](https://github.com/pivotal/kpack). 
 
-In this exercise, you will use kpack so that a new image is built automatically each time there is a new commit to the `cat-service-release` repo.
+In this exercise, you will use `kpack` so that a new image is built automatically each time there is a new commit to the `cat-service-release` repo.
 
-### Review kpack installation
+## Review kpack installation
 
 kpack has already been installed into the workshop cluster.
 > Interested in the installation instructions? Read [this](https://github.com/pivotal/kpack/blob/main/docs/install.md).
@@ -20,19 +31,17 @@ List the Custom Resource Definitions (CRDs) that kpack has added to your cluster
 kubectl api-resources | grep kpack
 ```
 
-In the next steps, you will create a "builder" and an "image" to automate builds for `cat-service-release`.
+In the next steps, you will create a "Builder" and an "Image" to automate builds for `cat-service-release`.
 
-### Create a builder
+## Create a builder
 
-Recall the mental note you made during `mvn spring-boot:build-image`.
-The build-image logs showed the precise builder that Spring Boot uses by default:
-```
-[INFO]  > Pulling builder image 'docker.io/paketobuildpacks/builder:base' 100%
-```
+In contrast to `spring-boot:build-image`, kpack cannot directly access the publicly available Paketo Buildbacks builder image (`docker.io/paketobuildpacks/builder:base`). By design, kpack must assemble its own builder.
 
-kpack cannot directly access the same builder; it must assemble one on its own.
-However, you can configure kpack to assemble a builder image using the same building blocks as the Paketo builder.
-This way you guarantee that images built using the Spring Boot plugin and images built by kpack are built in the same way.
+However, you can configure kpack to assemble a builder by re-using elements of the Paketo builder.
+This way you guarantee that app images built by Spring Boot and app images built by kpack are built in the same way.
+
+
+### Examine the configuration
 
 The building blocks of builders are stacks (OS file system) and stores (buildpacks).
 Notice in the list of _kpack api-resources_ that stacks and stores are cluster-scoped only, while builders can be namespaced.
@@ -44,7 +53,7 @@ kubectl get clusterstacks,clusterstores | grep $WORKSHOP_NAMESPACE
 ```
 
 Examine the configuration that was applied to create these resources.
-Notice that they reuse building blocks of Paketo Buildpacks rather than defining a stack and store from scratch.
+Notice how they reuse the Paketo build and run images, and they reuse the store (aka the language-specific buildpacks).
 
 The stack:
 ```
@@ -71,11 +80,11 @@ spec:
     - image: paketobuildpacks/builder:base
 ```
 
-You are now ready to create a builder.
+You are now ready to configure the builder.
 
 Create a directory for kpack manifests.
 ```execute-1
-mkdir ~/cat-service-release-ops/kpack
+mkdir kpack
 ```
 
 Create the builder manifest.
@@ -121,6 +130,8 @@ text: 'order:'
 after: 4
 ```
 
+### Create the builder image
+
 Apply the builder manifest to instruct kpack to create the builder.
 ```execute-1
 kubectl apply -f ~/cat-service-release-ops/kpack/builder.yaml
@@ -131,22 +142,26 @@ Wait for builder to be ready.
 kubectl get bldr booternetes-builder -w
 ```
 
-When the output shows a reference to a builder, run the following command to verify the new builder image is in the Docker registry.
+When the output shows a reference to a builder, stops the watch process.
 ```execute-1
 <ctrl-c>
 ```
+
+Use the skpoeo CLI to verify the new builder image is in the Docker registry.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
 
-This builder can now be used by anyone with access to the registry - presumably everyone in the organization. You can now ensure that all apps across the org are built using the same components (base image, Java runtime, etc), and incorporate the same additional features the buildpacks provide (e.g. Paketo Java memory calculator, clean exits on out-of-memory errors, and more).
+This builder can now be used by anyone with access to the registry - presumably everyone in a given organization. All apps across the org will be built using the same components (base image, Java runtime, etc), and incorporate the same features the buildpacks provide (e.g. Paketo Java memory calculator, clean exits on out-of-memory errors, and more).
 
-### Configure kpack for cat-service
+## Build the Cat Service image
 
-Next, you need to tell kpack to build the cat-service image.
+Next, you need to tell kpack to build Cat Service.
+You do this by creating an image resource.
 
+### Configure the image resource
 Click on the action block to create the image manifest.
-Review its contents and notice that you are instructing kpack to poll the cat-service-release repository for any new commits on the release branch.
+Notice the configuration instructing kpack to poll the `cat-service-release` repository for any new commits on the `release` branch.
 ```editor:append-lines-to-file
 file: ~/cat-service-release-ops/kpack/image.yaml
 text: |
@@ -173,14 +188,14 @@ file: ~/cat-service-release-ops/kpack/image.yaml
 text: '<YOUR_GITHUB_ORG_HERE>'
 ```
 
-Notice also that the image resource will use a service account.
+Notice also that the image resource requires a service account.
+The service account needs access to pull the builder and push the app image.
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/kpack/image.yaml
 text: 'serviceAccount: kpack-builder'
 ```
 
-You need to create the service account, as well as a secret with credentials for pushing to the registry.
-Create the service account and secret manifests.
+Create the manifest for the service account.
 ```editor:append-lines-to-file
 file: ~/cat-service-release-ops/kpack/service-account.yaml
 text: |
@@ -194,6 +209,7 @@ text: |
     - name: eduk8s-registry-credentials
 ```
 
+Create the manifest for the secret with proper registry access.
 ```editor:append-lines-to-file
 file: ~/cat-service-release-ops/kpack/secret.yaml
 text: |
@@ -208,6 +224,8 @@ text: |
       username: {{registry_username}}
       password: {{registry_password}}
 ```
+
+### Build the application image
 
 Apply the manifests you just created.
 ```execute-1
@@ -227,76 +245,26 @@ logs -image cat-service -build 1 -namespace ${SESSION_NAMESPACE}
 ```
 
 You can also watch the status of the build.
-When it is ready, you will see `SUCCEEDED=True` and a reference to the published image.
 ```execute-1
 kubectl get builds -w
 ```
 
-At this point, you can also check the Docker registry to confirm that the app image has been published.
+When the build is ready (`SUCCEEDED=True` and an image reference appears), stop the watch process.
+```execute-1
+<ctrl-c>
+```
+
+You can also check the Docker registry to confirm that the app image has been published.
 Notice that kpack applies two tags - a build tag and "latest."
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```
 
+### Ongoing automation
+
 kpack will poll the source code repo and the builder image every 5 minutes and will update the image if either changes.
+You will have a chance to see this in action later.
 
 ## Next Steps
 
-In the next exercises, you will automate the deployment of this image to Kubernetes.
-
-
----
----
----
----
-> TODO: decide whether or not to use anything from below...
-## Behind the scenes
-
-For convenience, store the build name and number of the latest build in env vars.
-```
-LATEST_BUILD=$(kubectl get builds -o yaml | yq r - "items[-1].metadata.name") \
-&& echo "Latest build: ${LATEST_BUILD}"
-BUILD_NR=$(kubectl get builds -o yaml | yq r - "items[-1].metadata.labels.[image.build.pivotal.io/buildNumber]")
-echo "LATEST_BUILD=${LATEST_BUILD}"
-echo "BUILD_NR=${BUILD_NR}"
-```{{execute}}
-
-You can use `kubectl describe` to get more information about the build.
-
-```
-kubectl describe build ${LATEST_BUILD}
-```{{execute}}
-
-Notice that the build description includes such details as the source commit id and the reson for the build:
-```
-kubectl describe build ${LATEST_BUILD} | grep Revision
-kubectl describe build ${LATEST_BUILD} | grep reason | head -1
-```{{execute}}
-
-The Build creates a Pod in order to execute the build and produce the image.
-
-```
-kubectl get pods | grep ${LATEST_BUILD}
-```{{execute}}
-
-You should see evidence of _init_ containers in the results (something like: "Init:1/6"). kpack orchestrates the CNB lifecycle using _init_ containers - a prepare container, plus containers for each lifecycle step: detect, analyze, restore, build, export. (These should sound familiar based on the logs that `pack` generated in the last step). A simple `kubectl logs` command will not stream the init container logs, so kpack provides a `logs` CLI to make it easy to extract the logs from all init containers:
-
-```
-logs -image go-sample-app -build ${BUILD_NR}
-```{{execute}}
-
-You should see logging similar to the logging you saw with `pack`, since the underlying process using the Paketo Builder is the same.
-
-When the log shows that the build is done, check your [Docker Hub](https://hub.docker.com) to validate that an image has been published. The image will have a tag as specified in your Image configuration, as well as an auto-generated tag. Both tags are aliasing the same image digest.
-
-## Trigger a new build
-
-By default, kpack will poll the source code repo, the builder image, and the run image every 5 minutes, and will automatically rebuild - or rebase, as approrpriate - if it detects a new commit.
-
-Notice that the Image resource is configured to poll the master branch on the app repo. That means any commit to the master branch will trigger a build.
-
-
-
-
-
-
+In the next exercises, you will deploy the Cat Service image to Kubernetes.

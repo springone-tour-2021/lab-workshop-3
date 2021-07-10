@@ -1,5 +1,3 @@
-## Deploy manually to Kubernetes
-
 ### Imperative vs Declarative
 
 Applications can be deployed to Kubernetes _imperatively_ or _declaratively_.
