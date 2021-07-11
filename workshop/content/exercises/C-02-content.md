@@ -114,8 +114,8 @@ Edit the base kustomization.yaml file in your ops repo so that the proper value 
 https://github.com/ciberkleid/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
 ```
 
-Set the `newName: REGISTRY_HOST/cat-service` to the output of the following command.
-Do NOT change the image name that is used for kustomize matching.
+Set the `newName: REGISTRY_HOST/cat-service` to the output of the following command (copy it from the terminal window).
+Do **not** change the image name that is used for kustomize matching.
 ```execute-1
 echo "newName: ${REGISTRY_HOST}/cat-service"
 ```
