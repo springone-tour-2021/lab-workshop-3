@@ -17,11 +17,11 @@ kubectl api-resources | grep argo
 
 Shortly, you will create "Application" resources.
 
-## Terminal setup
+### Terminal setup
 
 For convenience, set the following shortcuts in both terminal windows.
 ```execute-all
-alias argocd='argocd --server :8080 --insecure'
+#alias argocd='argocd --server :8080 --insecure'
 ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 ```
 
@@ -30,7 +30,7 @@ Also, in terminal 2, start a port forwarding process so that you can communicate
 kubectl port-forward svc/argocd-server -n argocd 8080:80
 ```
 
-## Argo CD Web UI
+### Argo CD Web UI
 
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:open-url
@@ -43,7 +43,7 @@ OR:
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:create-dashboard
 name: Argo CD
-url: https://localhost:8080/
+url: http://localhost:8080/
 ```
 ---
 
@@ -52,27 +52,38 @@ Log in as `admin`. To retrieve the password, run:
 echo $ARGOCD_PW
 ```
 
-## Argo CD Web CLI
+### Argo CD CLI
 
 ```execute-1
-argocd login localhost:8080 --username admin --password=$ARGOCD_PW
+argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure
 ```
 
-Check the current app list. It should be empty.
+To see some available commands, run `argocd --help`, or simply:
 ```execute-1
-argocd app list
+argocd
 ```
 
-## Configure Argo CD for cat-service dev deployment
+## Set up the dev application
 
 There are several ways to configure an application in Argo CD.
 You can use the UI, the `argocd` CLI, or you can use `kubectl` to apply a manifest describing the Argo CD application resource.
 In this exercise, you will use the CLI.
 
+Before continuing, you will need to update the 'newName' field in `manifests/base/app/kustomization.yaml` on GitHub, as Argo CD will be using the remote copy of the file.
+You can navigate to the file on GitHub or run this command and click on the link in terminal 1:
+```execute-1
+https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
+```
+Click on the pencil icon to edit, replace `MY_REGISTRY` with the following value, and click on "Commit changes."
+```execute-1
+echo $REGISTRY_HOST
+```
+
 Create an Argo CD `application` for the dev deployment.
 Notice that you are instructing Argo CD to poll the `educates-workshop` branch of the cat-service-release-ops repository on GitHub for any changes to `manifests/overlays/dev` (and any relevant base files).
 ```execute-1
-argocd app create dev-cat-service \
+argocd app create dev-cat-service-${SESSION_NAMESPACE} \
+                  --label session=${SESSION_NAMESPACE} \
                   --dest-namespace ${SESSION_NAMESPACE} \
                   --dest-server https://kubernetes.default.svc \
                   --repo https://github.com/${GITHUB_ORG}/cat-service-release-ops.git \
@@ -82,10 +93,14 @@ argocd app create dev-cat-service \
                   --auto-prune
 ```
 
-You can revisit the UI to see the dev application represented visually.
-You will be able to see that all the resources included in the kustomized yaml have been deployed, including the postgres database.
-You will also see some additional resource types that `kubectl get all` does not show by default.
+You can revisit the UI to see the application represented visually.
+You will all the resources related to the deployment - app and database resources, including resource types that `kubectl get all` does not show by default.
 In addition, you will see the health of the various resources, and also see if they are "synced," meaning if the running components match the manifests in GitHub.
+
+You can also check the status using the CLI.
+```execute-1
+argocd app list --label session=${SESSION_NAMESPACE}
+```
 
 ## Explore Argo CD
 
