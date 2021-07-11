@@ -11,7 +11,7 @@ curl -L https://github.com/pivotal/kpack/releases/download/v$VERSION/logs-v$VERS
 echo "### Finished installing kpack logs CLI"
 
 echo -e "\n### Installing argocd CLI"
-VERSION=2.0.4
+VERSION=v2.0.4
 #VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
 curl -sSL -o /home/eduk8s/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${VERSION}/argocd-linux-amd64
 chmod +x /home/eduk8s/bin/argocd
