@@ -42,3 +42,7 @@ You can use the [skopeo CLI](https://github.com/containers/skopeo) to verify tha
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```
+
+## Next Steps
+
+Next you will automate the deployment process.

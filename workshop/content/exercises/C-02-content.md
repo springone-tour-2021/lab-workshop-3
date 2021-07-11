@@ -118,12 +118,11 @@ Preview the yaml that will be generated.
 kustomize build manifests/overlays/dev/
 ```
 
-In this case, you should see three key differences:
-1. All resource names are prefixed with "dev"
-2. The overlay includes the database manifest
+You should see these key differences:
+1. All resource names (`metadata.name`) are prefixed with "dev"
+2. The overlay result includes the database manifests
 
 Pipe the output to kubectl to deploy to Kubernetes.
-> Note: You can also use `kubectl apply -k manifests/overlays/dev/` -- kubectl has native support for kustomize.
 ```execute-1
 kustomize build manifests/overlays/dev/ | kubectl apply -f -
 ```
@@ -141,17 +140,17 @@ When the cat-service pod is ready (STATUS=Running and READY=1/1), stop the watch
 
 ### Test the dev deployment
 
-In terminal 2, start a port-forwarding process so that you can send a request to the running application.
+In terminal 2, start a port-forwarding process so that you can send requests to the running application.
 ```execute-2
 kubectl port-forward service/dev-cat-service 8080:8080
 ```
 
-Send a couple of requests to the application.
-You should see successful responses.
+Send a request to Spring Boot actuator to check the health of the app.
 ```execute-1
 http :8080/actuator/health
 ```
 
+Send a request for Toby the cat.
 ```execute-1
 http :8080/cats/Toby
 ```
@@ -163,14 +162,11 @@ Stop the port-forwarding process.
 
 ## Cleanup
 
-To delete the dev deployment, run:
+Delete the dev deployment.
 ```execute-1
 kustomize build manifests/overlays/dev/ | kubectl delete -f -
 ```
 
-## Optional: Deploy to prod
+## Deploy to prod
 
 As an exercise, you can repeat these steps using the prod overlay.
-
-## Next Steps
-In the next steps, you will automate the test, build, and deployment of the application.

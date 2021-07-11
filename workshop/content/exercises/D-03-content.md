@@ -116,7 +116,7 @@ Review the dev application definition.
  after: 5
  ```
 
-Click the option in UIto re-sync the application, and ArgoCD will re-apply the manifests, including the missing deployment.
+Click the option in UI to re-sync the application, and ArgoCD will re-apply the manifests, including the missing deployment.
 
 > Note: You can read more about ArgoCD sync policies [here](https://argoproj.github.io/argo-cd/user-guide/auto_sync/).
 
