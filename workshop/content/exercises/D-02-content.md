@@ -266,7 +266,8 @@ skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ### Ongoing automation
 
 kpack will poll the source code repo and the builder image every 5 minutes and will update the image if either changes.
-You will have a chance to see this in action later.
+
+If you like, you can commit another bump to the `cat-service` repo, wait for GitHub Actions to push the change to `cat-release`, an within 5 minutes you should see a second build resource in Kubernetes and a second image published to the image registry.
 
 ## Next Steps
 
