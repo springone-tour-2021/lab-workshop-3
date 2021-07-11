@@ -17,7 +17,7 @@ kubectl api-resources | grep argo
 
 Shortly, you will create "Application" resources.
 
-### Terminal setup
+#### Terminal setup
 
 For convenience, set the following shortcut to the login password.
 ```execute-1
@@ -29,7 +29,7 @@ Also, in terminal 2, start a port forwarding process so that you can communicate
 kubectl port-forward svc/argocd-server -n argocd 8080:80
 ```
 
-### Argo CD Web UI
+#### Argo CD Web UI
 
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:open-url
@@ -51,7 +51,7 @@ Log in as `admin`. To retrieve the password, run:
 echo $ARGOCD_PW
 ```
 
-### Argo CD CLI
+#### Argo CD CLI
 
 Log in using the CLI.
 ```execute-1
@@ -69,19 +69,31 @@ There are several ways to configure an application in Argo CD.
 You can use the UI, the `argocd` CLI, or you can use `kubectl` to apply a manifest describing the Argo CD application resource.
 In this exercise, you will use the CLI.
 
-### Update registry host
+#### Update registry host
 Before continuing, you will need to update the 'newName' field in `manifests/base/app/kustomization.yaml` on GitHub, as Argo CD will be using the remote copy of the file.
 You can navigate to the file on GitHub or run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
 ```
-Click on the pencil icon to edit and "Commit changes" to save.
+Click on the pencil icon to edit.
 Make sure `newName` matches the "Repository" value in your registry:
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```
 
-### Create the dev application
+While you're here, add another configMapGenerator using the following snippet.
+You will use it later in this exercise.
+```
+configMapGenerator:
+  - name: catty-config
+    literals:
+      - KITTY=cat
+```
+
+Click "Commit changes" at the bottom of the page to save the changes.
+
+#### Create the dev application
+
 Create an Argo CD `application` for the dev deployment.
 Notice that you are instructing Argo CD to poll the `educates-workshop` branch of the cat-service-release-ops repository on GitHub for any changes to `manifests/overlays/dev` (and any relevant base files).
 ```execute-1
@@ -91,15 +103,46 @@ argocd app create dev-cat-service-${SESSION_NAMESPACE} \
                   --dest-server https://kubernetes.default.svc \
                   --repo https://github.com/${GITHUB_ORG}/cat-service-release-ops.git \
                   --revision educates-workshop \
-                  --path manifests/overlays/dev \
-                  --sync-policy automated \
-                  --auto-prune
+                  --path manifests/overlays/dev
 ```
 
-### Check the results
+## Check the results
+
+The following instructions will guide you using the CLI.
+Feel free to switch to the UI and apply the same concepts.
+
+#### App sync
+
+Check the status of the Argo CD application.
+```execute-1
+argocd app list --selector session=${SESSION_NAMESPACE}
+```
+
+Your results should show that the application is `OutOfSync`.
+```
+NAME                                  CLUSTER                         NAMESPACE             PROJECT  STATUS     HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                       PATH                    TARGETdev-cat-service-eduk8s-labs-w14-s008  https://kubernetes.default.svc  eduk8s-labs-w14-s008  default  OutOfSync  Missing  <none>      <none>      https://github.com/ciberkleid/cat-service-release-ops.git  manifests/overlays/dev  educates-workshop
+```
 
 Check the resources in your Kubernetes namespace.
-Your output should look something like this.
+You should not see any Cat Service resources.
+```execute-1
+kubectl get all
+```
+
+You might have expected Argo CD to immediately apply the manifests, since they clearly do not match what is running in the cluster. 
+However, by default, Argo CD notifies you that the cluster is `OutOfSync` but it does not automatically apply the manifests.
+You can 'sync' the application using the UI or the CLI each time Argo CD reports it is out of sync, or you can enable auto-sync so that Argo CD continues to do so automatically.
+
+Enable auto-sync.
+```execute-1
+argocd app set dev-cat-service-${SESSION_NAMESPACE} --sync-policy automated
+```
+
+Run the commands above again, to check the app status and Kubernetes resources.
+You can also use the UI.
+Notice that Argo CD immediately applied the manifests, and is reporting on the health of the resources.
+
+Your Kubernetes output should look something like this.
 ```
 NAME                                      READY   STATUS      RESTARTS   AGE
 pod/cat-service-build-1-w4kp6-build-pod   0/1     Completed   0          18m
@@ -120,67 +163,114 @@ replicaset.apps/dev-cat-service-575b766458    0         0         0       4m14s
 replicaset.apps/dev-cat-service-79c687969     1         1         1       57s
 ```
 
-Return to the UI to see the application represented visually.
-You will all the resources related to the deployment - app and database resources, including resource types that `kubectl get all` does not show by default.
+#### App prune
 
-You can also check the health and status using the CLI.
+Check for ConfigMaps in your Kubernetes namespace.
+```execute-1
+kubectl get cm
+```
+
+Your output will be similar to this.
+```
+NAME                                DATA   AGE
+dev-cat-service-config-mh6774bg29   1      5m47s
+dev-catty-config-fk62ft2f9k         1      35s
+kube-root-ca.crt                    1      176m
+```
+
+Return to GitHub, and delete the configMapGenerator for catty-config. 
+Save the change and check Argo CD status again.
 ```execute-1
 argocd app list --selector session=${SESSION_NAMESPACE}
 ```
 
-Whether you are checking through the UI or the CLI, everything should look "synced" and "healthy."
+You should see the status is OutOfSync.
+You should also see that the configMap is not deleted from the cluster.
 
-## Health & synchronization
+Why is this?
 
-Health reflects the health of a resource on Kubernetes (pod errors, etc).
-Synced means that the deployment on Kubernetes matches the manifest files.
+Deleting live resources that have been removed from the manifests is called `pruning`.
+Argo CD does not prune resources by default.
 
-### Make a change to the deployment configuration
-
-Argo CD is monitoring the manifests on GitHub.
-Try changing a value and seeing how Argo CD responds.
-
-Execute the following action block, then click on the url in the terminal to open the dev kustomization.yaml file.
+You can prune manually anytime Argo CD alerts you about the discrepancy, or you can enable automatic pruning.
+Use the CLI or the UI to prune catty-config.
 ```execute-1
-echo https://github.com/$GITHUB_ORG/cat-service-release-ops/blob/educates-workshop/manifests/overlays/dev/kustomization.yaml
+argocd app sync dev-cat-service-${SESSION_NAMESPACE} --prune 
 ```
 
-Make sure you are looking at the `educates-workshop` branch an click the pencil icon on the right to edit the file.
-Change the value of the replicas count by 1 (from 1 to 2, or 2 to 1, as appropriate).
-Leave the default option to "Commit directly to the educates-workshop branch." and click on the "Commit changes" button.
+Check the app status and the configMaps in Kubernetes again.
+You should see the application is synced and catty-config is gone.
 
-Return to the Argo CD UI and watch Argo CD automatically apply the change to the cluster.
+#### Auto-heal
 
-Now try deleting the dev-cat-service deployment.
+Kubernetes manages a lot of self-healing.
+If you delete a pod, for example, the associated Kubernetes deployment will ensure a new pod is created.
+
+However, what happens if you delete a deployment? Kubernetes will accept the action as intentional, and it will not recreate it.
+
+Let's say a critical situation arises and your Operations team determines that the best course of action is to manually change a resource in the production cluster. This buys the team time to investigate the root cause and find a long term solution.
+
+In the case, would you want Argo CD to automatically sync the application, immediately overriding your emergency actions? Probably not. Hence, automatic `self-healing` is also disabled by default.
+
+Give it a try.
+Run the following command to manually delete the dev deployment.
 ```execute-1
 kubectl delete deployment dev-cat-service
 ```
 
-After a few moments, Argo CD will notice that the current state is out of sync with the declared state.
-Check the UI to confirm that Argo CD reports the discrepancy.
-However, Argo CD will not automatically re-apply the manifests.
+Again, get the app status and check Kubernetes resources.
 
-Why is this?
+You should see the following output.
+```
+~$ argocd app list --selector session=${SESSION_NAMESPACE}
+NAME                                  CLUSTER                         NAMESPACE             PROJECT  STATUS     HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                       PATH                    TARGET
+dev-cat-service-eduk8s-labs-w14-s008  https://kubernetes.default.svc  eduk8s-labs-w14-s008  default  OutOfSync  Missing  Auto        <none>      https://github.com/ciberkleid/cat-service-release-ops.git  manifests/overlays/dev  educates-workshop
+```
+and
+```
+~$ kubectl get all
+NAME                                      READY   STATUS      RESTARTS   AGE
+pod/cat-service-build-1-w4kp6-build-pod   0/1     Completed   0          134m
+pod/dev-cat-postgres-5c488f4cbc-rxvgp     1/1     Running     0          36m
 
-Argo CD has three components to its sync policies. For the cat-service dev application, we have selected to enable automatic mode for two of them, but manual mode for the third.
-- `sync`: re-apply manifests if there is a change in git
-- `prune`: delete resources from the cluster that are no longer in the git manifests
-- `self-heal`: re-apply manifests when a change has been made manually to the cluster
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/dev-cat-postgres   NodePort    10.106.137.28    <none>        5432:31916/TCP   36m
+service/dev-cat-service    ClusterIP   10.111.101.236   <none>        8080/TCP         36m
 
-Review the dev application definition.
- ```editor:select-matching-text
- file: ~/cat-service-release-ops/argocd/application-dev.yaml
- text: syncPolicy
- after: 5
- ```
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/dev-cat-postgres   1/1     1            1           36m
 
-Click the option in UI to re-sync the application, and Argo CD will re-apply the manifests, including the missing deployment.
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/dev-cat-postgres-5c488f4cbc   1         1         1       36m
+```
+
+You can sync the app manually as needed using:
+```execute-1
+argocd app sync dev-cat-service-${SESSION_NAMESPACE}
+```
+You can also enable automatic self-healing.
+```execute-1
+argocd app set dev-cat-service-${SESSION_NAMESPACE} --self-heal
+```
 
 > Note: You can read more about Argo CD sync policies [here](https://argoproj.github.io/argo-cd/user-guide/auto_sync/).
 
 ## Deploy to prod
 
 As an exercise, you can repeat these steps using the prod overlay.
+
+Here is an app creation command that enables auto-sync and pruning from the outset.
+```execute-1
+argocd app create prod-cat-service-${SESSION_NAMESPACE} \
+                  --label session=${SESSION_NAMESPACE} \
+                  --dest-namespace ${SESSION_NAMESPACE} \
+                  --dest-server https://kubernetes.default.svc \
+                  --repo https://github.com/${GITHUB_ORG}/cat-service-release-ops.git \
+                  --revision educates-workshop \
+                  --path manifests/overlays/prod \
+                  --sync-policy automated \
+                  --auto-prune                  
+```
 
 ## Next Steps
 
