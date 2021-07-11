@@ -11,12 +11,12 @@ Applications can be deployed to Kubernetes _imperatively_ or _declaratively_.
     - Configuration options are limited to those exposed through the CLI
 - Declarative:
     - Using configuration _manifest_ files (typically in YAML syntax) that describe the desired deployment (e.g. `kubectl apply my-app.yaml`)
-    - Manifests express - or declare, as it were - the desired state, serving as a blueprint and "source of truth" for a running system
+    - Manifests express - or declare - the desired state, serving as a blueprint and "source of truth" for a running system
     - Manifests make it possible to configure any aspect of a given resource
 
 The declarative approach aligns with the idea of "infrastructure as code" and enables [GitOps](https://www.gitops.tech) as a methodology for managing deployments. It is the approach you will use here.
 
-To deploy the application to Kubernetes, you need:
+To deploy _Cat Service_ application to Kubernetes, you need:
 1. Manifests describing the deployment of the postgres database
 2. Manifests describing the deployment of the cat-service application
 
@@ -68,13 +68,36 @@ Take a look at the `kustomization.yaml` file.
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 ```
 
-To see this in action, use the `kustomize` CLI to generate the final yaml.
+Notice anything odd? This kustomization will rename your cat-service image to `MY_REGISTRY/cat-service`. 
+Kubernetes will try to pull an image with this name, but this won't work. 
+There is no such image. 
+You need to update this value using your workshop session's registry adress.
+
+To get this value, run the following command:
+```execute-1
+echo $REGISTRY_HOST
+```
+
+Copy this value and paste it into the editor. 
+The result should look something like this (your value will be different).
+```
+images:
+  - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
+    newTag: latest
+    newName: eduk8s-labs-w14-s005-registry.s1tour-a2edc10.tanzu-labs.esp.vmware.com/cat-service
+```
+
+Make sure you only changed `newName` and not `name`. Kustomize will find references based on the name and update them to the new value.
+
+The kustomization file also includes instructions to convert the application.properties file into a ConfigMap.
+
+To see this in action, use the `kustomize` CLI to preview the final yaml.
 > Note: This command just produces yaml; it does not apply it to the cluster.
 ```execute-1
 kustomize build manifests/base/app/
 ```
 
-Compare the output to the contents of the source files. Notice that a ConfigMap was generated from the properties file, and the image tag was replaced with `latest`.
+Compare the output to the contents of the source files. Notice that a ConfigMap was generated from the properties file, and the image name and tag were updated..
 
 ## What about the database?
 
@@ -85,12 +108,12 @@ However, this will not be an area of focus in this tutorial.
 
 ## Deploy to dev
 
-Examine the dev kustomization configuration.
+Examine the `dev` kustomization configuration.
 ```editor:open-file
 file: ~/cat-service-release-ops/manifests/overlays/dev/kustomization.yaml
 ```
 
-Preview the yaml that will be generated using the dev overlay.
+Preview the yaml that will be generated.
 ```execute-1
 kustomize build manifests/overlays/dev/
 ```
@@ -99,34 +122,14 @@ In this case, you should see three key differences:
 1. All resource names are prefixed with "dev"
 2. The overlay includes the database manifest
 
-There is one issue.
-Do you see it?
-Try running this command:
-```execute-1
-kustomize build manifests/overlays/dev/ | grep image:
-```
-
-You can see the two images that will be deployed to the cluster.
-The postgres image will be pulled from Docker Hub, as it was when you ran it locally.
-The cat-service image, however, has the wrong registry coordinates.
-Edit the base kustomization.yaml file in your ops repo so that the proper value is pulled from GitHub.
-```execute-1
-https://github.com/ciberkleid/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
-```
-
-Set the `newName: REGISTRY_HOST/cat-service` to the output of the following command (copy it from the terminal window).
-Do **not** change the image name that is used for kustomize matching.
-```execute-1
-echo "newName: ${REGISTRY_HOST}/cat-service"
-```
-
-Deploy the dev application:
+Pipe the output to kubectl to deploy to Kubernetes.
+> Note: You can also use `kubectl apply -k manifests/overlays/dev/` -- kubectl has native support for kustomize.
 ```execute-1
 kustomize build manifests/overlays/dev/ | kubectl apply -f -
 ```
 
 You can watch the progress of the deployment.
-> > Note: the database must complete startup before the app can start successfully, so you will likely see the app restart a few times before it finaly succeeds.
+> Note: the database must complete startup before the app can start successfully, so you will likely see the app restart a few times before it finally succeeds.
 ```execute-1
 kubectl get pods --watch
 ```
