@@ -24,7 +24,8 @@ In this exercise, you will use `kpack` so that a new image is built automaticall
 ## Review kpack installation
 
 kpack has already been installed into the workshop cluster.
-> Interested in the installation instructions? Read [this](https://github.com/pivotal/kpack/blob/main/docs/install.md).
+
+_Interested in the installation instructions? Read [this](https://github.com/pivotal/kpack/blob/main/docs/install.md)._
 
 List the Custom Resource Definitions (CRDs) that kpack has added to your cluster.
 ```execute-1
@@ -144,12 +145,18 @@ Wait for builder to be ready.
 kubectl get bldr booternetes-builder -w
 ```
 
-When the output shows a reference to a builder, stops the watch process.
+While you wait for the builder image to be ready, you can run the following command in terminal 2.
+This will show any status, as well as more detail about the bits and pieces of Paketo Buildpacks that are being used to create this builder.
+```execute-2
+kubectl describe builder booternetes-builder
+```
+
+When the command in terminal 1 shows a reference to a builder, stop the watch process.
 ```execute-1
 <ctrl-c>
 ```
 
-Use the skpoeo CLI to verify the new builder image is in the Docker registry.
+The reference that appeared in the output in terminal 1 means the image was published, but you can use the skpoeo CLI to see the new builder image in the Docker registry.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
@@ -243,7 +250,7 @@ kubectl get builds,pods
 You can use kpack's `logs` CLI to get the logs from a build.
 The output should look similar to that of the `spring-boot:build-image` output.
 ```execute-1
-logs -image cat-service -build 1 -namespace ${SESSION_NAMESPACE}
+logs -namespace ${SESSION_NAMESPACE} -image cat-service -build 1 
 ```
 
 You can also watch the status of the build.
@@ -258,7 +265,7 @@ When the build is ready (`SUCCEEDED=True` and an image reference appears), stop 
 ```
 
 You can also check the Docker registry to confirm that the app image has been published.
-Notice that kpack applies two tags - a build tag and "latest."
+> Notice that kpack applies two tags - a build tag and "latest." Make a mental note of the pattern of the build tag; you will use this later.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```
@@ -267,7 +274,7 @@ skopeo list-tags docker://$REGISTRY_HOST/cat-service
 
 kpack will poll the source code repo and the builder image every 5 minutes and will update the image if either changes.
 
-If you like, you can commit another bump to the `cat-service` repo, wait for GitHub Actions to push the change to `cat-release`, an within 5 minutes you should see a second build resource in Kubernetes and a second image published to the image registry.
+If you like, you can commit another bump to the `cat-service` repo, wait for GitHub Actions to push the change to `cat-service-release`, and within 5 minutes you should see a second build resource in Kubernetes and a second image published to the image registry. You can re-run the last few commands in this exercise (`logs...` using build 2, `kubectl... -w` to watch the build, and `skopeo` to check the registry).
 
 ## Next Steps
 

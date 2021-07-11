@@ -11,7 +11,8 @@ ArgoCD runs on Kubernetes. You will install it and configure it to ensure that t
 ### Review Argo CD installation
 
 Argo CD has already been installed into the workshop cluster.
-> Interested in the installation instructions? Read  [this](https://argo-cd.readthedocs.io/en/stable/getting_started).
+
+_Interested in the installation instructions? Read  [this](https://argo-cd.readthedocs.io/en/stable/getting_started)._
 
 List the Custom Resource Definitions (CRDs) that argocd has added to your cluster.
 ```execute-1
