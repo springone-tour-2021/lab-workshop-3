@@ -17,29 +17,44 @@ kubectl api-resources | grep argo
 
 Shortly, you will create "Application" resources.
 
-## Argo CD UI and CLI
+## Terminal setup
+
+For convenience, set the following shortcuts in both terminal windows.
+```execute-all
+alias argocd='argocd --server :8080 --insecure'
+ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
+```
+
+Also, in terminal 2, start a port forwarding process so that you can communicate with the Argo CD server in the argocd namespace. Keep this process running throughout this exercise.
+```execute-2
+kubectl port-forward svc/argocd-server -n argocd 8080:80
+```
+
+## Argo CD Web UI
 
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:open-url
 url: $(INGRESS_PROTOCOL)://$(SESSION_NAMESPACE)-argocd.$(INGRESS_DOMAIN)
 ```
 
-In terminal 2, start a port forwarding process so that you can connect to the Argo CD server in the argocd namespace.
-```execute-2
-kubectl port-forward svc/argocd-server -n argocd 8080:80
-```
+---
+OR:
 
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:create-dashboard
 name: Argo CD
 url: https://localhost:8080/
 ```
+---
 
-You can also log in using the CLI.
+Log in as `admin`. To retrieve the password, run:
 ```execute-1
-ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 echo $ARGOCD_PW
-alias argocd='argocd --server :8080 --insecure'
+```
+
+## Argo CD Web CLI
+
+```execute-1
 argocd login localhost:8080 --username admin --password=$ARGOCD_PW
 ```
 
