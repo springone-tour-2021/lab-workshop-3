@@ -4,6 +4,8 @@ First order of business is to package it as a container image.
 
 A container image is a deployment artifact that is compatible with container runtime systems such Docker and Kubernetes, and which contains not only the application but also the runtime (JRE) and OS file system.
 
+In the next exercises, you'll build the image manually first and then automate the process.
+
 ## Build the image
 
 The Spring Boot [maven](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image) and [gradle](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#build-image) build plugins make it easy to build images. 
