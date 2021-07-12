@@ -1,5 +1,3 @@
-## Automate testing
-
 In the previous exercises you ran the tests manually, but this is not optimal. The next step is to have an automated workflow. One way is with [GitHub Actions](https://docs.github.com/en/actions). 
 
 GitHub Actions are used to automate your development workflow. They can be triggered on any GitHub event such as creating a pull request or a new commit. It has CI/CD and can be used to build, test, and deploy your code from GitHub.
@@ -36,7 +34,7 @@ after: 11
 ```
 
 #### GitHub Actions workflow file
-Now take a look at the YAML workflow file. You can ignore the Artifactory env variables as they're not used in this workshop. You'll be storing your GitHub username and access token in the next step. 
+Now take a look at the YAML workflow file. You'll be storing your GitHub username and access token in the next step. 
 
 The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. 
 ```editor:select-matching-text
@@ -107,6 +105,14 @@ Run this command and click on the link in terminal 1
 echo https://github.com/$GITHUB_ORG/cat-service-release
 ```
 
+### If not public make the `cat-service-release` repo public
+For Github Actions to work the `cat-service-release` repo must be public. If you need to make the repository public. Within the repo `cat-service-release` in your Github org, navigate to `Settings`.
+![alt_text](images/gactions-pub-repo-example.png "Change GitHub repo visibility to public")
+
+Scroll to the bottom `Danger Zone` section and click `Change visibility`
+![alt_text](images/gactions-pub-repo-example.png "Change GitHub repo visibility to public")
+
+Select `Make public` and type `<your-org>/<repo>` and finally click "I understand.." to make this repo public.
 #### Commit and push a change
 
 Now make a change and add a commit to trigger the GitHub Actions workflow. 
