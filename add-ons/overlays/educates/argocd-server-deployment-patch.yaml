@@ -6,11 +6,9 @@ spec:
   template:
     spec:
       containers:
-        - name: argocd-server
-          command:
-            - /argocd-server
+        - command:
+            - argocd-server
             - --staticassets
             - /shared/app
-            - --repo-server
-            - argocd-repo-server:8081
             - --insecure
+          name: argocd-server

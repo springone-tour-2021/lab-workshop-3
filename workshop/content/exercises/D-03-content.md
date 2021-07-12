@@ -36,14 +36,14 @@ Next, run this command to store the password in an environment variable.
 ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 ```
 
-Log in.
-```execute-1
-argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure
-```
-
 To see some available commands, run `argocd --help`, or simply:
 ```execute-1
 argocd
+```
+
+Log in through the CLI.
+```execute-1
+argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure
 ```
 
 #### Argo CD Web UI

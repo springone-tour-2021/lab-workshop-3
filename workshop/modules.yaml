@@ -34,7 +34,7 @@ modules:
     exercises/D-03-content:
         name: Automate deployment
     exercises/D-04-content:
-        name: Automate depoyment, part 2
+        name: Automate image updates
 
     # Part E: Observe the complete automated workflow
     exercises/E-01-content:
