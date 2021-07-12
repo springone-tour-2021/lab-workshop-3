@@ -20,3 +20,6 @@ configMapGenerator:
     behavior: merge
     literals:
       - log.level=debug
+
+patches:
+  - ./argocd-server-deployment-patch.yaml

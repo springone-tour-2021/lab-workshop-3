@@ -17,43 +17,26 @@ kubectl api-resources | grep argo
 
 Shortly, you will create "Application" resources.
 
-#### Terminal setup
+## Log in to Argo CD
 
-For convenience, set the following shortcut to the login password.
-```execute-1
-ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
-```
+Argo CD has a UI as well as a CLI.
 
-Also, in terminal 2, start a port forwarding process so that you can communicate with the Argo CD server. Keep this process running throughout this exercise.
+#### Argo CD CLI
+
+Log in using the CLI first.
+
+First, start a port-forward.
+Do this in terminal 2 and leave it running for the remainder of this exercise.
 ```execute-2
 kubectl port-forward svc/argocd-server -n argocd 8080:80
 ```
 
-#### Argo CD Web UI
-
-At this point, you can explore the Argo CD UI to get a visual sense for what it does.
-```dashboard:open-url
-url: {{ingress_protocol}}://{{session_namespace}}-argocd.{{ingress_domain}}
-```
-
----
-OR:
-
-At this point, you can explore the Argo CD UI to get a visual sense for what it does.
-```dashboard:create-dashboard
-name: Argo CD
-url: http://localhost:8080/
-```
----
-
-Log in as `admin`. To retrieve the password, run:
+Next, run this command to store the password in an environment variable.
 ```execute-1
-echo $ARGOCD_PW
+ARGOCD_PW=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d)
 ```
 
-#### Argo CD CLI
-
-Log in using the CLI.
+Log in.
 ```execute-1
 argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure
 ```
@@ -63,10 +46,26 @@ To see some available commands, run `argocd --help`, or simply:
 argocd
 ```
 
+#### Argo CD Web UI
+
+Open the Argo CD UI.
+```dashboard:open-url
+url: {{ingress_protocol}}://{{session_namespace}}-argocd.{{ingress_domain}}
+```
+
+Log in as `admin`.
+To retrieve the password, run:
+```execute-1
+echo $ARGOCD_PW
+```
+
+Click around if you like.
+You'll come back to the UI shortly.
+
 ## Deploy dev Cat Service 
 
 There are several ways to configure an application in Argo CD.
-You can use the UI, the `argocd` CLI, or you can use `kubectl` to apply a manifest describing the Argo CD application resource.
+You can use the UI, the CLI, or you can use `kubectl` to apply a manifest describing the Argo CD application resource.
 In this exercise, you will use the CLI.
 
 #### Update registry host

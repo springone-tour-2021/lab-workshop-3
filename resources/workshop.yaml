@@ -253,3 +253,16 @@ spec:
           image: "paketobuildpacks/build:base-cnb"
         runImage:
           image: "paketobuildpacks/run:base-cnb"
+    - apiVersion: extensions/v1beta1
+      kind: Ingress
+      metadata:
+        name: $(workshop_namespace)-argocd-server-http
+        namespace: argocd
+      spec:
+        rules:
+          - host: $(workshop_namespace)-argocd.$(ingress_domain)
+            http:
+              paths:
+                - backend:
+                    serviceName: argocd-server
+                    servicePort: http
