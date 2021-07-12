@@ -1,23 +1,26 @@
-## Automate image update deployments
-
 Any update to the manifests will be detected by Argo CD.
-However, we don't currently have an mechanism in place to update the manifests when a new app image is available.
+
+What happens after kpack publishes a new image?
+Right now, nothing.
+This means Argo CD won't know that a new image is available.
+
 This problem can be solved in different ways.
 In this workshop, we are going to use a tool called [Argo CD Image Updater](https://argocd-image-updater.readthedocs.io/en/stable).
 
 **How does it work?**
 
-Argo CD Image Updater polls the container registry, and when it finds a new image, it updates the ops git repo.
-To avoid conflict with manual updates, it writes to a separate file called .argocd-source-<app-name>.yaml (e.g. `manifests/overlays/dev/.argocd-source-dev-cat-service.yaml`).
+Argo CD Image Updater polls the container registry and updates the manifests when it finds a new image.
+To avoid conflict with manual updates, it writes to a separate file.
 
-The file contents might look something like this:
+The file might look something like this:
 ```yaml
+$ cat manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
 kustomize:
   images:
-  - my-registry.io/cat-service:b1.20210702.035806
+  - my-registry.com/cat-service:b1.20210702.035806
 ```
 
-At this point, Argo CD will detect the change to the ops repo and re-apply the manifests.
+Argo CD will detect a change in the ops repo and re-apply the manifests using the image tag in this file.
 
 ### Review Argo CD Image Updater installation
 
@@ -25,7 +28,7 @@ Argo CD Image Updater has already been installed into the workshop cluster.
 
 _Interested in the installation instructions? Read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace)._
 
-Argo CD does not add any CRDs to the cluster.
+Argo CD does not add any CRDs.
 
 ### Additional configuration
 

@@ -13,11 +13,11 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
-    ingresses:
-      - name: argocd
-        protocol: http
-        host: argocd-server.argocd.svc.cluster.local
-        port: 80
+#    ingresses:
+#      - name: argocd-grpc
+#        protocol: https
+#        host: argocd-server-grpc.argocd.svc.cluster.local
+#        port: 443
     namespaces:
       budget: large
     #    resources:
@@ -266,3 +266,16 @@ spec:
                 - backend:
                     serviceName: argocd-server
                     servicePort: http
+#    - apiVersion: extensions/v1beta1
+#      kind: Ingress
+#      metadata:
+#        name: $(workshop_namespace)-argocd-server-grpc
+#        namespace: argocd
+#      spec:
+#        rules:
+#          - host: $(workshop_namespace)-argocd-grpc.$(ingress_domain)
+#            http:
+#              paths:
+#                - backend:
+#                    serviceName: argocd-server
+#                    servicePort: https
