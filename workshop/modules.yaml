@@ -16,9 +16,11 @@ modules:
     exercises/B-01-content:
         name: Unit testing
     exercises/B-02-content:
-        name: Contract testing
+        name: Persistence Integration testing
     exercises/B-03-content:
-        name: Database testing
+        name: Complete Integration testing
+    exercises/B-04-content:
+        name: Consumer Driven Contracts
     exercises/D-01-content:
         name: Automate testing
 
