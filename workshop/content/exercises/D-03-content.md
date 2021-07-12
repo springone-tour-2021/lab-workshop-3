@@ -33,7 +33,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:80
 
 At this point, you can explore the Argo CD UI to get a visual sense for what it does.
 ```dashboard:open-url
-url: {{INGRESS_PROTOCOL}}://{{SESSION_NAMESPACE}}-argocd.{{INGRESS_DOMAIN}}
+url: {{ingress_protocol}}://{{session_namespace}}-argocd.{{ingress_domain}}
 ```
 
 ---
