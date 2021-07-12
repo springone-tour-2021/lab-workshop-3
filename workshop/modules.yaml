@@ -20,21 +20,21 @@ modules:
     exercises/B-03-content:
         name: Database testing
     exercises/D-01-content:
-        name: Automate testing using GitHub Actions
+        name: Automate testing
 
     # Part C: Build Image
     exercises/C-01-content:
-        name: Build container image (manual)
+        name: Build the image
     exercises/D-02-content:
-        name: Automate build using kpack
+        name: Automate builds
 
     # Part D: Automate deployment
     exercises/C-02-content:
-        name: Deploy to Kubernetes (manual)
+        name: Deploy to Kubernetes
     exercises/D-03-content:
-        name: Automate deployment using ArgoCD
+        name: Automate deployment
     exercises/D-04-content:
-        name: Automate container updates using ArgoCD Image Updater
+        name: Automate image updates
 
     # Part E: Observe the complete automated workflow
     exercises/E-01-content:

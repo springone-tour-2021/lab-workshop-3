@@ -1,48 +1,77 @@
 ## Cats, Cats, Everywhere
 
-Throughout this workshop, you will be using an application that returns cat names and ages.
+Throughout this workshop, you will be using a Spring Boot application called _Cat Service_ that returns cat names and ages. The app uses a postgres database to store cat information.
 
-The application comprises a Spring Boot app and a database:
-- **cat-service** - Exposes an enpoint "/cats/{name}" and returns the cat's name and age in months.
-- **cat-postgres** - Stores the names and birth dates of cats.
+#### Prerequisites
 
-## Prerequisites
+You will need a [GitHub account](https://github.com).
 
-You will need:
-- A GitHub [account](https://github.com)
-- A GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) (with "repo" and "workflow" access rights)
-  
-Make sure you have those ready before proceeding.
+## GitHub repo setup
 
-### Environment variables
+### Fork the GitHub repos
 
-Run the following command and enter the appropriate values at the prompts.
-```execute-1
-source scripts/credentials.sh
+Click on the following GitHub links and use the GitHub UI to fork the following repos:
+
+**1. cat-service** - app source code
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 ```
 
-Make sure the output of the script indicates that the environment variables were properly set.
+**2. cat-service-release-ops** - app & database deployment files
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
+```
 
-### GitHub repositories
+### Set the default branch
 
-The workshop requires three GitHub repositories:
-- **cat-service** - source code for the cat application and files to automate testing
-- **cat-service-release** - copy of the cat application source code, once it has passed testing
-- **cat-service-release-ops** - files needed to automate deployment of cat application and postgres db
+For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
+![alt_text](images/github-set-default-branch.png "Set default branch")
 
-A script is provided to fork the repos into your own GitHub org and update references to point to your GitHub org and this workshop instance's Docker registry.
-> Note: This script uses the [`hub`](https://hub.github.com/) CLI, which uses the GITHUB_USER and GITHUB_TOKEN env vars set above, so it will be able to access your GitHub account.
+> Make sure to update the default branch for both repositories.
+
+### Set your GitHub org
+
+It's easier to auto-generate commands in this tutorial if you store the name of your GitHub org in an environment variable (hint: the org is the bit before the repo name on your newly forked repos; often the same as your username).
+> Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
 
 Run the following command.
+At the prompt, enter your GitHub org name.
 ```execute-1
-source scripts/repos.sh
+printf "Enter your GitHub org: " && read GITHUB_ORG
 ```
 
-In a browser, open [GitHub](https://github.com), and navigate to the list of repositories in your org.
-You should see three new repositories:
-- `cat-service` - the application code and testing automation files
-- `cat-service-release` - empty for now; tested code will be copied here
-- `cat-service-release-ops` - deployment files and deployment automation files
+### Clone the repos
 
-You do not need to understand the contents of these repos yet. 
-You will go through them as you proceed through this workshop.
+Clone your repos to the workshop environment.
+```execute-1
+git clone https://github.com/$GITHUB_ORG/cat-service && \
+    cd cat-service && \
+    cd ..
+
+git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
+    cd cat-service-release-ops && \
+    cd ..
+```
+
+You should now see two new directories in the workshop.
+Check out the contents.
+```execute-1
+tree -L 1 cat*
+```
+
+The output will show:
+```
+cat-service
+├── bin
+├── bump
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+└── src
+cat-service-release-ops
+├── manifests
+└── README.md
+```
+
+As you can see, `cat-service` has the structure of a typical Spring Boot application, and `cat-service-release-ops` contains the manifests for deploying to Kubernetes.

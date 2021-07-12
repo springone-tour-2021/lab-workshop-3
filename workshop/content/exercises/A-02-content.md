@@ -1,31 +1,16 @@
-### Run the app locally
+## Run the app locally
 
 Let's begin by running the application locally to understand its behavior.
 
-In both terminal windows, navigate into the app repo that you cloned & forked earlier.
+In both terminal windows, navigate into the cat-service directory.
 ```execute-all
-cd cat-service
+cd ~/cat-service
+clear
 ```
 
-List the contents of the repository.
-You will see the contents of a typical Spring Boot application.
-```execute-1
-ls -l
-```
-
-Your output will show:
-```
-drwxr-xr-x 2 eduk8s root  4096 Jul  6 18:10 bin
--rw-r--r-- 1 eduk8s root     5 Jul  6 18:10 bump
--rwxr-xr-x 1 eduk8s root 10070 Jul  6 18:10 mvnw
--rw-r--r-- 1 eduk8s root  6608 Jul  6 18:10 mvnw.cmd
--rw-r--r-- 1 eduk8s root  7618 Jul  6 18:10 pom.xml
--rw-r--r-- 1 eduk8s root   260 Jul  6 18:10 README.md
-drwxr-xr-x 4 eduk8s root  4096 Jul  6 18:10 src
-```
-
-Start a postgres database.
-The container will run on docker in detached mode (aka in the background).
+Cat service requires a database to store cat information.
+The following command will download a postgres container from Docker Hub and start it on the local docker daemon.
+The process will run in the background ("detached" mode).
 ```execute-1
 docker run -d --rm --name my-postgres \
        -p 5432:5432 \
@@ -35,10 +20,8 @@ docker run -d --rm --name my-postgres \
        bitnami/postgresql:latest
 ```
 
--e POSTGRESQL_USERNAME=bk -e POSTGRESQL_DATABASE=bk -e POSTGRESQL_PASSWORD=bk bitnami/postgresql:latest
-
-In the second terminal, start the app.
-App startup may take a couple of minutes as Java dependencies are downloaded for the first time.
+Next, start the app.
+This may take a couple of minutes as Java dependencies are downloaded for the first time.
 ```execute-2
 ./mvnw spring-boot:run \
       -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
@@ -54,9 +37,9 @@ Send a request.
 http :8080/cats/Toby
 ```
 
-You should see a successful response including Tobys' age in months.
+You should see a successful response including Tobys' age in months. Toby is the only cat in the database, so you'll get the same response for every request.
 
-### Stop the app
+## Stop the app
 
 Stop the app.
 ```execute-2
@@ -64,7 +47,7 @@ Stop the app.
 ```
 
 Stop the database.
-```execute-2
+```execute-1
 docker stop my-postgres
 ```
 
