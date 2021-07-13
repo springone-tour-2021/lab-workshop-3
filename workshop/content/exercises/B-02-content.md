@@ -150,13 +150,13 @@ Paws or no paws. That is a pretty complete set of tests of the persistence and s
 
 ### Testing the CatsService
 
-Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at test here; the JPA tests are complete. Further up the cat test pyramid is where we are.
+Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are.
 
-filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a 'before' method that will get called at the beginning of each test. Take a look at how this works in context:
+Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void findByNameShouldReturnName()"
+text: "void setup() {"
 before: 1
 after: 3
 ```
