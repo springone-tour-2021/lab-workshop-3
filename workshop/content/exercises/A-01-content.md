@@ -52,7 +52,7 @@ git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
     cd cat-service-release-ops && \
     cd ..
     
-git clone https://github.com/$GITHUB_ORG/cat-client && \
+git clone https://github.com/https://github.com/booternetes-III-springonetour-july-2021/cat-client/cat-client && \
     cd cat-client && \
     cd ..
 ```
