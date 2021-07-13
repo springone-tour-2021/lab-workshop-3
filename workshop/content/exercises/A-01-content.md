@@ -56,6 +56,10 @@ git clone https://github.com/$GITHUB_ORG/cat-service && \
 git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
     cd cat-service-release-ops && \
     cd ..
+
+git clone https://github.com/$GITHUB_ORG/cat-client && \
+    cd cat-client && \
+    cd ..
 ```
 
 You should now see two new directories in the workshop.
