@@ -123,31 +123,6 @@ file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.s
 
 The good news is that our tests are certified against ***real*** database  schema Versions. Flyway migrations affect tests routines as well as production.  However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
 
-### Testing the Service
-
-Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at test here; the JPA tests are complete. Further up the cat test pyramid is where we are.
-
-filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a 'before' method that will get called at the beginning of each test. Take a look at how this works in context:
-
-```editor:select-matching-text
-file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void findByNameShouldReturnName()"
-before: 1
-after: 3
-```
-
-Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. lets have a look at the mock setup and test assertion in context:
-
-```editor:select-matching-text
-file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void getCatShouldReturnCat() {"
-before: 1
-after: 3
-```
-
-Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Lets move on to testing the Web Layer.
-
-
 ### Testing the CatsService
 
 Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are.
