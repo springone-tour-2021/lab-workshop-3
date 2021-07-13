@@ -105,7 +105,7 @@ perviously.
 Start by cloning a cat-client repository.
 ```execute-1
 cd ~
-git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client/cat-client
+git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client
 cd cat-client
 ```
 

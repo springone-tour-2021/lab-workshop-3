@@ -40,7 +40,7 @@ It's easier to auto-generate commands in this tutorial if you store the name of 
 Run the following command.
 At the prompt, enter your GitHub org name.
 ```execute-1
-printf "Enter your GitHub org: " && read GITHUB_ORG
+printf "Enter your GitHub org and press enter/return: " && read GITHUB_ORG
 ```
 
 ### Clone the repos
