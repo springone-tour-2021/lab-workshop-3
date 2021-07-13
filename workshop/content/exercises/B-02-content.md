@@ -28,6 +28,10 @@ text: '@Id'
 after: 2
 ```
 
+For the remainder of the Cat class, you will notice several (non-junit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract - DBC as it's known is enabled by Spring Frameworks `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object oriented systems. 
+
+Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
+
 ## Testing Persistence Read / Write
 
 Now under test is the behaviour for when a Cat get stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides enough `EntityManager` to be useful in typical store and retrieve situations.
