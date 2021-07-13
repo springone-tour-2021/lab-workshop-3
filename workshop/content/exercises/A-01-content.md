@@ -32,7 +32,7 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
 
 ### Set the default branch
 
-For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
+For each of the repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
 ![alt_text](images/github-set-default-branch.png "Set default branch")
 
 > Make sure to update the default branch for both repositories.
@@ -75,6 +75,11 @@ tree -L 1 cat*
 
 The output will show:
 ```
+cat-client
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── src
 cat-service
 ├── bin
 ├── bump
@@ -84,8 +89,11 @@ cat-service
 ├── README.md
 └── src
 cat-service-release-ops
+├── build
+├── deploy
 ├── manifests
-└── README.md
+├── README.md
+└── tooling
 ```
 
 As you can see, `cat-service` has the structure of a typical Spring Boot application, and `cat-service-release-ops` contains the manifests for deploying to Kubernetes.
