@@ -100,7 +100,16 @@ Now, lets heard cats toward the next segment - Client to Stub tests!
 ## Stubs the Cat (client)
 
 In this section, we will examine the validation of client to server by using the contract stub generated 
-perviously. This means we will need some pom.xml entries, so lets get started by looking at the necesary
+perviously. 
+
+Start by cloning a cat-client repository.
+```execute-1
+cd ~
+git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client/cat-client
+cd cat-client
+```
+
+We will need some pom.xml entries, so lets get started by looking at the necesary
 dependencies:
 
 Click to view in context:
