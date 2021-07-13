@@ -99,21 +99,9 @@ Now, lets heard cats toward the next segment - Client to Stub tests!
 
 ## Stubs the Cat (client)
 
-In this section, we will examine the validation of client to server by using the contract stub generated 
-perviously. 
+In this section, we will examine the validation of client to server by using the contract stub generated perviously. 
 
-Start by cloning a cat-client repository.
-```execute-1
-cd ~
-git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client
-cd cat-client
-```
-
-We will need some pom.xml entries, so lets get started by looking at the necesary
-dependencies:
-
-Click to view in context:
-
+Lets get started by looking at the necesary dependency in `pom.xml`:
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
 text: "spring-cloud-starter-contract-stub-runner"
