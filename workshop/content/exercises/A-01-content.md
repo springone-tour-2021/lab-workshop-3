@@ -12,6 +12,9 @@ You will need a [GitHub account](https://github.com).
 
 Click on the following GitHub links and use the GitHub UI to fork the following repos:
 
+> Note: If you've done this workshop before and already have forks, delete and recreate them now.
+> You can delete a repo on GitHub: click on `Settings` and scroll to the bottom of the page; it is the last option in the box titled "Danger Zone."
+
 **1. cat-service** - app source code
 ```dashboard:open-url
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
@@ -44,16 +47,14 @@ printf "Enter your GitHub org: " && read GITHUB_ORG
 
 Clone your repos to the workshop environment.
 ```execute-1
+rm -rf cat-*
+
 git clone https://github.com/$GITHUB_ORG/cat-service && \
     cd cat-service && \
     cd ..
 
 git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
     cd cat-service-release-ops && \
-    cd ..
-    
-git clone https://github.com/https://github.com/booternetes-III-springonetour-july-2021/cat-client/cat-client && \
-    cd cat-client && \
     cd ..
 ```
 
