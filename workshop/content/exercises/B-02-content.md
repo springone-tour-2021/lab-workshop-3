@@ -61,7 +61,7 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-There is also the necessary test-scoped dependency in `h2` on the classpath. Lets take a look:
+There is also the necessary test-scoped dependency in (embedded database for tests) `h2` on the classpath. Lets take a look:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -88,9 +88,8 @@ We are not complete with basic save find tests. The CatsService uses a JpaReposi
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
-text: "private final CatsRepository repository;"
+text: "private CatsRepository repository;"
 before: 1
-after: 4
 ```
 
 A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepostory` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test not caused by the EntityManager. The resulting test case is a straight forward save and find through the repository methods.
@@ -104,7 +103,25 @@ before: 1
 after: 3
 ```
 
-*** More Cats mean a Bigger Test Pyramid
+### Flying Cats (Database Versioning)
+
+For these Repository Tests, you'll notice that no state has been configured. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+
+ The main principle at work here is that `flyway` migrations having run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
+
+Click below to see the flyway database beginning state file:
+```editor:open-file
+file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
+```
+
+This is the first database `version migration` file - enumerated v1, v2, etc... - which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
+
+Click below to se flyway database migration v2 in context:
+```editor:open-file
+file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
+```
+
+The good news is that our tests are certified against ***real*** database  schema Versions. Flyway migrations affect tests routines as well as production.  However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
 
 ### Testing the Service
 
