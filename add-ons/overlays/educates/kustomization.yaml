@@ -10,6 +10,7 @@ configMapGenerator:
     literals:
       - kustomize.buildOptions=--load_restrictor LoadRestrictionsNone
       - accounts.image-updater=apiKey
+      - accounts.session-user=login
   - name: argocd-rbac-cm
     behavior: merge
     literals:

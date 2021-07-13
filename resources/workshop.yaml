@@ -3,8 +3,8 @@ kind: Workshop
 metadata:
   name: lab-springone-tour-devops
 spec:
-  title: SpringOne Tour 2021 Workshop 3
-  description: MAIN - SpringOne Tour 2021 Workshop 3
+  title: Main Branch
+  description: SpringOne Tour 2021 Workshop 3
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
