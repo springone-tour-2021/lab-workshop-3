@@ -25,6 +25,11 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
 
+**3. cat-client** - app client source code
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
+```
+
 ### Set the default branch
 
 For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
