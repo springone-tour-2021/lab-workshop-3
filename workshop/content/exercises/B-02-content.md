@@ -105,7 +105,17 @@ after: 3
 
 ### Flying Cats (Database Versioning)
 
-For these Repository Tests, you'll notice that no state has been configured. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+For these Repository Tests, you'll notice that DBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. 
+
+Click to see the flyway dependency in context:
+```editor:select-matching-text
+file: ~/cat-service/pom.xml
+text: "org.flywaydb"
+before: 1
+after: 3
+```
 
  The main principle at work here is that `flyway` migrations having run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
 
