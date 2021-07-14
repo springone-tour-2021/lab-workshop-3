@@ -66,7 +66,7 @@ after: 7
 
 With the contract definition out of the way, we can write the verification `BaseClass`.
 
-### Verification Base Test
+### Verification base test
 
 The `BaseClass` sets up the endpoint-under-test to behave as we expect it to in the contract definition. This means any changes to contract MUST result in a change to service, and vice versa.
 

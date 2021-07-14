@@ -89,7 +89,7 @@ This configuration will instruct `h2` to act like an embedded PostgreSQL - perfe
 
 ### Enter the CatRepository
 
-We are not complete with basic save find tests. The CatsService uses a JpaRepository - `CatsRepository` - thus it's interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
+We are not complete with basic save/find tests. The CatsService uses a JpaRepository - `CatsRepository` - thus its interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
@@ -97,7 +97,7 @@ text: "private CatsRepository repository;"
 before: 1
 ```
 
-A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepostory` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test not caused by the EntityManager. The resulting test case is a straight forward save and find through the repository methods.
+A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepository` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test that is not caused by the EntityManager. The resulting test case is a straightforward save and find through the repository methods.
 
 See the repository test in context:
 
@@ -108,11 +108,11 @@ before: 1
 after: 3
 ```
 
-### Flying Cats (Database Versioning)
+### Flying cats (database versioning)
 
-For these Repository Tests, you'll notice that DBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+For these Repository Tests, you'll notice that DBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a vesrion control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a hissy-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a _hiss_-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
 Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
@@ -122,7 +122,7 @@ before: 1
 after: 3
 ```
 
- The main principle at work here is that `flyway` migrations having run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
+ The main principle at work here is that `flyway` migrations run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
 
 Click below to see the `flyway` database beginning state file:
 ```editor:open-file
@@ -131,7 +131,7 @@ file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 
 This is the first database `version migration` file - enumerated v1, v2, etc... - which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
-Click below to se `flyway` database migration v2 in context:
+Click below to see `flyway` database migration v2 in context:
 ```editor:open-file
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
@@ -140,7 +140,7 @@ The good news is that our tests are certified against ***real*** database schema
 
 ### Testing the CatsService
 
-Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are.
+Further upstream we have the `CatsService` - responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are!
 
 Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
@@ -151,7 +151,7 @@ before: 1
 after: 3
 ```
 
-Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. Let's have a look at the mock setup and test assertion in context:
+Once we have the mock component setup, we can focus on its behaviour. Usually mock behaviour is configured at each test site. Thus, it is trivial to deduce the mocking behaviour when reviewing later. Let's have a look at the mock setup and test assertion in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
@@ -166,7 +166,7 @@ Paws or no paws. That is a pretty complete set of tests of the persistence and s
 
 Another layer of our testing regimen is the HTTP REST endpoint - web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should - unlike most cats. 
 
-Likewise, This test is still quite low on the pyramid - closer to Integration than Unit tests, but not quite Complete Integration since all resourcs are not available. This means that those resources we aren't testing are going to be mocked.
+Likewise, this test is still quite low on the pyramid - closer to Integration than Unit tests, but not quite Complete Integration since all resources are not available. This means that those resources we aren't testing are going to be mocked.
 
 Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
@@ -178,11 +178,11 @@ text: "@RestController"
 after: 14
 ```
 
-What we know is that the the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text - e.g. `/toby`. Furthermore a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
+What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text - e.g. `/toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
 
 ### Cat scratch test REST
 
-Time to model a test after the endpoint behaviour. The test should perform exactly all of the code paths that the Controller will execute in Production. We are not concerned with the wiring of the JPA repository since its been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
+Time to model a test after the endpoint behaviour. The test should perform exactly all the code paths that the Controller will execute in Production. We are not concerned with the wiring of the JPA repository since it's been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
 
 Since we are testing the Web Layer, we will ensure Spring wires up the CatRestController and provide some testing facilities to boot. We can do this using the `@WebMVCTest` annotation which `"disable full auto-configuration and instead apply only configuration relevant to MVC tests "`. 
 
@@ -194,7 +194,7 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include mock `CatsService` as perscribed earlier. But also we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and an `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes transparently and directly, the framework paths leading to our code - there are no transport logic in our code - which reduces the time necessary to complete tests.
+For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly - there is no transport logic in our code - which reduces the time necessary to complete tests.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 
@@ -207,7 +207,9 @@ after: 10
 before: 1
 ```
 
-This mock performs the task of calling our endpoint controller at `"/cats/Toby"` and receiving it's response. MockMVC proivides all the necessary DSL methods to enable us to control the request and verify the response. Using `MockMvcRequestBuilders` is the preferred way to ensure we build a proper HTTP request, while it's `expect` methods
+This mock performs the task of calling our endpoint controller at `"/cats/Toby"` and receiving its response. MockMVC provides all the necessary DSL methods to enable us to control the request and verify the response. Using `MockMvcRequestBuilders` is the preferred way to ensure we build a proper HTTP request, while its `expect` methods
 enable us to validate all result criteria for HTTP (i.e. status, headers, content etc...).
+
+## Next steps
 
 Now we are ready for full Integration tests using TestContainers to assist our REST service with a real JPA functionality, real CatsService, and actual HTTP server. Let's go!

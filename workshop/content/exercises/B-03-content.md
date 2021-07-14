@@ -58,7 +58,7 @@ after: 6
 
 This particular instance exposes its URL, username and password through the PostgreSQLContainer's instance that we will use to make the connection at runtime. Then the DynamicPropertySource gets filled in and merged with Spring's Environment's set of PropertySources.
 
-### Integration Testing the REST Endpoint
+### Integration testing the REST endpoint
 
 This test represents a fully wired server application. But we want to test the behaviour not of the client, but of the REST endpoint. Thus, we can bring out the `TestRestTemplate` - this object makes it easier to know how an HTTP service under test is behaving. Per the document: `4xx and 5xx do not result in an exception being thrown and can instead be detected via the response entity and its status code`. This is important because we can more easily model expected failure behaviour through HTTP response-state assertions.
 
