@@ -1,5 +1,3 @@
-## Consumer Driven Contract Tests
-
 This section of the workshop introduces a `client` aspect for illustrating the consumer side of Consumer Driven Contract (CDC) testing. To initialize, fork and clone the `cat-client` repository as follows below.
 
 **1. cat-client** - client source code
@@ -7,7 +5,7 @@ This section of the workshop introduces a `client` aspect for illustrating the c
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
 ```
 
-Clone the `cat-client` repos to the workshop environment:
+Clone the `cat-client` repo to the workshop environment:
 ```execute-1
 rm -rf cat-client
 
@@ -200,4 +198,4 @@ after: 12
 
 Because this is a `@SpringBootTest`, all client dependencies will be configured as a full application, thus the stub-runner facilitates the server-side (in this case our Wiremock stub).
 
-With the client out of the way, we have come to the conclusion of our test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the automated-testing and build phases in the next section.
+With the client out of the way, we have come to the conclusion of our local-bound test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the automated-testing and build phases in the next section.

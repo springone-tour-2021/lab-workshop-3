@@ -1,4 +1,4 @@
-## App integration tests with containers
+## App Integration Tests with Containers
 
 *** Further up the test pyramid, Cats become meowschievous ***
 
@@ -56,7 +56,7 @@ after: 6
 The `DynamicPropertyRegistry` is used to add name-value pairs to the core Spring Environment's set of PropertySources used for placeholder and values. Values supplied to the registry are dynamic and provided via a `java.util.function.Supplier` which is only invoked when the property is resolved.
 In this case, we have relayed container connection details over to `spring.datasource.` properties. This way, JPA will have all the necessary property values for making a connection to the container-bound Postgres database.
 
-### Integration testing the REST endpoint
+### Testing the REST endpoint
 
 This test represents a fully wired server application. But we want to test the behaviour not of the client, but of the REST endpoint. Thus, we can bring out the `TestRestTemplate`. This object makes it easier to know how an HTTP service under test is behaving. Per the document: `4xx and 5xx do not result in an exception being thrown and can instead be detected via the response entity and its status code`. This is important because we can more easily model expected failure behaviour through HTTP response-state assertions.
 
@@ -69,6 +69,6 @@ before: 1
 after: 3
 ```
 
-The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real transport-backed HTTP server. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
+The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real transport-backed HTTP server via its random port. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
 
 Next, we will begin writing tests that ensure client-side (consumer) behaviour is matched between released versions using Spring-Cloud-Contract.
