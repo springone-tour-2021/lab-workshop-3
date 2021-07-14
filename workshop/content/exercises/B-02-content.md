@@ -1,4 +1,4 @@
-## Persisting persistant Cats
+## Persisting persistent Cats
 
 The meowtivation for these tests it to verify Cats state remains when persisted as RDBMS entries. Cats and other entities must have an `@Entity` annotation at the class level that tells our program it is eligible for persistence.
 
@@ -9,7 +9,7 @@ file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: "@Entity"
 ```
 
-Today, we're storing Cats in RDBMS tables. Thus, there needs to be a `@Table` annotation present which tells Spring JPA the name a database table. Lets explore this class markup a little further.
+Today, we're storing Cats in RDBMS tables. Thus, there needs to be a `@Table` annotation present which tells Spring JPA the name a database table. Let's explore this class markup a little further.
 
 ```editor:select-matching-text
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
@@ -32,7 +32,7 @@ For the remainder of the Cat class, you will notice several (non-JUnit) `Assert`
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
-## Testing Persistence Read / Write
+## Testing persistence read/write
 
 Now under test is the behaviour for when a Cat get stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides enough `EntityManager` to be useful in typical store and retrieve situations.
 
@@ -61,7 +61,7 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-There is also the necessary test-scoped dependency in (embedded database for tests) `h2` on the classpath. Lets take a look:
+There is also the necessary test-scoped dependency in (embedded database for tests) `h2` on the classpath. Let's take a look:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -84,7 +84,7 @@ This configuration will instruct `h2` to act like an embedded PostgreSQL - perfe
 
 ### Enter the CatRepository
 
-We are not complete with basic save find tests. The CatsService uses a JpaRepository - `CatsRepository` - thus it's interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Lets see in context:
+We are not complete with basic save find tests. The CatsService uses a JpaRepository - `CatsRepository` - thus it's interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
@@ -146,7 +146,7 @@ before: 1
 after: 3
 ```
 
-Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. lets have a look at the mock setup and test assertion in context:
+Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. Let's have a look at the mock setup and test assertion in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
@@ -155,7 +155,7 @@ before: 1
 after: 3
 ```
 
-Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Lets move on to testing the Web Layer.
+Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Let's move on to testing the Web Layer.
 
 ### Cats REST Controller 
 
@@ -163,7 +163,7 @@ Another layer of our testing regimen is the HTTP REST endpoint - web tests. Simi
 
 Likewise, This test is still quite low on the pyramid - closer to Integration than Unit tests, but not quite Complete Integration since all resourcs are not available. This means that those resources we aren't testing are going to be mocked.
 
-Lets take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
+Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
 Click below to see the CatsRestController in context:
 
@@ -191,7 +191,7 @@ after: 10
 
 For this test, we also include mock `CatsService` as perscribed earlier. But also we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and an `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes transparently and directly, the framework paths leading to our code - there are no transport logic in our code - which reduces the time necessary to complete tests.
 
-Lets focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Lets see this more in depth.
+Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 
 Click below to see the Controller test case in context:
 
@@ -205,4 +205,4 @@ before: 1
 This mock performs the task of calling our endpoint controller at `"/cats/Toby"` and receiving it's response. MockMVC proivides all the necessary DSL methods to enable us to control the request and verify the response. Using `MockMvcRequestBuilders` is the preferred way to ensure we build a proper HTTP request, while it's `expect` methods
 enable us to validate all result criteria for HTTP (i.e. status, headers, content etc...).
 
-Now we are ready for full Integration tests using TestContainers to assist our REST service with a real JPA functionality, real CatsService, and actual HTTP server. Lets go!
+Now we are ready for full Integration tests using TestContainers to assist our REST service with a real JPA functionality, real CatsService, and actual HTTP server. Let's go!

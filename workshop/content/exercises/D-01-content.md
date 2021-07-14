@@ -33,7 +33,7 @@ text: "user.name"
 before: 1
 ```
 
-It then does a `mvn clean verify` to test the code. On success it creates some directories and for clones the upstream `booternetes-III-springonetour-july-2021/cat-service-release` repository from GitHub. It then moves out the `.git` directory out to preserve it. The contents are cleared and the code from `cat-service` is then copied over and the `.git` director is moved back. Lastly a branch is created and it's pushed up to your `cat-service-release` repository.
+It then does a `mvn clean verify` to test the code. On success, it creates some directories and then clones the upstream `booternetes-III-springonetour-july-2021/cat-service-release` repository from GitHub. It then moves the `.git` directory out to preserve it. The contents are cleared and the code from `cat-service` is then copied over and the `.git` directory is moved back. Lastly a branch is created and it's pushed up to your `cat-service-release` repository.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.sh
 text: "promote_code()"
@@ -43,7 +43,7 @@ after: 11
 #### GitHub Actions workflow file
 Now take a look at the YAML workflow file. You'll be storing your GitHub username and access token in the next step. 
 
-The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. 
+The `on` section lists the kinds of events that will trigger the `job`.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "on"
@@ -78,7 +78,7 @@ text: "actions/setup-java@v1"
 To `run:` is used to run the `deploy.sh` script that we just looked at.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
-text: "run"
+text: "run:"
 ```
 
 ### GitHub Actions secrets
@@ -87,16 +87,16 @@ The last configuration detail to set up is to add credentials to `cat-service` s
 
 Create a GitHub [personal access token](https://github.com/settings/tokens). It needs "repo" and "workflow" access rights.
 
-Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets
+Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
 ```
-Create a new repository secret called `GIT_USERNAME` with your GitHub username as the value
-Create another secret called `GIT_PASSWORD` with your access token as the value
+Create a new repository secret called `GIT_USERNAME` with your GitHub username as the value.
+Create another secret called `GIT_PASSWORD` with your access token as the value.
 
 ## Enable GitHub Actions
 
-Run this command and click on the link in terminal 1 navigate to the `cat-service` repository's actions page:
+Run this command and click on the link in terminal 1 to navigate to the `cat-service` repository's actions page:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
 ```

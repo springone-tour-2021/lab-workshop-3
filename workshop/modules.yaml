@@ -1,9 +1,9 @@
 modules:
     workshop-overview:
-        name: Workshop Overview
-        exit_sign: Setup Environment
+        name: Workshop overview
+        exit_sign: Environment Setup
     setup-environment:
-        name: Setup Environment
+        name: Workshop environment
         exit_sign: Start Workshop
 
     # Part A: Into to the app
@@ -16,11 +16,11 @@ modules:
     exercises/B-01-content:
         name: Unit testing
     exercises/B-02-content:
-        name: Persistence Integration testing
+        name: Persistence integration testing
     exercises/B-03-content:
-        name: Complete Integration testing
+        name: Complete integration testing
     exercises/B-04-content:
-        name: Consumer Driven Contracts
+        name: Consumer-driven contracts
     exercises/D-01-content:
         name: Automate testing
 
@@ -42,5 +42,5 @@ modules:
     exercises/E-01-content:
         name: Watch it all run!
     workshop-summary:
-        name: Workshop Summary
+        name: Workshop summary
         exit_sign: Finish Workshop
