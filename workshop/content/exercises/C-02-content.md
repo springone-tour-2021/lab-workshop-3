@@ -64,8 +64,26 @@ This directory contains:
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
 Take a look at the `kustomization.yaml` file.
-```editor:open-file
+```editor:append-to-file
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
+text: |
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+
+    resources:
+    - deployment.yaml
+    - service.yaml
+
+    configMapGenerator:
+    - name: cat-service-config
+        files:
+        - application.properties
+
+    images:
+    - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
+        newTag: latest
+        newName: {{registry_host}}/cat-service
+  
 ```
 
 Notice anything odd? This kustomization will rename your cat-service image to `MY_REGISTRY/cat-service`. 
