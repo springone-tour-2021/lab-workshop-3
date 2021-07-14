@@ -161,7 +161,7 @@ The reference that appeared in the output in terminal 1 means the image was publ
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
 
-This builder can now be used by anyone with access to the registry - presumably everyone in a given organization. All apps across the org will be built using the same components (base image, Java runtime, etc), and incorporate the same features the buildpacks provide (e.g. Paketo Java memory calculator, clean exits on out-of-memory errors, and more).
+This builder can now be used by anyone with access to the registry—presumably everyone in a given organization. All apps across the org will be built using the same components (base image, Java runtime, etc), and incorporate the same features the buildpacks provide (e.g. Paketo Java memory calculator, clean exits on out-of-memory errors, and more).
 
 ## Build the Cat Service image
 
@@ -265,7 +265,7 @@ When the build is ready (`SUCCEEDED=True` and an image reference appears), stop 
 ```
 
 You can also check the Docker registry to confirm that the app image has been published.
-> Notice that kpack applies two tags - a build tag and "latest." Make a mental note of the pattern of the build tag; you will use this later.
+> Notice that kpack applies two tags—a build tag and "latest." Make a mental note of the pattern of the build tag; you will use this later.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```

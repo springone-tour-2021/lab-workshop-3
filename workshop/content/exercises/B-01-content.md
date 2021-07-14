@@ -1,7 +1,7 @@
 ## Testing makes purr-fect
 
-The Cats app is something we definitely want to meow in production.
-Let's go through the rigamarole to ensure that what we coded is indeed
+We definitely want this Cats application meowing in production.
+Let's go through the rigamarole of testing to ensure that what we coded is indeed
 the behaviour that will be exhibited during production and any future
 version[N] -> version[N+1] rollouts.
 
@@ -10,9 +10,9 @@ version[N] -> version[N+1] rollouts.
 <font size="1"> background photo by Willian Justen de Vasconcellos on Unsplash</font> 
 ### Test pyramids with Jupiter
 
-JUnit5 also known as Jupiter, will facilitate our test bed - the bottom of the test pyramid - and allow us to surface some useful behavioural tests. If you are already used to Junit4, then dont bite your nails just yet - JUnit5 is quite similar up front. The most visible difference being namespace changes from `org.junit.test` to `org.junit.jupiter.test`. There are some architectural changes to Junit5, and you might be curious about; read [the docs](https://junit.org/junit5/docs/current/user-guide/) to get further indepth. 
+JUnit5, also known as Jupiter, will facilitate our test bed—the bottom of the test pyramid—and allow us to surface some useful behavioural tests. If you are already used to Junit4, then don't bite your nails just yet—JUnit5 is quite similar up front. The most visible difference being namespace changes from `org.junit.test` to `org.junit.jupiter.test`. There are some architectural changes to Junit5; if you are curious about those, check out [the docs](https://junit.org/junit5/docs/current/user-guide/) to get further in depth. 
 
-First, we will add a test to determine if a Cat can be created without error. That is, we dont want our constructor
+First, we will add a test to determine if a Cat can be created without error. That is, we don't want our constructor
 or constructor-like method to throw `Exception`. Thus, annotate the method under test with the `@Test` annotation, 
 and provide assertion logic per our application spec.
 
@@ -36,11 +36,11 @@ before: 1
 after: 7
 ```
 
-So far, nothing too complex is happening and that's good; cats like to keep things simple in tests. Other than basic state tests, the Cat manages a `LocalDate` internally, and any methods that use it must go under test as well. We want to ensure that Cat state remains consistant across method calls, and that 
-`LocalDateObject` we mentioned earlier is properly utilized. We can do that by testing out methods which make use of `LocalDateObject`'s manipulation methods such as `getAgeInMonths()`, `minusMonths()`, `now()`, and so on..
+So far, nothing too complex is happening and that's good; cats like to keep things simple. Other than basic state tests, the Cat manages a `LocalDate` internally, and any methods that use it must go under test as well. We want to ensure that Cat state remains consistent across method calls, and that 
+`LocalDateObject` is properly utilized. We can do that by testing out methods which make use of `LocalDateObject`'s manipulation methods such as `getAgeInMonths()`, `minusMonths()`, `now()`, and so on...
 
 
-Click to see in context:
+Click to see this in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatTests.java
