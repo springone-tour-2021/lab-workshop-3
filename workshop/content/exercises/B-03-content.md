@@ -4,7 +4,7 @@
 
 The entrypoint for getting TestContainers working is through `pom.xml`. Simply add the necessary `testcontainers` dependency to the project under `test` scope. TestContainser makes available many modules for getting your flavor of DBMS in test. See a listing of whats there now [on their website](https://www.testcontainers.org/modules/databases/); this workshop uses [postgres](https://www.testcontainers.org/modules/databases/postgres/) module for testing - we will explore it's API shortly. 
 
-First, lets take a peek at the dependency inclusion for our build:
+First, let's take a peek at the dependency inclusion for our build:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -17,7 +17,7 @@ after: 4
 
 With the dependency in hand, we can issue configuration to our next test class `CatsIntegrationTests`. 
 
-In this test, we will enable Testcontainers and allow Spring Boot to classpath-scan our entity and service objects. This is accomplished with 2 annotations: `@Testcontainers` and `@SpringBootTest`. The former is a JUnit Jupiter extension that activates automatic startup, and shutdown of containers used during a test case. The latter annotation activates Spring Boots Classpath scanning for our Spring-related configuration objects; we want the whole application to find RDBMS and expose real (heavy, transport-laden) REST endpoints for test.
+In this test, we will enable Testcontainers and allow Spring Boot to classpath-scan our entity and service objects. This is accomplished with 2 annotations: `@Testcontainers` and `@SpringBootTest`. The former is a JUnit Jupiter extension that activates automatic startup and shutdown of containers used during a test case. The latter annotation activates Spring Boot's Classpath scanning for our Spring-related configuration objects; we want the whole application to find RDBMS and expose real (heavy, transport-laden) REST endpoints for test.
 
 Click to see configuration in context:
 
@@ -38,7 +38,7 @@ text: "@Container"
 after: 1
 ```
 
-The test extenstion AKA `@Testcontainers` will capture the `@Container` annotated bean and do the work of managing its  (startup, shutdown, restart ,etc...) lifecycle. In addition, we need to specify a parameter to the PostgreSQLContainer - some container name in the Docker regisry - by default is `postgres`, but you *may* need a specific version for
+The test extension (aka `@Testcontainers`) will capture the `@Container` annotated bean and do the work of managing its lifecycle (startup, shutdown, restart ,etc...). In addition, we need to specify a parameter to the PostgreSQLContainer - some container name in the Docker registry - by default is `postgres`, but you *may* need a specific version for
 your application.
 
 ### Catnecting to TestContainers
@@ -56,13 +56,13 @@ text: "@DynamicPropertySource"
 after: 6
 ```
 
-This particular instance exposes it's URL, username and password through the PostgreSQLContainer's instance that we will use to make the connection at runtime. Then the DynamicPropertySource gets filled in and merged with Spring's Environment's set of PropertySources.
+This particular instance exposes its URL, username and password through the PostgreSQLContainer's instance that we will use to make the connection at runtime. Then the DynamicPropertySource gets filled in and merged with Spring's Environment's set of PropertySources.
 
-### Integration testing the REST Endpoint
+### Integration Testing the REST Endpoint
 
 This test represents a fully wired server application. But we want to test the behaviour not of the client, but of the REST endpoint. Thus, we can bring out the `TestRestTemplate` - this object makes it easier to know how an HTTP service under test is behaving. Per the document: `4xx and 5xx do not result in an exception being thrown and can instead be detected via the response entity and its status code`. This is important because we can more easily model expected failure behaviour through HTTP response-state assertions.
 
-Lets see how this works in context:
+Let's see how this works in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsIntegrationTests.java
@@ -71,6 +71,6 @@ before: 1
 after: 3
 ```
 
-The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to real transport-backed HTTP server. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
+The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real transport-backed HTTP server. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
 
 Next, we will begin writing tests that ensure client-side (consumer) behaviour is matched between released versions using Spring-Cloud-Contract.

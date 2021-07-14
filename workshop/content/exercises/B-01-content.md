@@ -1,7 +1,7 @@
 ## Testing makes Purr-fect
 
-The Cats app is something we definately want to meow in production.
-Lets go through the rigamarole to ensure that what we coded is indeed
+The Cats app is something we definitely want to meow in production.
+Let's go through the rigamarole to ensure that what we coded is indeed
 the behaviour that will be exhibited during production and any future
 version[N] -> version[N+1] rollouts.
 
@@ -46,4 +46,4 @@ before: 1
 after: 15
 ```
 
-And thats it! Cats arent easy to please, but they test cleanly. In the next secion, we move on up the test pyramid to integration testing of the persistence layer.
+And thats it! Cats arent easy to please, but they test cleanly. In the next section, we move on up the test pyramid to integration testing of the persistence layer.

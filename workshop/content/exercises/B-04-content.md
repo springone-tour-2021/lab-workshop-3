@@ -37,7 +37,7 @@ text: "import org.springframework.cloud.contract.spec.Contract"
 
 Now, begin the initial claws (clause) with `Contract.make`. This method is our point of entry to build the contract and represents the top-level object in the contract specification. Then, we can add a description using the `description` method. It's not required, but it facilitates readability.
 
-Lets begin putting this together. Click the action to see clause and description in context:
+Let's begin putting this together. Click the action to see clause and description in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/resources/contracts/shouldReturnAllCats.groovy
@@ -72,7 +72,7 @@ The `BaseClass` sets up the endpoint-under-test to behave as we expected to in t
 
 The BaseClass is a simple `@SpringBootTest` that doesn't expose it's own server, but rather exposes a `mock MVC` endpoint through [RestAssured](https://rest-assured.io/). It is `mock` because rather than a full blown server with exposed TCP port, there is ONLY the server-side mechanics without transport - the exact same behaviour but no wire traffic. This makes it quite fast and efficient at running many tests.
 
-Lets take a look at the Cat's BaseClass. This is a simple `@SpringBootTest` kind of test as there are a few parts we will identify and explain as we go further.
+Let's take a look at the Cat's BaseClass. This is a simple `@SpringBootTest` kind of test as there are a few parts we will identify and explain as we go further.
 
 Take a look at the BaseClass resource configuration in context:
 
@@ -95,7 +95,7 @@ text: "@BeforeEach"
 after: 5
 ```
 
-Now, lets heard cats toward the next segment - Client to Stub tests!
+Now, let's heard cats toward the next segment - Client to Stub tests!
 
 ## Stubs the Cat (client)
 
@@ -117,7 +117,7 @@ before: 2
 after: 2
 ```
 
-Adding the `spring-cloud-starter-contract-stub-runner` lets us decare tests bound to a specific stub generated 
+Adding the `spring-cloud-starter-contract-stub-runner` let's us decare tests bound to a specific stub generated 
 through the `verifier` module. From here we can take a quick peek at client production to understand whats under
 the client hood; the Cat data, how to make that HTTP call out, where it goes, and what to make of the result.
 
@@ -130,7 +130,7 @@ before: 3
 after: 3
 ```
 
-So this is what the client expects in return for a request - hopefully its the same as on server - and if it's not, then we will find out during tests. Now, lets take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".  
+So this is what the client expects in return for a request - hopefully it's the same as on server - and if it's not, then we will find out during tests. Now, let's take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".  
 
 Click below to see the client in context:
 
