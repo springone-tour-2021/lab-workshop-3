@@ -182,4 +182,4 @@ after: 12
 
 Because this is a `@SpringBootTest`, all client dependencies will be configured as a full application, thus the stub-runner facilitates the server-side (in this case our Wiremock stub).
 
-With the client out of the way, we have come to the conclusion of our test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the build and deployment phases in the next section.
+With the client out of the way, we have come to the conclusion of our test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the automated-testing and deployment phases in the next section.
