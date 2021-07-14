@@ -118,7 +118,7 @@ We are going to manually push to the `cat-service` repository to trigger the Git
 
 Within the `cat-service` repo make a change to the file `bump` 
 
-Reach your the file `cat-service/bump` in your repo by clicking the next command to get a link in terminal-1.
+Open the file `cat-service/bump` in your repo by clicking the next command to get a link in terminal-1.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/blob/educates-workshop/bump
 ```
