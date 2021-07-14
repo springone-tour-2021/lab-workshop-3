@@ -5,7 +5,7 @@ Right now, nothing.
 This means Argo CD won't know that a new image is available.
 
 This problem can be solved in different ways.
-In this workshop, we are going to GitHub Actions.
+In this workshop, we are going to use GitHub Actions.
 
 ### GitHub Actions secrets
 
