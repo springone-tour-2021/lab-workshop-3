@@ -1,4 +1,4 @@
-## Consumer Side (contract)Cat Testing
+## Consumer Side (contract) Cat Testing
 
 The furst step is to add the `spring-cloud-starter-contract-verifier` dependency that lets us write a test to support the contract verification. Click the action below to show Maven `pom.xml` dependencies in context:
 
