@@ -11,6 +11,7 @@ You will need a [GitHub account](https://github.com).
 ### Fork the GitHub repos
 
 Click on the following GitHub links and use the GitHub UI to fork the following repos:
+![alt_text](images/prereq-fork.png "Fork by clicking top right button")
 
 > Note: If you've done this workshop before and already have forks, delete and recreate them now.
 > You can delete a repo on GitHub: click on `Settings` and scroll to the bottom of the page; it is the last option in the box titled "Danger Zone."
@@ -25,14 +26,9 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
 
-**3. cat-client** - app client source code
-```dashboard:open-url
-url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
-```
-
 ### Set the default branch
 
-For each of the repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
+For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
 ![alt_text](images/github-set-default-branch.png "Set default branch")
 
 > Make sure to update the default branch for both repositories.
@@ -61,10 +57,6 @@ git clone https://github.com/$GITHUB_ORG/cat-service && \
 git clone https://github.com/$GITHUB_ORG/cat-service-release-ops && \
     cd cat-service-release-ops && \
     cd ..
-
-git clone https://github.com/$GITHUB_ORG/cat-client && \
-    cd cat-client && \
-    cd ..
 ```
 
 You should now see two new directories in the workshop.
@@ -75,11 +67,6 @@ tree -L 1 cat*
 
 The output will show:
 ```
-cat-client
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
-└── src
 cat-service
 ├── bin
 ├── bump
