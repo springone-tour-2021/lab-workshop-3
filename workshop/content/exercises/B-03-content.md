@@ -1,6 +1,6 @@
 ## App integration tests with containers
 
-*** Further Up the Test Pyramid, Cats become meowschievious ***
+*** Further up the test pyramid, Cats become meowschievous ***
 
 The entrypoint for getting TestContainers working is through `pom.xml`. Simply add the necessary `testcontainers` dependency to the project under `test` scope. TestContainser makes available many modules for getting your flavor of RDBMS in test. See a listing of whats there now [on their website](https://www.testcontainers.org/modules/databases/); this workshop uses [postgres](https://www.testcontainers.org/modules/databases/postgres/) module for testing—we will explore it's API shortly. 
 

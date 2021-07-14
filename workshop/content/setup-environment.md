@@ -28,7 +28,7 @@ name: Editor
 ```
 
 #### Kubernetes Console 
-You will have the ability to inspect your Kubernetes cluster with the Kubernetes Dashboard- a web UI for Kubernetes clusters. Kubernetes Dashboard is an Open Source, developer-centric web interface for Kubernetes that lets you inspect a Kubernetes cluster and its applications.
+You will have the ability to inspect your Kubernetes cluster with the Kubernetes Dashboard—a web UI for Kubernetes clusters. Kubernetes Dashboard is an Open Source, developer-centric web interface for Kubernetes that lets you inspect a Kubernetes cluster and its applications.
 
 You haven't deployed anything to Kubernetes so there isn't much to display at the moment, but you can see the dashboard now and come back to it later in the workshop.
 
