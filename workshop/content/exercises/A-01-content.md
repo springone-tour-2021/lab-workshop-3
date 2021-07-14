@@ -36,7 +36,7 @@ For each of the two repos, navigate to `Settings-->Branches` and click on the tw
 ### Set your GitHub org
 
 It's easier to auto-generate commands in this tutorial if you store the name of your GitHub org in an environment variable (hint: the org is the bit before the repo name on your newly forked repos; often the same as your username).
-> Don't worry - the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
+> Don't worry—the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
 
 Run the following command.
 At the prompt, enter your GitHub org name.
