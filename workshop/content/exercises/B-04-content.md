@@ -130,7 +130,7 @@ before: 3
 after: 3
 ```
 
-So this is what the client expects in return for a request—hopefully it's the same as on the server—and if it's not, then we will find out during tests. Now, let's take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".  
+So this is what the client expects in return for a request—hopefully it's the same as on the server—and if it's not, then we will find out during tests. Now, let's take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".
 
 Click below to see the client in context:
 
@@ -169,7 +169,8 @@ First, we configure the `ids` property which is in `ivy notation`—per the doc�
 
 ***By default, Spring Cloud Contract integrates with Wiremock as the HTTP server stub.***
 
-Next, we can write the test as usual.  Remember the stub runner locates and executes our Stub, which is really a [WireMock](http://wiremock.org/) service that models our service; its not the real service, just a static stub of it.
+Next, we can write the test as usual.
+Remember the stub runner locates and executes our Stub, which is really a [WireMock](http://wiremock.org/) service that models our service; its not the real service, just a static stub of it.
 The test simply calls the Cat REST endpoint (the stub) and evaluates that the result is consistent with client's expectations.
 
 Click here to see the cat-client in context:

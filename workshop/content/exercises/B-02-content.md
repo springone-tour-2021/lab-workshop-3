@@ -1,6 +1,6 @@
 ## Persisting persistent Cats
 
-The meowtivation for these tests it to verify Cat's state remains when persisted as database entries.
+The meowtivation for these tests is to verify Cat's state remains when persisted as database entries.
 Cats and other entities must have an `@Entity` annotation at the class level to signal that they are eligible for persistence.
 
 Click below to view the usage of `@Entity` in context:
@@ -17,7 +17,7 @@ file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: '@Table(name = "cat")'
 ```
 
-Since RDBMS's have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key), we need to suffice the engine with a marker and its strategy.  
+Since RDBMS's have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key), we need to suffice the engine with a marker and its strategy.
 
 The `id` field has been annotated with `@Id` to denote it is the holder of the primary key, while `@GeneratedValue` tells the engine how the key gets generated. Usually, this means a monotonically incrementing value or something specific to the RDBMS, like a UUID. Check out [the JEE docs](https://docs.oracle.com/javaee/7/api/javax/persistence/TableGenerator.html) for more details on its use!
 
@@ -29,17 +29,18 @@ text: '@Id'
 after: 2
 ```
 
-For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code—Design By Contract (DBC)—is enabled by Spring Framework's `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
+For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code—Design By Contract (DBC)—is enabled by Spring Framework's `org.springframework.util` package.
+The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
-## Testing persistence read/write
+## Testing read/write persistence
 
-Let's focus on testing the behaviour when a Cat gets stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides just enough `EntityManager` to be useful in typical store and retrieve situations.
+Let's focus on testing the behaviour when a Cat is stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides just enough `EntityManager` to be useful in typical store-and-retrieve situations.
 
 To enable both, mark a test class with [@DataJpaTest](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/DataJpaTest.html) annotation. This will ensure our test only encompasses the JPA persistence layer with the following behaviour as described in the docs: 
-`Using this annotation will disable full auto-configuration and instead apply only configuration relevant to JPA tests.`. Thus, do not expect any other non-JPA (e.g. Web) components to function as they simply won't
-get configured. This also means any dependent services need to be explicitly configured or mocked.
+`Using this annotation will disable full auto-configuration and instead apply only configuration relevant to JPA tests`. Thus, do not expect any other non-JPA (e.g. Web) components to function as they simply won't get configured. 
+This also means any dependent services need to be explicitly configured or mocked.
 
 Click below to see test class configuration in context:
 
@@ -62,7 +63,7 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-There is also the necessary classpath dependency for a test-scoped "embedded" database.
+We will need a test-scoped "embedded" database dependency on the classpath.
 An embedded database runs in-memory (aka inside the same Cats app java process), so it enables us to test Cats without having to start up a separate database.
 In this case we are using a database called [h2](https://www.h2database.com/html/main.html). 
 
@@ -75,7 +76,7 @@ before: 1
 after: 3
 ```
 
-Next, we need to specify the connections of the persistence (JPA) engine. Spring accepts a datasource URL property which gets fed to the h2 engine. The h2 engine accepts various parameters through such URL. In this case, it means we get to control the mode for which SQL gets interpreted. For more comprehensive configuration options, please read the [h2 docs](http://www.h2database.com/html/features.html).
+Next, we need to specify the connections of the JPA (persistence) engine. Spring accepts a datasource URL property which gets fed to the h2 engine. The h2 engine accepts various parameters through such URLs. In this case, it means we get to control the mode in which SQL gets interpreted. For more comprehensive configuration options, please read the [h2 docs](http://www.h2database.com/html/features.html).
 
 Click to see an h2 datasource URL in context:
 
@@ -97,7 +98,7 @@ text: "private CatsRepository repository;"
 before: 1
 ```
 
-A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepository` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test that is not caused by the EntityManager. The resulting test case is a straightforward save and find through the repository methods.
+A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepository` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test that is not caused by the EntityManager. The resulting test case is a straightforward save-and-find through the repository methods.
 
 See the repository test in context:
 
@@ -110,9 +111,9 @@ after: 3
 
 ### Flying cats (database versioning)
 
-For these Repository Tests, you'll notice that RDBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+For these Repository tests, you'll notice that RDBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a _hiss_-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database, we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a *hiss*y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
 Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
@@ -129,14 +130,14 @@ Click below to see the `flyway` database beginning state file:
 file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 ```
 
-This is the first database `version migration` file—enumerated v1, v2, etc...—which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
+This is the first database `version migration` file (named v1). It sets up a schema, but this schema is incompatible with our latest code base. A second version (named v2) has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
 Click below to see `flyway` database migration v2 in context:
 ```editor:open-file
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
 
-The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `RDBMS` tests, as well as production executions.
+The good news is that our tests are certified against ***real*** database schema versions. `Flyway` migrations affect not only test routines, but also the production database itself. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will production. Thus `flyway` has become a vital component to `JPA` or `RDBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
@@ -160,13 +161,13 @@ before: 1
 after: 3
 ```
 
-Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Let's move on to testing the Web Layer.
+Paws or no paws, that is a pretty complete set of tests of the persistence and service layer. Let's move on to testing the Web Layer.
 
 ### Cats REST Controller 
 
 Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should—unlike most cats. 
 
-Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite Complete Integration since all resources are not available. This means that those resources we aren't testing are going to be mocked.
+Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite "Complete Integration" since not all resources are available. This means that the resources we aren't testing need to be mocked.
 
 Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
@@ -180,11 +181,11 @@ after: 14
 
 What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text—e.g. `/toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
 
-### Cat scratch test REST
+### Catnap (REST) test
 
-Time to model a test after the endpoint behaviour. The test should perform exactly all the code paths that the Controller will execute in Production. We are not concerned with the wiring of the JPA repository since it's been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
+Time to model a test after the endpoint behaviour. The test should perform exactly all the code paths that the Controller will execute in production. We are not concerned with the wiring of the JPA repository since it has been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
 
-Since we are testing the Web Layer, we will ensure Spring wires up the CatRestController and provide some testing facilities to boot. We can do this using the `@WebMVCTest` annotation which `"disable full auto-configuration and instead apply only configuration relevant to MVC tests "`. 
+Since we are testing the Web Layer, we will ensure Spring wires up the CatRestController and provides some testing facilities to boot. We can do this using the `@WebMVCTest` annotation which will `"disable full auto-configuration and instead apply only configuration relevant to MVC tests "`. 
 
 Click below to see the test class configuration in context:
 
@@ -212,4 +213,4 @@ enable us to validate all result criteria for HTTP (i.e. status, headers, conten
 
 ## Next steps
 
-Now we are ready for full Integration tests using TestContainers to assist our REST service with a real JPA functionality, real CatsService, and actual HTTP server. Let's go!
+Now we are ready for full Integration tests using TestContainers to assist our REST service with real JPA functionality, real CatService, and an actual HTTP server. Let's go!
