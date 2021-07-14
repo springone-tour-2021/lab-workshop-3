@@ -110,7 +110,7 @@ after: 3
 
 ### Flying cats (database versioning)
 
-For these Repository Tests, you'll notice that DBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+For these Repository Tests, you'll notice that RDBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
 We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a _hiss_-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
@@ -122,7 +122,7 @@ before: 1
 after: 3
 ```
 
- The main principle at work here is that `flyway` migrations run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
+ The main principle at work here is that `flyway` migrations run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other RDBMS starts up.
 
 Click below to see the `flyway` database beginning state file:
 ```editor:open-file
@@ -136,7 +136,7 @@ Click below to see `flyway` database migration v2 in context:
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
 
-The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
+The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `RDBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
