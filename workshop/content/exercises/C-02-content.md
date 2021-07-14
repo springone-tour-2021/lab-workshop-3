@@ -76,13 +76,13 @@ text: |
 
     configMapGenerator:
     - name: cat-service-config
-        files:
-        - application.properties
+      files:
+      - application.properties
 
     images:
     - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
-        newTag: latest
-        newName: {{registry_host}}/cat-service
+      newTag: latest
+      newName: {{registry_host}}/cat-service
 ```
 
 Notice anything odd? This kustomization will rename your cat-service image to `MY_REGISTRY/cat-service`. 
