@@ -105,9 +105,9 @@ after: 3
 
 ### Flying Cats (Database Versioning)
 
-For these Repository Tests, you'll notice that DBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
+For these Repository Tests, you'll notice that RDBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a vesrion control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a hissy-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a vesrion control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a hiss-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
 Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
