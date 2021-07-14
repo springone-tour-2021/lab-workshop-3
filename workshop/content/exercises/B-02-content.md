@@ -1,6 +1,7 @@
 ## Persisting persistent Cats
 
-The meowtivation for these tests it to verify Cats state remains when persisted as RDBMS entries. Cats and other entities must have an `@Entity` annotation at the class level that tells our program it is eligible for persistence.
+The meowtivation for these tests it to verify Cat's state remains when persisted as database entries.
+Cats and other entities must have an `@Entity` annotation at the class level to signal that they are eligible for persistence.
 
 Click below to view the usage of `@Entity` in context:
 
@@ -9,16 +10,16 @@ file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: "@Entity"
 ```
 
-Today, we're storing Cats in RDBMS tables. Thus, there needs to be a `@Table` annotation present which tells Spring JPA the name a database table. Let's explore this class markup a little further.
+Today, we're storing Cats in relational database (RDBMS) tables. Thus, there needs to be an `@Table` annotation present which tells Spring JPA the name of the database table. Let's explore this class markup a little further.
 
 ```editor:select-matching-text
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: '@Table(name = "cat")'
 ```
 
-Since RDBMS's have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key) that we need to suffice the engine with a marker and it's strategy.  
+Since RDBMS's have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key), we need to suffice the engine with a marker and its strategy.  
 
-The `id` field has been annotated with `@Id` to denote it is the holder of the primary key, while `@GeneratedValue` tells the engine how the key gets generated. Usually, this means an monotonically incrementing value or something specific to the DMBS like a UUID. Check out [the JEE docs](https://docs.oracle.com/javaee/7/api/javax/persistence/TableGenerator.html) for more details on it's use!
+The `id` field has been annotated with `@Id` to denote it is the holder of the primary key, while `@GeneratedValue` tells the engine how the key gets generated. Usually, this means a monotonically incrementing value or something specific to the RDBMS, like a UUID. Check out [the JEE docs](https://docs.oracle.com/javaee/7/api/javax/persistence/TableGenerator.html) for more details on its use!
 
 Click below to see property persistence configuration in context:
 
@@ -28,16 +29,16 @@ text: '@Id'
 after: 2
 ```
 
-For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract - DBC as it's known is enabled by Spring Frameworks `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object oriented systems. 
+For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract (DBC) - is enabled by Spring Framework's `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
 ## Testing persistence read/write
 
-Now under test is the behaviour for when a Cat get stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides enough `EntityManager` to be useful in typical store and retrieve situations.
+Let's focus on testing the behaviour when a Cat gets stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides just enough `EntityManager` to be useful in typical store and retrieve situations.
 
 To enable both, mark a test class with [@DataJpaTest](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/DataJpaTest.html) annotation. This will ensure our test only encompasses the JPA persistence layer with the following behaviour as described in the docs: 
-`Using this annotation will disable full auto-configuration and instead apply only configuration relevant to JPA tests.`. Thus, do not expect any other non-JPA (e.g. Web) components to function as they simply wont
+`Using this annotation will disable full auto-configuration and instead apply only configuration relevant to JPA tests.`. Thus, do not expect any other non-JPA (e.g. Web) components to function as they simply won't
 get configured. This also means any dependent services need to be explicitly configured or mocked.
 
 Click below to see test class configuration in context:
@@ -61,7 +62,11 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-There is also the necessary test-scoped dependency in (embedded database for tests) `h2` on the classpath. Let's take a look:
+There is also the necessary classpath dependency for a test-scoped "embedded" database.
+An embedded database runs in-memory (aka inside the same Cats app java process), so it enables us to test Cats without having to start up a separate database.
+In this case we are using a database called [h2](https://www.h2database.com/html/main.html). 
+
+Let's take a look:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -70,7 +75,7 @@ before: 1
 after: 3
 ```
 
-Next, we need to specify the connections of the persistence (JPA) engine. Spring accepts a datasource URL property which gets fed to the h2 engine. The h2 engine accepts various parameters through such URL. In this case, it means we get to control the mode which SQL gets interpreted. For more comprehensive configuration options, please read the [h2 docs](http://www.h2database.com/html/features.html).
+Next, we need to specify the connections of the persistence (JPA) engine. Spring accepts a datasource URL property which gets fed to the h2 engine. The h2 engine accepts various parameters through such URL. In this case, it means we get to control the mode for which SQL gets interpreted. For more comprehensive configuration options, please read the [h2 docs](http://www.h2database.com/html/features.html).
 
 Click to see an h2 datasource URL in context:
 
