@@ -21,7 +21,7 @@ docker run -d --rm --name my-postgres \
 ```
 
 Next, start the app.
-This may take a couple of minutes as Java dependencies are downloaded for the first time. Additionaly, the testing artifacts are generated and installed locally.
+This may take a couple of minutes as Java dependencies are downloaded for the first time.
 ```execute-2
 ./mvnw spring-boot:run \
       -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
