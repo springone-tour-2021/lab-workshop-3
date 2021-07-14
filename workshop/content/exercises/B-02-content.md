@@ -28,6 +28,10 @@ text: '@Id'
 after: 2
 ```
 
+For the remainder of the Cat class, you will notice several (non-junit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract - DBC as it's known is enabled by Spring Frameworks `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object oriented systems. 
+
+Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
+
 ## Testing Persistence Read / Write
 
 Now under test is the behaviour for when a Cat get stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides enough `EntityManager` to be useful in typical store and retrieve situations.
@@ -57,7 +61,7 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-There is also the necessary test-scoped dependency in `h2` on the classpath. Lets take a look:
+There is also the necessary test-scoped dependency in (embedded database for tests) `h2` on the classpath. Lets take a look:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -84,9 +88,8 @@ We are not complete with basic save find tests. The CatsService uses a JpaReposi
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
-text: "private final CatsRepository repository;"
+text: "private CatsRepository repository;"
 before: 1
-after: 4
 ```
 
 A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepostory` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test not caused by the EntityManager. The resulting test case is a straight forward save and find through the repository methods.
@@ -100,42 +103,45 @@ before: 1
 after: 3
 ```
 
-*** More Cats mean a Bigger Test Pyramid
+### Flying Cats (Database Versioning)
 
-### Testing the Service
+For these Repository Tests, you'll notice that DBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at test here; the JPA tests are complete. Further up the cat test pyramid is where we are.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. 
 
-filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a 'before' method that will get called at the beginning of each test. Take a look at how this works in context:
-
+Click to see the flyway dependency in context:
 ```editor:select-matching-text
-file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void findByNameShouldReturnName()"
+file: ~/cat-service/pom.xml
+text: "org.flywaydb"
 before: 1
 after: 3
 ```
 
-Once we have the mock component setup, we can focus on it's behaviour. Usually mock behaviour is configured at each test site. Thus it is trivial to deduce the mocking behaviour when reviewing later. lets have a look at the mock setup and test assertion in context:
+ The main principle at work here is that `flyway` migrations having run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
 
-```editor:select-matching-text
-file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void getCatShouldReturnCat() {"
-before: 1
-after: 3
+Click below to see the flyway database beginning state file:
+```editor:open-file
+file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 ```
 
-Paws or no paws. That is a pretty complete set of tests of the persistence and service layer. Lets move on to testing the Web Layer.
+This is the first database `version migration` file - enumerated v1, v2, etc... - which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
+Click below to se flyway database migration v2 in context:
+```editor:open-file
+file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
+```
+
+The good news is that our tests are certified against ***real*** database  schema Versions. Flyway migrations affect tests routines as well as production.  However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
-Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at test here; the JPA tests are complete. Further up the cat test pyramid is where we are.
+Further upstream we have the `CatsService` which gets the job of exposing application persistence. The service accepts a repository, which depends on JPA. However, we wont have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are.
 
-filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a 'before' method that will get called at the beginning of each test. Take a look at how this works in context:
+Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
-text: "void findByNameShouldReturnName()"
+text: "void setup() {"
 before: 1
 after: 3
 ```
