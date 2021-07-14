@@ -99,9 +99,17 @@ Now, lets heard cats toward the next segment - Client to Stub tests!
 
 ## Stubs the Cat (client)
 
-In this section, we will examine the validation of client to server by using the contract stub generated perviously. 
+In this section, we will examine the validation of consumer (client) to producer (service) by using the contract stub generated perviously. 
 
-Lets get started by looking at the necesary dependency in `pom.xml`:
+Start by running `install` target to the `service` repo which installs the generated `verifier` artifacts:
+
+```execute-1
+mvn install
+```
+
+This step will execute the spring-cloud-contract maven plugin, which generates artifacts and installs them into `.m2` directory (becasue we're using Maven).
+
+Then we can check out what needs to go in our `pom.xml` to enable stub reception at test:
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
 text: "spring-cloud-starter-contract-stub-runner"
@@ -110,8 +118,8 @@ after: 2
 ```
 
 Adding the `spring-cloud-starter-contract-stub-runner` lets us decare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at production to understand whats under
-the client hood; the Cat data, how to make that call out, where it goes, and what to make of the result.
+through the `verifier` module. From here we can take a quick peek at client production to understand whats under
+the client hood; the Cat data, how to make that HTTP call out, where it goes, and what to make of the result.
 
 Click below to see the client data in context:
 
@@ -133,9 +141,9 @@ before: 1
 after: 19
 ```
 
-This `restTemplate` eventually gets wired in through our appliation configuration.
-Click to see this in context:
+The `restTemplate` eventually gets wired in through our appliation configuration.
 
+Click to see this in context:
 ```editor:select-matching-text
 file: ~/cat-client/src/main/java/com/example/catclient/CatClient.java
 text: "@Bean"
