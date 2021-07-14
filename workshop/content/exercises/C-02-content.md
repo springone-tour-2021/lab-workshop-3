@@ -85,26 +85,15 @@ text: |
       newName: {{registry_host}}/cat-service
 ```
 
-Notice anything odd? This kustomization will rename your cat-service image to `MY_REGISTRY/cat-service`. 
-Kubernetes will try to pull an image with this name, but this won't work. 
-There is no such image. 
-You need to update this value using your workshop session's registry adress.
-
-To get this value, run the following command:
-```execute-1
-echo $REGISTRY_HOST
-```
-
-Copy this value and paste it into the editor. 
-The result should look something like this (your value will be different).
+Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry/cat-service>` in `newName` like so:
 ```
 images:
   - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
     newTag: latest
-    newName: eduk8s-labs-w14-s005-registry.s1tour-a2edc10.tanzu-labs.esp.vmware.com/cat-service
+    newName: {{registry_host}}/cat-service
 ```
 
-Make sure you only changed `newName` and not `name`. Kustomize will find references based on the name and update them to the new value.
+Kustomize will find references based on the name and update them to the new value.
 
 The kustomization file also includes instructions to convert the application.properties file into a ConfigMap.
 
