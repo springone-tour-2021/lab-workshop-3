@@ -11,7 +11,7 @@ Applications can be deployed to Kubernetes _imperatively_ or _declaratively_.
     - Configuration options are limited to those exposed through the CLI
 - Declarative:
     - Using configuration _manifest_ files (typically in YAML syntax) that describe the desired deployment (e.g. `kubectl apply my-app.yaml`)
-    - Manifests express - or declare - the desired state, serving as a blueprint and "source of truth" for a running system
+    - Manifests express—or declare—the desired state, serving as a blueprint and "source of truth" for a running system
     - Manifests make it possible to configure any aspect of a given resource
 
 The declarative approach aligns with the idea of "infrastructure as code" and enables [GitOps](https://www.gitops.tech) as a methodology for managing deployments. It is the approach you will use here.

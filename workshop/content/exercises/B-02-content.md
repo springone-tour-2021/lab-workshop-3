@@ -29,7 +29,7 @@ text: '@Id'
 after: 2
 ```
 
-For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract (DBC) - is enabled by Spring Framework's `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
+For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code—Design By Contract (DBC)—is enabled by Spring Framework's `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
@@ -85,11 +85,11 @@ text: "spring.datasource.url=jdbc:h2:~/test;MODE=PostgreSQL;DATABASE_TO_LOWER=TR
 after: 2
 ```
 
-This configuration will instruct `h2` to act like an embedded PostgreSQL - perfect for quick and lithe tests.
+This configuration will instruct `h2` to act like an embedded PostgreSQL—perfect for quick and lithe tests.
 
 ### Enter the CatRepository
 
-We are not complete with basic save/find tests. The CatsService uses a JpaRepository - `CatsRepository` - thus its interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
+We are not complete with basic save/find tests. The CatsService uses a JpaRepository—`CatsRepository`—thus its interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
@@ -129,18 +129,18 @@ Click below to see the `flyway` database beginning state file:
 file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 ```
 
-This is the first database `version migration` file - enumerated v1, v2, etc... - which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
+This is the first database `version migration` file—enumerated v1, v2, etc...—which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
 Click below to see `flyway` database migration v2 in context:
 ```editor:open-file
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
 
-The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
+The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
-Further upstream we have the `CatsService` - responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are!
+Further upstream we have the `CatsService`—responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are!
 
 Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
@@ -164,9 +164,9 @@ Paws or no paws. That is a pretty complete set of tests of the persistence and s
 
 ### Cats REST Controller 
 
-Another layer of our testing regimen is the HTTP REST endpoint - web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should - unlike most cats. 
+Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should—unlike most cats. 
 
-Likewise, this test is still quite low on the pyramid - closer to Integration than Unit tests, but not quite Complete Integration since all resources are not available. This means that those resources we aren't testing are going to be mocked.
+Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite Complete Integration since all resources are not available. This means that those resources we aren't testing are going to be mocked.
 
 Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
@@ -178,7 +178,7 @@ text: "@RestController"
 after: 14
 ```
 
-What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text - e.g. `/toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
+What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text—e.g. `/toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
 
 ### Cat scratch test REST
 
@@ -194,7 +194,7 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly - there is no transport logic in our code - which reduces the time necessary to complete tests.
+For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly—there is no transport logic in our code—which reduces the time necessary to complete tests.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 

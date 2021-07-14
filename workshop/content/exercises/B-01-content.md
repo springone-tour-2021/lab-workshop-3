@@ -7,7 +7,7 @@ version[N] -> version[N+1] rollouts.
 
 ### Test pyramids with Jupiter
 
-JUnit5, also known as Jupiter, will facilitate our test bed - the bottom of the test pyramid - and allow us to surface some useful behavioural tests. If you are already used to Junit4, then don't bite your nails just yet - JUnit5 is quite similar up front. The most visible difference being namespace changes from `org.junit.test` to `org.junit.jupiter.test`. There are some architectural changes to Junit5; if you are curious about those, check out [the docs](https://junit.org/junit5/docs/current/user-guide/) to get further in depth. 
+JUnit5, also known as Jupiter, will facilitate our test bed—the bottom of the test pyramid—and allow us to surface some useful behavioural tests. If you are already used to Junit4, then don't bite your nails just yet—JUnit5 is quite similar up front. The most visible difference being namespace changes from `org.junit.test` to `org.junit.jupiter.test`. There are some architectural changes to Junit5; if you are curious about those, check out [the docs](https://junit.org/junit5/docs/current/user-guide/) to get further in depth. 
 
 First, we will add a test to determine if a Cat can be created without error. That is, we don't want our constructor
 or constructor-like method to throw `Exception`. Thus, annotate the method under test with the `@Test` annotation, 
