@@ -34,7 +34,7 @@ Go on to the next instruction in the meantime.
 
 Take a look at the class that makes our cats.
 This fine feline will need a name and birthday, at the very least.
-```open-dashboard
+```editor:open-file
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 ```
 
