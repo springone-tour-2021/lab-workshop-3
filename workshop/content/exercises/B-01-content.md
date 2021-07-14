@@ -6,7 +6,8 @@ the behaviour that will be exhibited during production and any future
 version[N] -> version[N+1] rollouts.
 
 ![alt_text](images/cat-test-pyramid2.png "Test pyramid - background photo by Willian Justen de Vasconcellos on Unsplash")
-[^1]: background photo by Willian Justen de Vasconcellos on Unsplash
+
+<font size="1"> background photo by Willian Justen de Vasconcellos on Unsplash</font> 
 ### Test pyramids with Jupiter
 
 JUnit5 also known as Jupiter, will facilitate our test bed - the bottom of the test pyramid - and allow us to surface some useful behavioural tests. If you are already used to Junit4, then dont bite your nails just yet - JUnit5 is quite similar up front. The most visible difference being namespace changes from `org.junit.test` to `org.junit.jupiter.test`. There are some architectural changes to Junit5, and you might be curious about; read [the docs](https://junit.org/junit5/docs/current/user-guide/) to get further indepth. 
