@@ -1,6 +1,6 @@
-## Consumer Side (contract) Cat Testing
+## Consumer-side (contract) Cat testing
 
-The furst step is to add the `spring-cloud-starter-contract-verifier` dependency that lets us write a test to support the contract verification. Click the action below to show Maven `pom.xml` dependencies in context:
+The *fur*st step is to add the `spring-cloud-starter-contract-verifier` dependency that lets us write a test to support the contract verification. Click the action below to show Maven `pom.xml` dependencies in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -18,13 +18,13 @@ before: 2
 after: 9
 ```
 
-Confurguration for the Cats service dictates that we're using JUNIT5 of course, but also we specify a `base class` property. This will get used to transform our contract into the service to contract verification test. 
+Con*fur*guration for the Cats service dictates that we're using JUNIT5 of course, but also we specify a `base class` property. This will get used to transform our contract into the service to contract verification test. 
 
 ***It is necessary to keep the contract in sync with REST services - any changes to the REST service must be reflected in related contracts.***
 
 When the verification process succeeds, the plugin will generate a maven artifact that can be used by our client-cat application for running consumer-side tests. Deployment of the artifact is configurable; our application makes use of the local option. We will explore that facet later.
 
-### The Cat Contract
+### The Cat contract
 
 The contract must specify how we expect the REST endpoint to work. This can be done in Groovy or YAML - Cats choose Groovy in this project - cats ARE groovy. Contract definitions are stored in a `contracts` folder within the `test/resources` directory. 
 
@@ -54,7 +54,7 @@ text: "request {"
 after: 3
 ```
 
-Next, we want a response that even a Tabby can appreciate. The `response` method is placed adjacent to the `request` object. We can make use of supplemental methods within the `response` object to state what we expect. In this case, it will inspect the HTTP `status` for OK (200), the `contentType` header should specify a `json` payload. Finally, body inspection is possible using json extractions; in this case a `field:value` evaluation occurs.
+Next, we want a response that even a Tabby can appreciate. The `response` method is placed adjacent to the `request` object. We can make use of supplemental methods within the `response` object to state what we expect. In this case, it will inspect the HTTP `status` for OK (200), the `contentType` header should specify a `json` payload. Finally, body inspection is possible using JSON extractions; in this case a `field:value` evaluation occurs.
 
 Click the action to see the response part of the contract in context:
 
@@ -68,9 +68,9 @@ With the contract definition out of the way, we can write the verification `Base
 
 ### Verification Base Test
 
-The `BaseClass` sets up the endpoint-under-test to behave as we expected to in the contract definition. This means any changes to contract MUST result in a change to service, and vice versa.
+The `BaseClass` sets up the endpoint-under-test to behave as we expect it to in the contract definition. This means any changes to contract MUST result in a change to service, and vice versa.
 
-The BaseClass is a simple `@SpringBootTest` that doesn't expose it's own server, but rather exposes a `mock MVC` endpoint through [RestAssured](https://rest-assured.io/). It is `mock` because rather than a full blown server with exposed TCP port, there is ONLY the server-side mechanics without transport - the exact same behaviour but no wire traffic. This makes it quite fast and efficient at running many tests.
+The BaseClass is a simple `@SpringBootTest` that doesn't expose its own server, but rather exposes a `mock MVC` endpoint through [RestAssured](https://rest-assured.io/). It is `mock` because rather than a full blown server with exposed TCP port, there is ONLY the server-side mechanics without transport - the exact same behaviour but no wire traffic. This makes it quite fast and efficient at running many tests.
 
 Let's take a look at the Cat's BaseClass. This is a simple `@SpringBootTest` kind of test as there are a few parts we will identify and explain as we go further.
 
@@ -99,7 +99,7 @@ Now, let's heard cats toward the next segment - Client to Stub tests!
 
 ## Stubs the Cat (client)
 
-In this section, we will examine the validation of consumer (client) to producer (service) by using the contract stub generated perviously. 
+In this section, we will examine the validation of consumer (client) to producer (service) by using the contract stub generated previously. 
 
 Start by running `install` target to the `service` repo which installs the generated `verifier` artifacts:
 
@@ -117,8 +117,8 @@ before: 2
 after: 2
 ```
 
-Adding the `spring-cloud-starter-contract-stub-runner` let's us decare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at client production to understand whats under
+Adding the `spring-cloud-starter-contract-stub-runner` let's us declare tests bound to a specific stub generated 
+through the `verifier` module. From here we can take a quick peek at client production to understand what's under
 the client hood; the Cat data, how to make that HTTP call out, where it goes, and what to make of the result.
 
 Click below to see the client data in context:
@@ -130,7 +130,7 @@ before: 3
 after: 3
 ```
 
-So this is what the client expects in return for a request - hopefully it's the same as on server - and if it's not, then we will find out during tests. Now, let's take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".  
+So this is what the client expects in return for a request - hopefully it's the same as on the server - and if it's not, then we will find out during tests. Now, let's take a look at the client itself; it's a simple `restTemplate` consumer that makes the HTTP callout to our cat service at "/cats/{some cat name}".  
 
 Click below to see the client in context:
 
@@ -141,7 +141,7 @@ before: 1
 after: 19
 ```
 
-The `restTemplate` eventually gets wired in through our appliation configuration.
+The `restTemplate` eventually gets wired in through our application configuration.
 
 Click to see this in context:
 ```editor:select-matching-text

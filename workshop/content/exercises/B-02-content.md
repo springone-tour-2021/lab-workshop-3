@@ -1,4 +1,4 @@
-## Persisting persistant Cats
+## Persisting persistent Cats
 
 The meowtivation for these tests it to verify Cats state remains when persisted as RDBMS entries. Cats and other entities must have an `@Entity` annotation at the class level that tells our program it is eligible for persistence.
 
@@ -32,7 +32,7 @@ For the remainder of the Cat class, you will notice several (non-JUnit) `Assert`
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
-## Testing Persistence Read / Write
+## Testing persistence read/write
 
 Now under test is the behaviour for when a Cat get stored and retrieved. To do this, we will use both [TestEntityManager](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/autoconfigure/orm/jpa/TestEntityManager.html) and an embedded RDBMS engine. The `TestEntityManager` provides enough `EntityManager` to be useful in typical store and retrieve situations.
 

@@ -1,4 +1,4 @@
-## App Integration Tests with Containers
+## App integration tests with containers
 
 *** Further Up the Test Pyramid, Cats become meowschievious ***
 
