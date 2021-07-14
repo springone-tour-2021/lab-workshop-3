@@ -5,113 +5,60 @@ Right now, nothing.
 This means Argo CD won't know that a new image is available.
 
 This problem can be solved in different ways.
-In this workshop, we are going to use a tool called [Argo CD Image Updater](https://argocd-image-updater.readthedocs.io/en/stable).
+In this workshop, we are going to GitHub Actions.
 
-**How does it work?**
+### GitHub Actions secrets
 
-Argo CD Image Updater polls the container registry and updates the manifests when it finds a new image.
-To avoid conflict with manual updates, it writes to a separate file.
-
-The file might look something like this:
-```yaml
-$ cat manifests/overlays/dev/.argocd-source-dev-cat-service.yaml
-kustomize:
-  images:
-  - my-registry.com/cat-service:b1.20210702.035806
-```
-
-Argo CD will detect a change in the ops repo and re-apply the manifests using the image tag in this file.
-
-### Review Argo CD Image Updater installation
-
-Argo CD Image Updater has already been installed into the workshop cluster.
-
-_Interested in the installation instructions? Read [this](https://argocd-image-updater.readthedocs.io/en/stable/install/start/#installing-as-kubernetes-workload-in-argo-cd-namespace)._
-
-Argo CD does not add any CRDs.
-
-### Additional configuration
-
-#### Provide Argo Server API access to Image Updater
-
-Argo CD Image Updater works in tandem with Argo CD.
-It needs to talk to the argo-server API.
-
-Hence, you need to create an account for Argo CD Image Updater in Argo CD with proper RBAC permissions and an API token.
-You also need to provide the API token to Argo CD Image Updater via a Kubernetes secret.
-
-Let's do this now.
-
-Create a new account in Argo CD called "image-updater" and grant it the "apiKey" capability.
-This capability allows generating authentication tokens for API access.
+You will need to add a few more secrets for this section. You'll need the registry host, registry username, and registry password.
+To get these values, run this command:
 ```execute-1
-yq eval '.data."accounts.image-updater" = "apiKey"' \
-     <(kubectl get cm argocd-cm -o yaml -n argocd) \
-     | kubectl apply -f -
+echo "REGISTRY_HOST:     $REGISTRY_HOST
+REGISTRY_USERNAME: $REGISTRY_USERNAME
+REGISTRY_PASSWORD: $REGISTRY_PASSWORD"
 ```
 
-Create roles for new account.
-You can add RBAC permissions to Argo CD's argocd-rbac-cm ConfigMap and Argo CD will pick them up automatically.
-
+Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets
 ```execute-1
-kubectl apply -n argocd -f tooling/argocd-image-updater-config/argocd-rbac-cm.yaml
+echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
 ```
+Create a new repository secret called `REGISTRY_HOST` with the registry host.
+Create a secret called `REGISTRY_USERNAME` with the username and a secret called `REGISTRY_PASSWORD` with the password.
 
-Generate the API token.
-You can do this using the `argocd` CLI.
-```execute-1
-alias argocd="argocd --port-forward --port-forward-namespace argocd"
+### Create a new GitHub Actions workflow
 
-argocd login --username admin --password $ARGOCD_PW
+The next part is to have the existing GitHub Actions workflow kick off a new workflow to update ...
+> TODO: continue this
 
-ARGOCD_API_TOKEN=$(argocd account generate-token \
-                         --account image-updater \
-                         --id image-updater)
-```
+The Update Tag workflow will be launched when a dispatch request is sent to the `cat-service` repository. Sending this request will be shown in the next section.
+> TODO: What is a dispatch...is this actually a request? Verify
 
-Create a secret from the token generated above.
-```execute-1
-kubectl create secret generic argocd-image-updater-secret \
-    --from-literal argocd.token=$ARGOCD_API_TOKEN \
-    --dry-run=client -o yaml | kubectl apply -f - -n argocd
-```
-
-Restart the argocd-image-updater pod.
-```execute-1
-kubectl rollout restart deployment argocd-image-updater -n argocd
-```
-
-#### Provide GitHub write access to Image Updater
-
-Argo CD Image Updater needs to push tag updates to the `cat-service-release-ops` repo when it detects new images.
-This means you also need to provide a GitHub access token to Argo CD Image Updater via a Kubernetes secret.
-You can use the token you set in the GITHUB_TOKEN environment variable earlier in the workshop.
-
-Create a secret to enable Argo CD Image Updater to push to your GitHub ops repository.
-```execute-1
-kubectl create secret generic gitcred \
-    --from-literal=username=$GITHUB_USER \
-    --from-literal=password=$GITHUB_TOKEN \
-    -n argocd
-```
-
-### Enable monitoring for the `cat-service` dev and prod applications
-
-To enable Argo CD Image Updater to monitor a registry for new images, you need to configure the corresponding application resource with a particular set of annotations.
-
-The dev and prod Argo CD application manifests actually already contain these annotations. Let's review them now.
-
-Open the dev application manifest.
 ```editor:select-matching-text
-file: ~/cat-service-release-ops/deploy/argocd-app-dev.yaml
-text: `annotations:`
-after: 5
+file: ~/cat-service/.github/workflows/update-tag.yaml
+text: "on"
+after: 2
 ```
 
-The annotations tell Argo CD Image Updater to find the most recently published `cat-service` image whose tag matches the specified regular expression, and to update the ops repo usign the git crendentials in the "gitcred" secret.
+> TODO: Explain script. If there is time, than can select different parts of the script to explain such as the skopeo command.
 
-> Note: If you want to disable Argo CD Image Updater from monitoring this image, you can delete all of the annotations or simply uncomment the one that sets ignore-tages to "*".
+```editor:open-file
+file: ~/cat-service/.github/workflows/update-tag.sh
+```
 
-The prod application has the same configuration.
+### Update previous GitHub Actions workflow to deploy new workflow
 
-Since this configuration is already in place, Argo CD Image Updater will start to monitor the container registry right away.
+The following will send the dispatch via curl. It is sending the event type `tag` which is what the Update Tag workflow expects. It is being added to the end of the Deploy workflow.
+
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.yaml
+text: "Update Tag"
+after: 6
+```
+
+Uncomment the lines:
+
+```editor:execute-command
+command: editor.action.commentLine
+```
+
+> TODO: create new commit and push to `cat-service`
+
