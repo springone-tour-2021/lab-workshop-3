@@ -162,9 +162,9 @@ The `restTemplate` eventually gets wired in through our application configuratio
 
 Click to see this in context:
 ```editor:select-matching-text
-file: ~/cat-client/src/main/java/com/example/catclient/CatClient.java
-text: "@Bean"
-after: 1
+file: ~/cat-client/src/main/java/com/example/catclient/CatClientApplication.java
+text: "RestTemplate restTemplate"
+before: 1
 ```
 
 From here, we can then understand what our Test will need to do: validate that that call succeeds and the data comes back without missing bits or failure.
