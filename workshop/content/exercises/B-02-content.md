@@ -28,7 +28,7 @@ text: '@Id'
 after: 2
 ```
 
-For the remainder of the Cat class, you will notice several (non-junit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract - DBC as it's known is enabled by Spring Frameworks `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object oriented systems. 
+For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code - Design By Contract - DBC as it's known is enabled by Spring Frameworks `org.springframework.util` package.  The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object oriented systems. 
 
 Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
@@ -107,9 +107,9 @@ after: 3
 
 For these Repository Tests, you'll notice that DBMS schema and data-state  is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. 
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a vesrion control for the database we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a hissy-y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
-Click to see the flyway dependency in context:
+Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
 text: "org.flywaydb"
@@ -119,19 +119,19 @@ after: 3
 
  The main principle at work here is that `flyway` migrations having run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other DBMS starts up.
 
-Click below to see the flyway database beginning state file:
+Click below to see the `flyway` database beginning state file:
 ```editor:open-file
 file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 ```
 
 This is the first database `version migration` file - enumerated v1, v2, etc... - which sets up schema but incompatible with our code base. A second version has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
-Click below to se flyway database migration v2 in context:
+Click below to se `flyway` database migration v2 in context:
 ```editor:open-file
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
 
-The good news is that our tests are certified against ***real*** database  schema Versions. Flyway migrations affect tests routines as well as production.  However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
+The good news is that our tests are certified against ***real*** database schema Versions. `Flyway` migrations affect tests routines as well as production. However, if you remove `flyway`, then this action ceases to happen, and tests fail - as will Production. Thus `flyway` has indeed become a vital component to `JPA` or `DBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
