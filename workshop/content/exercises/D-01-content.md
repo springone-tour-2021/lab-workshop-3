@@ -1,5 +1,3 @@
-## Automate testing
-
 In the previous exercises you ran the tests manually, but this is not optimal. The next step is to have an automated workflow. One way is with [GitHub Actions](https://docs.github.com/en/actions). 
 
 GitHub Actions are used to automate your development workflow. They can be triggered on any GitHub event such as creating a pull request or a new commit. It has CI/CD and can be used to build, test, and deploy your code from GitHub.
@@ -15,6 +13,13 @@ Triggering `mvn clean build` on a git commit would do all of these tasks. Howeve
 
 This can be done in different ways. We're first going to use `mvn clean deploy` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
 
+Click on the following link to get to your GitHub and use the UI to create a new repository called `cat-service-release` (this link works if you're signed in).
+
+```dashboard:open-url
+url: https://github.com/new
+```
+Make sure that your repo is `public` so that GitHub actions can work. Please match the following settings including the naming the repo `cat-service-release`.
+![alt_text](images/ga-new-repo.png "Create new repo exe and settings")
 #### Deployment script
 Now take a look at the deployment script. This script calls `mvn clean verify`, initializes the `cat-service-release` as a git respository, and pushes the code if and only if `mvn clean verify` passes. 
 ```editor:open-file
@@ -36,7 +41,7 @@ after: 11
 ```
 
 #### GitHub Actions workflow file
-Now take a look at the YAML workflow file. You can ignore the Artifactory env variables as they're not used in this workshop. You'll be storing your GitHub username and access token in the next step. 
+Now take a look at the YAML workflow file. You'll be storing your GitHub username and access token in the next step. 
 
 The `on` section is what the `job` section gets triggered by. Here we have it triggered on pushes or pull requests to the main branch. 
 ```editor:select-matching-text
@@ -108,14 +113,27 @@ echo https://github.com/$GITHUB_ORG/cat-service-release
 ```
 
 #### Commit and push a change
+We are going to manually push to the `cat-service` repository to trigger the GitHub Actions workflow to push the tested code to `cat-service-release`.
+> We will be doing this through the Github UI to avoid asking for your password, otherwise it is common to trigger this after pushing code to GitHub as part of the development process.
 
-Now make a change and add a commit to trigger the GitHub Actions workflow. 
+Within the `cat-service` repo make a change to the file `bump` 
+
+Open the file `cat-service/bump` in your repo by clicking the next command to get a link in terminal-1.
 ```execute-1
-echo "+" >> bump
-git add bump
-git commit -m "bump"
-git push
+echo https://github.com/$GITHUB_ORG/cat-service/blob/educates-workshop/bump
 ```
+
+When you get to that file it will look like this:
+![alt_text](images/ga-bump-1.png "Change this file to trigger GitHub Actions workflow")
+
+Click the edit button on the right hand side of the window, it's a pencil icon.
+![alt_text](images/ga-edit-file.png "Click edit file to edit bump file")
+
+Now, you can alter this file so you can commit to this repo, you can add another `+` sign if you wish.
+![alt_text](images/ga-update-1.png "Change bump file")
+
+Commit your changes in the UI at the bottom of this page like so.
+![alt_text](images/ga-commit-bump.png "Change bump file")
 
 Now check out the logs by clicking on the Action's name and then build. You'll see a log for setting up the job, running through each of the actions in the workflow file, post logs, and completing the job. Click on any of them to check out the logs.
 Run this command and click on the link in terminal 1:

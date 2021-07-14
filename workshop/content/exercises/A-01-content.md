@@ -11,6 +11,7 @@ You will need a [GitHub account](https://github.com).
 ### Fork the GitHub repos
 
 Click on the following GitHub links and use the GitHub UI to fork the following repos:
+![alt_text](images/prereq-fork.png "Fork by clicking top right button")
 
 > Note: If you've done this workshop before and already have forks, delete and recreate them now.
 > You can delete a repo on GitHub: click on `Settings` and scroll to the bottom of the page; it is the last option in the box titled "Danger Zone."
