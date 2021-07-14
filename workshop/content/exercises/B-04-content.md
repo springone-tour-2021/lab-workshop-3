@@ -1,4 +1,22 @@
-## Consumer-side (contract) Cat testing
+## Consumer Driven Contract Tests
+
+This section of the workshop introduces a `client` aspect for illustrating the consumer side of Consumer Driven Contract (CDC) testing. To initialize, fork and clone the `cat-client` repository as follows below.
+
+**1. cat-client** - client source code
+```dashboard:open-url
+url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
+```
+
+Clone the `cat-client` repos to the workshop environment:
+```execute-1
+rm -rf cat-client
+
+git clone https://github.com/$GITHUB_ORG/cat-client && \
+    cd cat-client && \
+    cd ..
+```
+
+### Producer Configuration
 
 The *fur*st step is to add the `spring-cloud-starter-contract-verifier` dependency that lets us write a test to support the contract verification. Click the action below to show Maven `pom.xml` dependencies in context:
 
@@ -9,7 +27,7 @@ before: 2
 after: 2
 ```
 
-Next, we will setup the maven plugin that allows for both service to contract test exectuion, and contract to stub (contract embodied as a stand-alone mock service) generation. This gives the necessary `verification` steps that ensure the contract works against the service.
+Next, we will setup the maven plugin that allows for both service-to-contract (verify service works as stated in the contract) test verification, and contract to stub (contract embodied as a stand-alone mock service) generation.
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -104,7 +122,7 @@ In this section, we will examine the validation of consumer (client) to producer
 Start by running `install` target to the `service` repo which installs the generated `verifier` artifacts:
 
 ```execute-1
-mvn install
+cd ~/cat-service ; mvn install
 ```
 
 This step will execute the spring-cloud-contract maven plugin, which generates artifacts and installs them into `.m2` directory (becasue we're using Maven).
@@ -118,8 +136,7 @@ after: 2
 ```
 
 Adding the `spring-cloud-starter-contract-stub-runner` let's us declare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at client production to understand what's under
-the client hood; the Cat data, how to make that HTTP call out, where it goes, and what to make of the result.
+through the `verifier` module. From here we can take a quick peek at client to understand what's under the hodd; the Cat data, how to make that HTTP call out, and what to make of the result.
 
 Click below to see the client data in context:
 
