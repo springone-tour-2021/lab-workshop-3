@@ -186,8 +186,8 @@ text: |
       # cacheSize: "1.5Gi" # Optional, if not set then the caching feature is disabled
       source:
         git:
-          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service.git
-          revision: educates-workshop
+          url: https://github.com/<YOUR_GITHUB_ORG_HERE>/cat-service-release.git
+          revision: release
       tag: {{registry_host}}/cat-service
 ```
 

@@ -11,7 +11,7 @@ spec:
   url: https://github.com/springone-tour-2021/lab-workshop-3
   content:
     image: quay.io/eduk8s/jdk11-environment:latest
-    files: github.com/springone-tour-2021/lab-workshop-3?ref=main
+    files: github.com/springone-tour-2021/lab-workshop-3?ref=develop-ivan
   session:
 #    ingresses:
 #      - name: argocd-grpc

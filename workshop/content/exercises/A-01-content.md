@@ -11,7 +11,7 @@ You will need a [GitHub account](https://github.com).
 ### Fork the GitHub repos
 
 Click on the following GitHub links and use the GitHub UI to fork the following repos:
-
+![alt_text](images/prereq-fork.png "Fork by clicking top right button")
 **1. cat-service** - app source code
 ```dashboard:open-url
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service

@@ -13,13 +13,13 @@ Triggering `mvn clean build` on a git commit would do all of these tasks. Howeve
 
 This can be done in different ways. We're first going to use `mvn clean deploy` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
 
-Click on the following GitHub link and use the GitHub UI to fork the `cat-service-release` repo like in the begining of the workshop.
+Click on the following link to get to your GitHub and use the UI to create a new repository called `cat-service-release` (this link works if your signed in).
 
-**1. cat-service** - app source code
 ```dashboard:open-url
-url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release
+url: https://github.com/new
 ```
-
+Make sure that your repo is `public` so that GitHub actions can work. Please match the following settings including the naming the repo `cat-service-release`.
+![alt_text](images/ga-new-repo.png "Create new repo exe and settings")
 #### Deployment script
 Now take a look at the deployment script. This script calls `mvn clean verify`, initializes the `cat-service-release` as a git respository, and pushes the code if and only if `mvn clean verify` passes. 
 ```editor:open-file
@@ -112,14 +112,6 @@ Run this command and click on the link in terminal 1
 echo https://github.com/$GITHUB_ORG/cat-service-release
 ```
 
-### If not public make the `cat-service-release` repo public
-For Github Actions to work the `cat-service-release` repo must be public. If you need to make the repository public. Within the repo `cat-service-release` in your Github org, navigate to `Settings`.
-![alt_text](images/gactions-pub-repo-example.png "Change GitHub repo visibility to public")
-
-Scroll to the bottom `Danger Zone` section and click `Change visibility`
-![alt_text](images/gactions-pub-repo-example.png "Change GitHub repo visibility to public")
-
-Select `Make public` and type `<your-org>/<repo>` and finally click "I understand.." to make this repo public.
 #### Commit and push a change
 We are going to manually push to the `cat-service` repository to trigger the GitHub Actions workflow to push the tested code to `cat-service-release`.
 > We will be doing this through the Github UI to avoid asking for your password, otherwise it is common to trigger this after pushing code to GitHub as part of the development process.
