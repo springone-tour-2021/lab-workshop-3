@@ -1,3 +1,12 @@
 p, role:image-updater, applications, get, */*, allow
 p, role:image-updater, applications, update, */*, allow
 g, image-updater, role:image-updater
+p, role:session-user-role, applications, get, */*, allow
+p, role:session-user-role, applications, create, */*, allow
+p, role:session-user-role, applications, update, */*, allow
+p, role:session-user-role, applications, delete, */*, allow
+p, role:session-user-role, applications, sync, */*, allow
+p, role:session-user-role, applications, override, */*, allow
+p, role:session-user-role, applications, action, */*, allow
+g, image-updater, role:image-updater
+g, session-user, role:session-user-role
