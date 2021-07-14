@@ -8,7 +8,7 @@ cd ~/cat-service
 clear
 ```
 
-Cat service requires a database to store cat information.
+Cats need somewhere to live, similarly cat service requires a database to store cat information.
 The following command will download a [bitnami](https://bitnami.com/) postgres container and start it on the local docker daemon.
 The process will run in the background ("detached" mode).
 ```execute-1
