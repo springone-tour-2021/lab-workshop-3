@@ -119,10 +119,10 @@ Now, let's heard cats toward the next segment—Client to Stub tests!
 
 In this section, we will examine the validation of consumer (client) to producer (service) by using the contract stub generated previously. 
 
-Start by running `install` target to the `service` repo which installs the generated `verifier` artifacts:
+Start by running `install` target to the `service` repo which installs the generated `verifier` stubs as maven artifacts:
 
 ```execute-1
-cd ~/cat-service ; mvn install
+cd ~/cat-service ; ./mvnw clean install -DskipTest
 ```
 
 This step will execute the spring-cloud-contract maven plugin, which generates artifacts and installs them into `.m2` directory (becasue we're using Maven).
@@ -136,7 +136,7 @@ after: 2
 ```
 
 Adding the `spring-cloud-starter-contract-stub-runner` let's us declare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at client to understand what's under the hodd; the Cat data, how to make that HTTP call out, and what to make of the result.
+through the `verifier` module. From here we can take a quick peek at client to understand what's under the hood; the Cat data, how to make that HTTP call out, and what to make of the result.
 
 Click below to see the client data in context:
 
