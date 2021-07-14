@@ -9,7 +9,7 @@ clear
 ```
 
 Cat service requires a database to store cat information.
-The following command will download a postgres container from Docker Hub and start it on the local docker daemon.
+The following command will download a [bitnami](https://bitnami.com/) postgres container and start it on the local docker daemon.
 The process will run in the background ("detached" mode).
 ```execute-1
 docker run -d --rm --name my-postgres \
@@ -20,12 +20,34 @@ docker run -d --rm --name my-postgres \
        bitnami/postgresql:latest
 ```
 
-Next, start the app.
+### Next, start the app.
 This may take a couple of minutes as Java dependencies are downloaded for the first time.
 ```execute-2
 ./mvnw spring-boot:run \
       -Dspring-boot.run.arguments=--spring.main.cloud-platform=none
 ```
+
+### While we wait, let meow look at our Cat service app
+
+To be the cats meow we need at a cat, this feline wil need at leaest a name, birthday, age and a few other things. Feel free to see the class that makese our cats.
+```open-dashboard
+file: ~/cat-service/src/main/java/com/example/demo/Cat.java
+```
+
+In this file you will find 3 Assert statements that we use for Testing. The next action button shows an example of one such `Assert` statement used in testing Cats. This like the Cat in line 45 but includes an id to facilitate testing.
+```editor:select-matching-text
+file: ~/cat-service/src/main/java/com/example/demo/Cat.java
+text: 'Assert'
+after: 2
+```
+
+For example, adopting a new Toby Cat into the db, when Toby is created a test Cat is also made and tagged for testing.
+```editor:select-matching-text
+file: ~/cat-service/src/main/resources/backup/data.sql
+text: 'Toby'
+after: 2
+```
+
 
 When the app has started, you will see the last line of logging as follows:
 ```
