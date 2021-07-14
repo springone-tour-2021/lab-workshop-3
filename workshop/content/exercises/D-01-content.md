@@ -13,7 +13,7 @@ Triggering `mvn clean build` on a git commit would do all of these tasks. Howeve
 
 This can be done in different ways. We're first going to use `mvn clean deploy` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
 
-Click on the following link to get to your GitHub and use the UI to create a new repository called `cat-service-release` (this link works if your signed in).
+Click on the following link to get to your GitHub and use the UI to create a new repository called `cat-service-release` (this link works if you're signed in).
 
 ```dashboard:open-url
 url: https://github.com/new
