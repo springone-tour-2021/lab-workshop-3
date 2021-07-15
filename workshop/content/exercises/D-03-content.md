@@ -59,7 +59,7 @@ To retrieve the password, run:
 echo $ARGOCD_PW
 ```
 
-Click around if you like.
+Click around if you'd like.
 You'll come back to the UI shortly.
 
 ## Deploy dev Cat Service 
@@ -69,7 +69,7 @@ You can use the UI, the CLI, or you can use `kubectl` to apply a manifest descri
 In this exercise, you will use the CLI.
 
 #### Update registry host
-Before continuing, you will need to update the 'newName' field in `manifests/base/app/kustomization.yaml` on GitHub, as Argo CD will be using the remote copy of the file.
+Before continuing, you will need to update the `newName` field in `manifests/base/app/kustomization.yaml` on GitHub, as Argo CD will be using the remote copy of the file.
 You can navigate to the file on GitHub or run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
@@ -77,16 +77,15 @@ echo https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-work
 Click on the pencil icon to edit.
 Make sure `newName` matches the "Repository" value in your registry.
 ```execute-1
-skopeo list-tags docker://$REGISTRY_HOST/cat-service
+skopeo list-tags docker://$REGISTRY_HOST/cat-service | jq '.Repository'
 ```
 
 > Heads up! 
 > Double-check to make sure you didn't delete the `/cat-service` name bit after the registry host.
 
-While you're here, add another configMapGenerator using the following snippet.
+While you're here, add another `configMapGenerator` after `cat-service-config` using the following snippet.
 You will use it later in this exercise.
 ```
-configMapGenerator:
   - name: catty-config
     literals:
       - KITTY=cat
