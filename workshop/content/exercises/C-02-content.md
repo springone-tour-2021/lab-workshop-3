@@ -63,17 +63,19 @@ This directory contains:
 - the Java application's properties file, to be converted into a ConfigMap for the app
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
+Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry>/cat-service` in `newName`. We have to input your image registry first select the value we need to change.
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 text: MY_REGISTRY
 ```
 
+Now, click the following to replace it with the image registry in your workshop.
 ```editor:replace-text-selection
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 text: {{registry_host}}
 ```
 
-Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry/cat-service>` in `newName` like so:
+Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry>/cat-service` in `newName` like so:
 ```
 images:
   - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
