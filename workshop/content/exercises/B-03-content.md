@@ -2,7 +2,7 @@
 
 *** Further up the test pyramid, Cats become meowschievous ***
 
-The entrypoint for getting Testcontainers working is through `pom.xml`. Simply add the necessary `testcontainers` dependency to the project under `test` scope. Testcontainers make available many modules for getting your flavor of RDBMS in test. See a listing of what's there now [on their website](https://www.testcontainers.org/modules/databases/). This workshop the uses a [postgres](https://www.testcontainers.org/modules/databases/postgres/) module for testing—we will explore its API shortly. 
+The entrypoint for getting Testcontainers working is through `pom.xml`. Simply add the necessary `testcontainers` dependency to the project under `test` scope. Testcontainers make available many modules for getting your flavor of RDBMS in test. See a listing of what's there now [on their website](https://www.testcontainers.org/modules/databases/). This workshop uses a [postgres](https://www.testcontainers.org/modules/databases/postgres/) module for testing—we will explore its API shortly. 
 
 First, let's take a peek at the dependency inclusion for our build:
 
@@ -41,10 +41,10 @@ The test extension (aka `@Testcontainers`) will capture the `@Container` annotat
 
 ### *Cat*necting to Testcontainers
 
-In order to connect to the container, we must find out how to relay it's connectivity details over to our test. This happens at runtime, because we cannot pre-program the specific IP/PORT parameters due to system limitations ; a pre-programmed IP/PORT for instance may become invalid sometime before the container starts. This potential cause of intermittent test failure downstream is mitigated by accessing connectivity details AFTER the container has been started.
+In order to connect to the container, we must find out how to relay its connectivity details over to our test. This happens at runtime, because we cannot pre-program the specific IP/PORT parameters due to system limitations; a pre-programmed IP/PORT for instance may become invalid sometime before the container starts. This potential cause of intermittent test failure downstream is mitigated by accessing connectivity details AFTER the container has been started.
 
 The `@DynamicPropertySource` annotation enables dynamically adding properties into Spring's Environment during runtime. This annotation requires a static method with a single parameter of type `DynamicPropertyRegistry`. 
-Lets take a look at the setup, and discuss functionaly below:
+Let's take a look at the setup and discuss its functionality below:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsIntegrationTests.java
