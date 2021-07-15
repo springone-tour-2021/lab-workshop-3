@@ -63,26 +63,13 @@ This directory contains:
 - the Java application's properties file, to be converted into a ConfigMap for the app
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
-Take a look at the `kustomization.yaml` file.
-```editor:append-lines-to-file
+```editor:select-matching-text
+file: file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
+text: MY_REGISTRY
+```
+```editor:replace-text-selection
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
-text: |
-    apiVersion: kustomize.config.k8s.io/v1beta1
-    kind: Kustomization
-
-    resources:
-    - deployment.yaml
-    - service.yaml
-
-    configMapGenerator:
-    - name: cat-service-config
-      files:
-      - application.properties
-
-    images:
-    - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
-      newTag: latest
-      newName: {{registry_host}}/cat-service
+text: {{registry_host}}
 ```
 
 Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry/cat-service>` in `newName` like so:
