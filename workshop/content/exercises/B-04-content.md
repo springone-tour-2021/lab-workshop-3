@@ -103,7 +103,7 @@ text: "@BeforeEach"
 after: 5
 ```
 
-Now, let's heard cats toward the next segment: client-to-stub tests!
+Now, let's herd cats toward the next segment: client-to-stub tests!
 
 ## Stubs the Cat (client)
 
