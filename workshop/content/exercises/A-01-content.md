@@ -76,15 +76,8 @@ cat-service
 ├── README.md
 └── src
 cat-service-release-ops
-├── auto-deploy-cleanup.sh
-├── auto-deploy.sh
-├── build
-├── deploy
 ├── manifests
-├── manual-deploy-cleanup.sh
-├── manual-deploy.sh
 ├── README.md
-└── tooling
 ```
 
 As you can see, `cat-service` has the structure of a typical Spring Boot application, and `cat-service-release-ops` contains the manifests for deploying to Kubernetes.
