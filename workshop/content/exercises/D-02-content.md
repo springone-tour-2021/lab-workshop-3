@@ -156,7 +156,7 @@ When the command in terminal 1 shows a reference to a builder, stop the watch pr
 <ctrl-c>
 ```
 
-The reference that appeared in the output in terminal 1 means the image was published, but you can use the skpoeo CLI to see the new builder image in the Docker registry.
+The reference that appeared in the output in terminal 1 means the image was published, but you can use the skopeo CLI to see the new builder image in the Docker registry.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/booternetes-builder
 ```
