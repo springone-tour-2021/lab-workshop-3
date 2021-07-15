@@ -20,6 +20,7 @@ We will use a new GitHub Actions workflow named Update Tag. We want this workflo
 
 The following curl command will send the dispatch event via curl to GitHub. 
 It is sending the event type `tag`.
+For now, just focus on understanding the objective.
 You will later uncomment this section in the browser. 
 
 ```editor:select-matching-text
@@ -28,7 +29,7 @@ text: "Update Tag"
 after: 6
 ```
 
-Here you can see that the Update Tag workflow is triggered by repository dispatches with the `tag` event type.
+Here you can see that the Update Tag workflow is triggered by repository dispatches (webhooks) with the `tag` event type.
 
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/update-tag.yaml
@@ -36,8 +37,8 @@ text: "on"
 after: 2
 ```
 
-We are then cloning down `cat-service` and running a custom script `update-tag.sh`.
-`update-tag.sh` gets the newest tag that kpack pushed to the registry and checks to see if it is newer than the tag in them manifest (`kustomization.yaml`). If it is, it updates the tag.
+We are then cloning `cat-service` and running a custom script `update-tag.sh`.
+This script gets the newest tag that kpack pushed and checks to see if it is newer than the tag in them manifest (`kustomization.yaml`). If it is, it updates the tag.
 
 ```editor:open-file
 file: ~/cat-service/.github/workflows/update-tag.sh
