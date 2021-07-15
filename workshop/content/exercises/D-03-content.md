@@ -75,10 +75,13 @@ You can navigate to the file on GitHub or run this command and click on the link
 echo https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-workshop/manifests/base/app/kustomization.yaml
 ```
 Click on the pencil icon to edit.
-Make sure `newName` matches the "Repository" value in your registry:
+Make sure `newName` matches the "Repository" value in your registry.
 ```execute-1
 skopeo list-tags docker://$REGISTRY_HOST/cat-service
 ```
+
+> Heads up! 
+> Double-check to make sure you didn't delete the `/cat-service` name bit after the registry host.
 
 While you're here, add another configMapGenerator using the following snippet.
 You will use it later in this exercise.
