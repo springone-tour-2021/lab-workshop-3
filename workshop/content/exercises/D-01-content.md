@@ -35,7 +35,7 @@ The `on` section lists the kinds of events that will trigger the `job`.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "on"
-after: 5
+after: 4
 ```
 
 The `jobs` section defines the tasks that it will run.
@@ -73,9 +73,9 @@ after: 2
 
 #### Deployment script
 
-Take a look at the deployment script.
-It looks more complicated than it is.
-Focus on the last line, which is the heart of the script:
+Take a look at the `deploy.sh` script.
+Don't [have too many kittens about it](https://idioms.thefreedictionary.com/having+kittens)—it's simpler than it looks.
+The last line is the heart of the script:
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.sh
 text: 'mvn clean verify && promote_code'
