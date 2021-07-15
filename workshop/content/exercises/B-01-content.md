@@ -22,7 +22,7 @@ before: 1
 after: 2
 ```
 
-The next couple of tests describe negative result behaviour. Since we have a 'Cat' entity under test that has specific requirements on input: `Names must start with a capital letter and be at least 2 letters in length`. The following Junit5 assertions can be used to ensure this behaviour.
+The next couple of tests describe negative result behaviour. We have a 'Cat' entity under test that has specific requirements on input: `names must start with a capital letter and be at least 2 letters in length`. The following Junit5 assertions can be used to ensure this behaviour.
 
 See this in context:
 
@@ -33,8 +33,8 @@ before: 1
 after: 7
 ```
 
-So far, nothing too complex is happening and that's good; cats like to keep things simple. Other than basic state tests, the Cat manages a `LocalDate` internally, and any methods that use it must go under test as well. We want to ensure that Cat state remains consistent across method calls, and that 
-`LocalDateObject` is properly utilized. We can do that by testing out methods which make use of `LocalDateObject`'s manipulation methods such as `getAgeInMonths()`, `minusMonths()`, `now()`, and so on...
+So far, nothing too complex is happening and that's good; cats like to keep things simple. Other than basic state tests, the Cat manages a `LocalDate` internally, and any methods that use it must go under test as well. We want to ensure that Cat's state remains consistent across method calls, and that 
+`LocalDateObject` is properly utilized. We can do that by testing out methods which make use of `LocalDateObject`'s manipulation methods such as `getAgeInMonths()`, `minusMonths()`, `now()`, and so on.
 
 
 Click to see this in context:
