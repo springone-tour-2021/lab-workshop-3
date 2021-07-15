@@ -15,7 +15,7 @@ spec:
   session:
     resources:
       memory: 2.5Gi
-      # ingresses:
+#    ingresses:
 #      - name: argocd-grpc
 #        protocol: https
 #        host: argocd-server-grpc.argocd.svc.cluster.local
