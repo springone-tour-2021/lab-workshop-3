@@ -195,7 +195,8 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly—sans transport (TCP) specifics—which reduces the time necessary to complete tests.
+For this test, we also include a mock `CatsService` as prescribed earlier. We also include an `ObjectMapper` for translating objects back and forth from JSON encoding, as well as a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP).
+This MockMvc component transparently and directly exposes the framework paths leading to our code, sans transport (TCP) specifics. This make tests faster.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 
@@ -213,4 +214,4 @@ enable us to validate all result criteria for HTTP (status, headers, content, et
 
 ## Next steps
 
-Now we are ready for full Integration tests using Testcontainers to assist our REST service with real JPA functionality, real CatService, and an actual HTTP server. Let's go!
+Now we are ready for full Integration tests using Testcontainers to assist our REST service with real JPA functionality, real CatsService, and an actual HTTP server. Let's go!

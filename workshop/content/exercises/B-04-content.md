@@ -17,7 +17,7 @@ before: 2
 after: 2
 ```
 
-Next, we will setup the maven plugin that allows for both service-to-contract (verify service works as stated in the contract) test verification, and contract to stub (contract embodied as a stand-alone mock service) generation.
+Next, we will set up the maven plugin that allows for both service-to-contract test verification (verify service works as stated in the contract), and contract to stub generation (contract embodied as a stand-alone mock service).
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -126,8 +126,8 @@ before: 2
 after: 2
 ```
 
-Adding the `spring-cloud-starter-contract-stub-runner` let's us declare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at client to understand what's under the hood; the Cat data, how to make that HTTP call out, and what to make of the result.
+Adding the `spring-cloud-starter-contract-stub-runner` lets us declare tests bound to a specific stub generated through the `verifier` module. 
+From here we can take a quick peek at the client to understand what's under the hood: the Cat data, how to make that HTTP callout, and what to make of the result.
 
 Click below to see the client data in context:
 
