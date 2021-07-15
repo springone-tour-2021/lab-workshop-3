@@ -67,6 +67,6 @@ before: 1
 after: 3
 ```
 
-The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real, transport-backed HTTP server via its random port. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
+The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real, transport-backed HTTP server. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
 
 Next, we will begin writing tests that ensure client-side (consumer) behaviour is matched between released versions using Spring-Cloud-Contract.
