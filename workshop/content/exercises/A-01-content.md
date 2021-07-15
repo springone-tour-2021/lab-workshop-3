@@ -4,7 +4,9 @@ Throughout this workshop, you will be using a Spring Boot application called _Ca
 
 #### Prerequisites
 
-You will need a [GitHub account](https://github.com).
+You will need:
+- A GitHub [account](https://github.com)
+- A GitHub [personal access token](https://github.com/settings/tokens) with *repo* and *workflow* access rights
 
 ## GitHub repo setup
 

@@ -99,7 +99,7 @@ before: 1
 
 These two variables are needed in order to push code to the release repository. Note, however, that:
 - The values must be set on GitHub (not in the tutorial editor), protected under your GitHub account as GitHub `Secrets`.
-- You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has **"repo"** and **"workflow"** access rights.
+- You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has *repo* and *workflow* access rights.
 
 Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets.
 ```execute-1
