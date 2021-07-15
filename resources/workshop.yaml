@@ -13,6 +13,8 @@ spec:
     image: quay.io/eduk8s/jdk11-environment:latest
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
+#    resources:
+#      memory: 1.7Gi
 #    ingresses:
 #      - name: argocd-grpc
 #        protocol: https
@@ -20,8 +22,6 @@ spec:
 #        port: 443
     namespaces:
       budget: large
-    #    resources:
-    #      memory: 1.7Gi
     applications:
       terminal:
         enabled: true
