@@ -1,4 +1,4 @@
-## App integration tests with containers
+## App Integration Tests with Containers
 
 *** Further up the test pyramid, Cats become meowschievous ***
 
@@ -41,22 +41,20 @@ The test extension (aka `@Testcontainers`) will capture the `@Container` annotat
 
 ### *Cat*necting to Testcontainers
 
-The next step is a lifecycle issue that will allow Spring to know where the container resource lives.
-In this test case, our Postgres database is started on an unknown port/IP because we cannot specify any transport first. That is because we may never know if such transport (the IP and port of the container) is available. Rather, let the operating system decide what is available, then feed those connection details to the application.
+In order to connect to the container, we must find out how to relay it's connectivity details over to our test. This happens at runtime, because we cannot pre-program the specific IP/PORT parameters due to system limitations ; a pre-programmed IP/PORT for instance may become invalid sometime before the container starts. This potential cause of intermittent test failure downstream is mitigated by accessing connectivity details AFTER the container has been started.
 
-Using an annotation called `@DynamicPropertySource` for our integration tests, we can fetch the correct connection details (or any other metadata of the running container at runtime) before a test starts. This way, we can map what the container knows about its connectivity to our `spring.datasource` properties.
-
-Thus, the following block of code executes when the container is ready, and gives our application the knowledge (properties) needed to make a connection to the resource—in this case a PostgreSQL database living in a container.
+The `@DynamicPropertySource` annotation enables dynamically adding properties into Spring's Environment during runtime. This annotation requires a static method with a single parameter of type `DynamicPropertyRegistry`. 
+Lets take a look at the setup, and discuss functionaly below:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsIntegrationTests.java
 text: "@DynamicPropertySource"
 after: 6
 ```
+The `DynamicPropertyRegistry` is used to add name-value pairs to the core Spring Environment's set of PropertySources used for placeholder and values. Values supplied to the registry are dynamic and provided via a `java.util.function.Supplier` which is only invoked when the property is resolved.
+In this case, we have relayed container connection details over to `spring.datasource.` properties. This way, JPA will have all the necessary property values for making a connection to the container-bound Postgres database.
 
-This particular instance exposes its URL, username, and password through the PostgreSQLContainer's instance that we will use to make the connection at runtime. Then the DynamicPropertySource gets filled in and merged with the Spring Environment's set of PropertySources.
-
-### Integration testing the REST endpoint
+### Testing the REST endpoint
 
 This test represents a fully wired server application. But we want to test the behaviour not of the client, but of the REST endpoint. Thus, we can bring out the `TestRestTemplate`. This object makes it easier to know how an HTTP service under test is behaving. Per the document: `4xx and 5xx do not result in an exception being thrown and can instead be detected via the response entity and its status code`. This is important because we can more easily model expected failure behaviour through HTTP response-state assertions.
 
@@ -69,6 +67,6 @@ before: 1
 after: 3
 ```
 
-The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real, transport-backed HTTP server. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
+The `@SpringBootTest` annotation specifies `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT` allowing `testRestTemplate` to bind to a real, transport-backed HTTP server via its random port. Thus, we can test the controller exposed on '/cats' with our `testRestTemplate`.
 
 Next, we will begin writing tests that ensure client-side (consumer) behaviour is matched between released versions using Spring-Cloud-Contract.
