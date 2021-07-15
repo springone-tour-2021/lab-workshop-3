@@ -145,7 +145,7 @@ echo https://github.com/$GITHUB_ORG/cat-service/actions
 
 #### Check contents of cat-service-release
 
-Once the action workflow is done, check the `cat-service-release` repository again.You should now see pushed code!
+Once the action workflow is done, check the `cat-service-release` repository again. You should now see pushed code!
 Run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service-release

@@ -77,7 +77,7 @@ cat-service
 └── src
 cat-service-release-ops
 ├── manifests
-└── README.md
+├── README.md
 ```
 
 As you can see, `cat-service` has the structure of a typical Spring Boot application, and `cat-service-release-ops` contains the manifests for deploying to Kubernetes.

@@ -63,31 +63,22 @@ This directory contains:
 - the Java application's properties file, to be converted into a ConfigMap for the app
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
-Take a look at the `kustomization.yaml` file.
-```editor:open-file
+Open the `kustomization.yaml`.
+Notice the name of the image that will be deployed (hint: the `newName` field).
+```editor:select-matching-text
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
+text: MY_REGISTRY/cat-service
 ```
 
-Notice anything odd? This kustomization will rename your cat-service image to `MY_REGISTRY/cat-service`. 
-Kubernetes will try to pull an image with this name, but this won't work. 
-There is no such image. 
-You need to update this value using your workshop session's registry adress.
+Kustomize will find image references in the yaml that match the `name` and replace them with the value in `newwName`.
+Thus, the `newName` field must contain the image you want to deploy.
 
-To get this value, run the following command:
-```execute-1
-echo $REGISTRY_HOST
+Replace the placeholder in `newwName` with the hostname of your image registry.
+> Note: Do not change the value of the `name` field, as this must match the value in the base deployment.yaml file.
+```editor:replace-text-selection
+file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
+text: {{registry_host}}/cat-service
 ```
-
-Copy this value and paste it into the editor. 
-The result should look something like this (your value will be different).
-```
-images:
-  - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
-    newTag: latest
-    newName: eduk8s-labs-w14-s005-registry.s1tour-a2edc10.tanzu-labs.esp.vmware.com/cat-service
-```
-
-Make sure you only changed `newName` and not `name`. Kustomize will find references based on the name and update them to the new value.
 
 The kustomization file also includes instructions to convert the application.properties file into a ConfigMap.
 
