@@ -1,17 +1,9 @@
-This section of the workshop introduces a `client` aspect for illustrating the consumer side of Consumer Driven Contract (CDC) testing. To initialize, fork and clone the `cat-client` repository as follows below.
-
-**1. cat-client** - client source code
-```dashboard:open-url
-url: https://github.com/booternetes-III-springonetour-july-2021/cat-client
-```
+In this section we will use a `cat-client` application to illustrate the consumer side of Consumer Driven Contract (CDC) testing.
 
 Clone the `cat-client` repo to the workshop environment:
 ```execute-1
-rm -rf cat-client
-
-git clone https://github.com/$GITHUB_ORG/cat-client && \
-    cd cat-client && \
-    cd ..
+cd ~ && rm -rf cat-client
+git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client
 ```
 
 ### Producer Configuration
@@ -120,7 +112,8 @@ In this section, we will examine the validation of consumer (client) to producer
 Start by running `install` target to the `service` repo which installs the generated `verifier` stubs as maven artifacts:
 
 ```execute-1
-cd ~/cat-service ; ./mvnw clean install -DskipTest
+cd ~/cat-service
+./mvnw clean install -DskipTests
 ```
 
 This step will execute the spring-cloud-contract maven plugin, which generates artifacts and installs them into `.m2` directory (becasue we're using Maven).
