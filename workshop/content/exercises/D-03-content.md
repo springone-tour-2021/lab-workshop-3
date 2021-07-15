@@ -50,7 +50,7 @@ argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure --
 
 Open the Argo CD UI.
 ```dashboard:open-url
-url: http://{{workspace_namespace}}-argocd.{{ingress_domain}}
+url: http://{{workshop_namespace}}-argocd.{{ingress_domain}}
 ```
 
 Log in as `admin`.
