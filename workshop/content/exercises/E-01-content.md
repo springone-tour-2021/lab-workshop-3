@@ -65,6 +65,11 @@ Argo CD is pretty fast—and you configured it to auto-sync—so you may not cat
 kubectl get all
 ```
 
+You can also use the `argocd` CLI.
+```execute-1
+argocd app list --selector session=${SESSION_NAMESPACE}
+```
+
 Once Argo CD reapplies the YAML, you should see the age of the `cat-service` pods reset.
 
 If you did the optional exercise of creating a production application in Argo CD, you'll see the prod deployment updated as well.
