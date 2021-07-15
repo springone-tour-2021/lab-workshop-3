@@ -23,8 +23,12 @@ kubectl get builds -w
 ```
 
 Eventually, you should see a `build-2` appear.
+Once it does, quit the watch process.
+```execute-1
+<ctrl-c>
+```
 
-Once it does, you can check its progress in the build log.
+You can check its progress in the build log.
 Wait until you see the build is successful.
 ```execute-1
 logs -namespace ${SESSION_NAMESPACE} -image cat-service -build 2

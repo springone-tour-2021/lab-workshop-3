@@ -186,7 +186,8 @@ Save the change and check Argo CD status again.
 argocd app list --selector session=${SESSION_NAMESPACE}
 ```
 
-You should see the status is OutOfSync.
+It may take a few minutes for Argo CD to poll the repo.
+Once it does, you should see the status is OutOfSync.
 You should also see that the configMap is not deleted from the cluster.
 
 Why is this?
