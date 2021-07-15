@@ -49,4 +49,4 @@ before: 1
 after: 15
 ```
 
-And that's it! Cats aren't easy to please, but are *fur*ious testers. In the next section, we move on up the test pyramid to component and integration testing of the persistence and web layers.
+And that's it! Cats aren't easy to please, but they are *fur*ious testers. In the next section, we move on up the test pyramid to component and integration testing of the persistence and web layers.
