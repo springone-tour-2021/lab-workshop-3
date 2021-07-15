@@ -63,27 +63,22 @@ This directory contains:
 - the Java application's properties file, to be converted into a ConfigMap for the app
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
-Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry>/cat-service` in `newName`. We have to input your image registry first select the value we need to change.
+Open the `kustomization.yaml`.
+Notice the name of the image that will be deployed (hint: the `newName` field).
 ```editor:select-matching-text
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
-text: MY_REGISTRY
+text: MY_REGISTRY/cat-service
 ```
 
-Now, click the following to replace it with the image registry in your workshop.
+Kustomize will find image references in the yaml that match the `name` and replace them with the value in `newwName`.
+Thus, the `newName` field must contain the image you want to deploy.
+
+Replace the placeholder in `newwName` with the hostname of your image registry.
+> Note: Do not change the value of the `name` field, as this must match the value in the base deployment.yaml file.
 ```editor:replace-text-selection
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
-text: {{registry_host}}
+text: {{registry_host}}/cat-service
 ```
-
-Within your `kustomization.yaml` the image being deployed is `<your-autopopulated-registry>/cat-service` in `newName` like so:
-```
-images:
-  - name: gcr.io/pgtm-jlong/cat-service # used for Kustomize matching
-    newTag: latest
-    newName: {{registry_host}}/cat-service
-```
-
-Kustomize will find references based on the name and update them to the new value.
 
 The kustomization file also includes instructions to convert the application.properties file into a ConfigMap.
 
