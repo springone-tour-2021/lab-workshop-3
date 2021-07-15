@@ -10,12 +10,12 @@ Our objective in this exercise is two-fold:
 We can accomplish this by running `mvn verify`, as this goal includes both unit tests and integration tests.
 2. Trigger the next step in the workflow. 
 
-This can be done in a few different ways. For this workshop, we've chosen to "force push" the tested code to a separate GitHub repo called `cat-service-release`. A commit to this "release" repo can serve as a trigger to the next step in the workflow.
+This can be done in a few different ways. For this workshop, we've chosen to "force push" the tested code to a separate GitHub repo called `cat-service-release`. A commit to this "release" repo can serve as a trigger for the next step in the workflow.
 
 ## Prerequisite: release repository
 
 Start by creating the "release" repository that will house the tested code.
-This repository must exist in order for our GitHub Actions to push code to it.
+This repository must exist in order for GitHub Actions to push code to it.
 
 You can use the following link to get to the right page on GitHub for creating a new repo.
 Name the repo `cat-service-release` and make sure you set the visibility to `public`.
@@ -94,12 +94,11 @@ However, there are two additional, non-default variables.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.sh
 text: '${GIT_USERNAME}:${GIT_PASSWORD}'
-before: 1
 ```
 
 These two variables are needed in order to push code to the release repository. Note, however, that:
 - The values must be set on GitHub (not in the tutorial editor), protected under your GitHub account as GitHub `Secrets`.
-- You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has **"repo"** and **"workflow"** access rights.
+- You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has *repo* and *workflow* access rights.
 
 Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets.
 ```execute-1

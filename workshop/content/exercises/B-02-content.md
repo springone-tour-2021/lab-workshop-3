@@ -30,9 +30,9 @@ after: 2
 ```
 
 For the remainder of the Cat class, you will notice several (non-JUnit) `Assert` statements for throwing Exceptions on improper input. This *style* of code—Design By Contract (DBC)—is enabled by Spring Framework's `org.springframework.util` package.
-The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction of object-oriented systems. 
+The concept of DBC has been used as a reference about code quality and is one of the optimal techniques of software construction for object-oriented systems. 
 
-Although not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
+Though not a requirement, this workshop makes use of this convention to ensure proper testing as well as production state consistency. 
 
 ## Testing read/write persistence
 
@@ -64,8 +64,8 @@ after: 3
 ### Configuring RDBMS-in-test for Cats
 
 We will need a test-scoped, embedded database dependency on the classpath.
-An embedded database runs in-memory (aka inside the same Cats app java process), so it enables us to test Cats without having to start up a separate database.
-In this case we are using a database called [h2](https://www.h2database.com/html/main.html). 
+An embedded database runs in-memory (aka inside the same java process as the application), so it enables us to test Cats without having to start up a separate database.
+In this case we are using a database called h2. 
 
 Let's take a look:
 
@@ -90,7 +90,7 @@ This configuration will instruct `h2` to act like an embedded PostgreSQL—perfe
 
 ### Enter the CatRepository
 
-We are not complete with basic save/find tests. The CatsService uses a JpaRepository—`CatsRepository`—thus its interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see in context:
+We are not complete with basic save/find tests. The CatsService uses a JpaRepository—`CatsRepository`—thus its interaction will need to play out in tests. Luckily, it follows pretty close to the previous test with a couple differences. Let's see this in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsRepositoryTests.java
@@ -113,7 +113,7 @@ after: 3
 
 For these Repository tests, you'll notice that RDBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database, we can test the database before it reaches production. This prevents many unwanted scenarios, like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a *hiss*y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database, we can test the database before it reaches production. This prevents many unwanted scenarios, like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a *hiss*yfit. With `flyway` you can use a clean copy of production data at a chosen state to test against.
 
 Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
@@ -123,7 +123,7 @@ before: 1
 after: 3
 ```
 
- The main principle at work here is that `flyway` migrations run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or other RDBMS starts up.
+ The main principle at work here is that `flyway` migrations run during our test cycle. This means that files in `src/main/resources/db.migration` get executed prior to test runs, but after `h2` or another RDBMS starts up.
 
 Click below to see the `flyway` database beginning state file:
 ```editor:open-file
@@ -137,13 +137,13 @@ Click below to see `flyway` database migration v2 in context:
 file: ~/cat-service/src/main/resources/db/migration/V2__cat_with_date_of_birth.sql
 ```
 
-The good news is that our tests are certified against ***real*** database schema versions. `Flyway` migrations affect not only test routines, but also the production database itself. However, if you remove `flyway`, then this action ceases to happen, and tests fail—as will production. Thus `flyway` has become a vital component to `JPA` or `RDBMS` tests, as well as production executions.
+The good news is that our tests are certified against ***real*** database schema versions. `Flyway` migrations affect not only test routines, but also the production database itself. Thus `flyway` has become a vital component to `JPA` or `RDBMS` tests, as well as production executions.
 
 ### Testing the CatsService
 
 Further upstream we have the `CatsService`—responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier.
 
-Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
+Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `Before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
@@ -152,7 +152,7 @@ before: 1
 after: 3
 ```
 
-Once we have the mock component setup, we can focus on its behaviour. Usually mock behaviour is configured at each test site. Thus, it is trivial to deduce the mocking behaviour when reviewing later. Let's have a look at the mock setup and test assertion in context:
+Once we have the mock component set up, we can focus on its behaviour. Usually mock behaviour is configured at each test site. Thus, it is trivial to deduce the mocking behaviour when reviewing later. Let's have a look at the mock setup and test assertion in context:
 
 ```editor:select-matching-text
 file: ~/cat-service/src/test/java/com/example/demo/CatsServiceTests.java
@@ -179,7 +179,7 @@ text: "@RestController"
 after: 14
 ```
 
-What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text—e.g. `/toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
+What we know is that the Controller and all endpoints underneath respond on `/cats`. Then we have an endpoint  responding to the `/{name}` path whereas `{name}` is simply replaced with the URI path text—e.g. `/Toby`. Furthermore, a request to URI with pattern `/cats/{name}` will respond with a single `Cat` object (JSON encoded). 
 
 ### Catnap (REST) test
 
@@ -195,7 +195,7 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include a mock `CatsService` as prescribed earlier. We also include an `ObjectMapper` for translating objects back and forth from JSON encoding, as well as a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP).
+For this test, we also include a mock `CatsService` as prescribed earlier. We further add an `ObjectMapper` for translating objects back and forth from JSON encoding, as well as a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP).
 This MockMvc component transparently and directly exposes the framework paths leading to our code, sans transport (TCP) specifics. This make tests faster.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.

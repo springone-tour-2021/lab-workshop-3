@@ -34,7 +34,7 @@ When the verification process succeeds, the plugin will generate a maven artifac
 
 ### The Cat contract
 
-The contract must specify how we expect the REST endpoint to work. This can be done in Groovy or YAML—Cats choose Groovy in this project—cats ARE groovy. Contract definitions are stored in a `contracts` folder within the `test/resources` directory. 
+The contract must specify how we expect the REST endpoint to work. This can be done in Groovy or YAML. Cats choose Groovy in this project. Cats ARE groovy! Contract definitions are stored in a `contracts` folder within the `test/resources` directory. 
 
 For this Groovy contract, you'll need to make an import to bring in the Contract DSL namespace. Click the action below to see the import in context:
 
@@ -78,7 +78,7 @@ With the contract definition out of the way, we can write the verification `Base
 
 The `BaseClass` sets up the endpoint-under-test to behave as we expect it to in the contract definition. This means any changes to contract MUST result in a change to service, and vice versa.
 
-The BaseClass is a simple `@SpringBootTest` that doesn't expose its own server, but rather exposes a `mock MVC` endpoint through [RestAssured](https://rest-assured.io/). It is `mock` because rather than a full-blown server with exposed TCP port, there is ONLY the server-side mechanics without transport—the exact same behaviour but no wire traffic. This makes it quite fast and efficient at running many tests.
+The BaseClass is a simple `@SpringBootTest` that doesn't expose its own server, but rather exposes a `mock MVC` endpoint through [RestAssured](https://rest-assured.io/). It is `mock` because, rather than a full-blown server with exposed TCP port, there is ONLY the server-side mechanics without transport—the exact same behaviour but no wire traffic. This makes it quite fast and efficient at running many tests.
 
 Let's take a look at the Cat's BaseClass. This is a simple `@SpringBootTest` kind of test. We will identify and explain a few parts as we go further.
 

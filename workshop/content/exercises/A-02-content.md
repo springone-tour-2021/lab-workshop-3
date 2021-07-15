@@ -41,7 +41,7 @@ file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 To be the cat's meow, you'll want to make sure this Cat passes inspection.
 Notice the three Assert statements. You will use these for testing.
 Click this action block to highlight an example.
-Compare it to the Cat in line 45.
+Compare it to the Cat on line 45.
 This one includes an id to facilitate testing (line 39 versus 45).
 ```editor:select-matching-text
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
@@ -55,6 +55,7 @@ While cats are solitary by nature, they can also form deep friendships.
 You'll want to test any new cat before you adopt it.
 For this, any time you add a cat, a test Cat (a copycat!) is also made and tagged for testing.
 The new Cat must pass the assertions before it can join the colony.
+Cats joining the colony are stored in the database.
 ```editor:select-matching-text
 file: ~/cat-service/src/main/resources/backup/data.sql
 text: 'Toby'
@@ -63,7 +64,7 @@ after: 2
 
 ### Are we there yet?
 
-When the app has started, you will see the last line of logging as follows:
+Click on the tab titled "Terminal" to check the progress of the app startup. When the app has started, you will see the last line of logging as follows:
 ```
 Application availability state ReadinessState changed to ACCEPTING_TRAFFIC
 ```
@@ -73,7 +74,7 @@ Send a request.
 http :8080/cats/Toby
 ```
 
-You should see a successful response including Tobys' age in months. Toby is the only cat in the town, so you'll get the same response for every request.
+You should see a successful response including Tobys' age in months. Toby is the only cat in town, so this is the only cat query you can make.
 
 ## Stop the app
 
