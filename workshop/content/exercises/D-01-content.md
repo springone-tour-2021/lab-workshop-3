@@ -35,7 +35,7 @@ The `on` section lists the kinds of events that will trigger the `job`.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "on"
-after: 5
+after: 4
 ```
 
 The `jobs` section defines the tasks that it will run.
@@ -73,9 +73,9 @@ after: 2
 
 #### Deployment script
 
-Take a look at the deployment script.
-It looks more complicated than it is.
-Focus on the last line, which is the heart of the script:
+Take a look at the `deploy.sh` script.
+Don't [have too many kittens about it](https://idioms.thefreedictionary.com/having+kittens)—it's simpler than it looks.
+The last line is the heart of the script:
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.sh
 text: 'mvn clean verify && promote_code'
@@ -101,7 +101,7 @@ These two variables are needed in order to push code to the release repository. 
 - The values must be set on GitHub (not in the tutorial editor), protected under your GitHub account as GitHub `Secrets`.
 - You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has *repo* and *workflow* access rights.
 
-Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets.
+Run this command to generate a shortcut link in terminal 1 to get to the `cat-service` repository's secrets.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
 ```
@@ -152,8 +152,8 @@ Edit this file any way you like. Adding or deleting a single character is enough
 Scroll to the bottom and commit your changes.
 ![alt_text](images/ga-commit-bump.png "Change bump file")
 
-Now check out the logs by clicking on the Action's name, and then on "build." You'll see a log for setting up the job, running through each of the actions in the workflow file, post logs, and completing the job. Click on any of them to check out the logs.
-Run this command and click on the link in terminal 1:
+Find the logs by clicking on the Action's name, and then on "build." You'll see a section for each step of the job. Click on any of them to expand to a detailed view.
+Run this command to generate a shortcut link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
 ```
@@ -163,7 +163,7 @@ echo https://github.com/$GITHUB_ORG/cat-service/actions
 #### Check contents of cat-service-release
 
 Once the action workflow is done, check the `cat-service-release` repository again. You should now see pushed code!
-Run this command and click on the link in terminal 1:
+Run this command to generate a shortcut link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service-release
 ```

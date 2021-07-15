@@ -76,12 +76,10 @@ echo https://github.com/${GITHUB_ORG}/cat-service-release-ops/blob/educates-work
 ```
 Click on the pencil icon to edit.
 Make sure `newName` matches the "Repository" value in your registry.
+To get the value, run:
 ```execute-1
-skopeo list-tags docker://$REGISTRY_HOST/cat-service | jq '.Repository'
+echo $REGISTRY_HOST
 ```
-
-> Heads up! 
-> Double-check to make sure you didn't delete the `/cat-service` name bit after the registry host.
 
 While you're here, add another `configMapGenerator` after `cat-service-config` using the following snippet.
 You will use it later in this exercise.
@@ -90,6 +88,9 @@ You will use it later in this exercise.
     literals:
       - KITTY=cat
 ```
+
+The result should look something like this:
+![alt_text](images/github-update-kustomization.png "Update registry host ")
 
 Click "Commit changes" at the bottom of the page to save the changes.
 
