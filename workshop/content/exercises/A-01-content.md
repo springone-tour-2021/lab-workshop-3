@@ -1,6 +1,6 @@
 ## Cats, Cats, Everywhere
 
-Throughout this workshop, you will be using a Spring Boot application called _Cat Service_ that returns cat names and ages. The app uses a postgres database to store cat information.
+Throughout this workshop, you will be using a Spring Boot application called _Cat Service_ that returns cat names and ages. The app uses a Postgres database to store cat information.
 
 #### Prerequisites
 

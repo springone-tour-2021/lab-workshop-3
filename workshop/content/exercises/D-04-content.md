@@ -18,7 +18,7 @@ text: "newTag"
 
 We will use a new GitHub Actions workflow named Update Tag. We want this workflow to be launched from the previous Deploy workflow after it runs the tests and pushes the code to `cat-service-release`. To trigger this new workflow, we will use a [repository_dispatch event](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#repository_dispatch). 
 
-The following code will send the dispatch event via curl to GitHub. 
+The following curl command will send the dispatch event via curl to GitHub. 
 It is sending the event type `tag`.
 You will later uncomment this section in the browser. 
 

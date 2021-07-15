@@ -1,5 +1,5 @@
 Woohoo! Your workflow is set up from beginning to end!
-What's more, by committing a change to cat-service, you've _cat_alyzed the workflow into action!
+What's more, by committing a change to cat-service, you've *cat*alyzed the workflow into action!
 Let's trace this kitty's paw prints as it makes its way to production.
 
 ## Testing
@@ -54,14 +54,14 @@ In GitHub, navigate to the `manifests/base/app/kustomization.yaml` file and veri
 
 ## Deploying
 
-Argo CD is busy polling the ops repo, so as soon as it detects the new commit created by the `update tag` workflow, it will apply the updated yaml to the cluster.
+Argo CD is busy polling the ops repo, so as soon as it detects the new commit created by the `update tag` workflow, it will apply the updated YAML to the cluster.
 
 Argo CD is pretty fast—and you configured it to auto-sync—so you may not catch it saying it's out-of-sync, but you can check the cluster to see the age of the various resources.
 ```execute-1
 kubectl get all
 ```
 
-Once Argo CD reapplies the yaml, you should see the age of the `cat-service` pods reset.
+Once Argo CD reapplies the YAML, you should see the age of the `cat-service` pods reset.
 
 If you did the optional exercise of creating a production application in Argo CD, you'll see the prod deployment updated as well.
 
