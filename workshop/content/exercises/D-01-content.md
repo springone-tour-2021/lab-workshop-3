@@ -1,13 +1,13 @@
 In the previous exercises you ran the tests manually, but this is not optimal. The next step is to have an automated workflow. One way is with [GitHub Actions](https://docs.github.com/en/actions). 
 
-GitHub Actions are used to automate your development workflow. They can be triggered on any GitHub event such as creating a pull request or a new commit. It has CI/CD and can be used to build, test, and deploy your code from GitHub.
+GitHub Actions are used to automate your development workflow. 
+They can be triggered on any GitHub event, including pull requests, commits, and more, and can be used to build, test, and/or deploy your code.
 
 ### GitHub Actions workflow
 
 There are some key tasks to automate:
 - Testing
 - Ensuring the app builds
-- Container builds (You could use `spring-boot:build-image`, but you will do it with a more specialized tool in the next exercise.)
 
 Triggering `mvn clean build` on a git commit would do all of these tasks. However, we do not want to build containers if the tests fail. We need a way to decouple these parts of the workflow. 
 

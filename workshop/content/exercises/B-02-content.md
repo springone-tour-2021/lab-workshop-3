@@ -10,16 +10,16 @@ file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: "@Entity"
 ```
 
-Today, we're storing Cats in relational database (RDBMS) tables. Thus, there needs to be an `@Table` annotation present which tells Spring JPA the name of the database table. Let's explore this class markup a little further.
+Today, we're storing Cats in relational database (RDBMS) tables. Thus, there needs to be a `@Table` annotation present which tells Spring JPA the name of the database table. Let's explore this class markup a little further.
 
 ```editor:select-matching-text
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: '@Table(name = "cat")'
 ```
 
-Since RDBMS's have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key), we need to suffice the engine with a marker and its strategy.
+Since RDBMSs have a notion of [primary keys](https://en.wikipedia.org/wiki/Primary_key), we need to supply the engine with a marker and its strategy.
 
-The `id` field has been annotated with `@Id` to denote it is the holder of the primary key, while `@GeneratedValue` tells the engine how the key gets generated. Usually, this means a monotonically incrementing value or something specific to the RDBMS, like a UUID. Check out [the JEE docs](https://docs.oracle.com/javaee/7/api/javax/persistence/TableGenerator.html) for more details on its use!
+The `id` field has been annotated with `@Id` to denote that it is the holder of the primary key, while `@GeneratedValue` tells the engine how the key gets generated. Usually, this means a monotonically incrementing value or something specific to the RDBMS, like a UUID. Check out [the JEE docs](https://docs.oracle.com/javaee/7/api/javax/persistence/TableGenerator.html) for more details on its use!
 
 Click below to see property persistence configuration in context:
 
@@ -63,7 +63,7 @@ after: 3
 
 ### Configuring RDBMS-in-test for Cats
 
-We will need a test-scoped "embedded" database dependency on the classpath.
+We will need a test-scoped, embedded database dependency on the classpath.
 An embedded database runs in-memory (aka inside the same Cats app java process), so it enables us to test Cats without having to start up a separate database.
 In this case we are using a database called [h2](https://www.h2database.com/html/main.html). 
 
@@ -113,7 +113,7 @@ after: 3
 
 For these Repository tests, you'll notice that RDBMS schema and data-state is lacking. To mitigate playing cat-and-mouse, we will explore  how `flyway` manages database state in test.
 
-We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database, we can test the database before it reaches production to prevent many unwanted scenarios. Like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a *hiss*y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
+We want to add `flyway` as a dependency in both test and production scopes so that we always get the same database schema. Using `flyway` as a version control for the database, we can test the database before it reaches production. This prevents many unwanted scenarios, like the common problem of multiple developers writing and moving data around like tangled yarn that can cause a *hiss*y-fit. With `flyway` you can do something like using a clean copy of production data at a chosen state to test against.
 
 Click to see the `flyway` dependency in context:
 ```editor:select-matching-text
@@ -130,7 +130,7 @@ Click below to see the `flyway` database beginning state file:
 file: ~/cat-service/src/main/resources/db/migration/V1__cat_with_age.sql
 ```
 
-This is the first database `version migration` file (named v1). It sets up a schema, but this schema is incompatible with our latest code base. A second version (named v2) has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
+This is the first database `version migration` file (named v1). It sets up a schema, but this schema is incompatible with our latest codebase. A second version (named v2) has been created that alters v1 such that Cat's age is represented as `date` rather than `int`.
 
 Click below to see `flyway` database migration v2 in context:
 ```editor:open-file
@@ -183,7 +183,7 @@ What we know is that the Controller and all endpoints underneath respond on `/ca
 
 ### Catnap (REST) test
 
-Time to model a test after the endpoint behaviour. The test should perform exactly all the code paths that the Controller will execute in production. We are not concerned with the wiring of the JPA repository since it has been tested at an adjacent point in the test-pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
+Time to model a test after the endpoint behaviour. The test should perform exactly all the code paths that the Controller will execute in production. We are not concerned with the wiring of the JPA repository since it has been tested at an adjacent point in the test pyramid. To prove the point, the docs state `"Typically @WebMvcTest is used in combination with @MockBean or @Import to create any collaborators required by your @Controller beans"`. Stubbing the service guarantees we will see a result that exercises Controller code and nothing more.
 
 Since we are testing the Web Layer, we will ensure Spring wires up the CatRestController and provides some testing facilities to boot. We can do this using the `@WebMVCTest` annotation which will `"disable full auto-configuration and instead apply only configuration relevant to MVC tests "`. 
 
@@ -195,7 +195,7 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly—there is no transport logic in our code—which reduces the time necessary to complete tests.
+For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component transparently and directly exposes the framework paths leading to our code, without using any transport logic (no sockets, etc). This make tests faster.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 
@@ -209,8 +209,8 @@ before: 1
 ```
 
 This mock performs the task of calling our endpoint controller at `"/cats/Toby"` and receiving its response. MockMVC provides all the necessary DSL methods to enable us to control the request and verify the response. Using `MockMvcRequestBuilders` is the preferred way to ensure we build a proper HTTP request, while its `expect` methods
-enable us to validate all result criteria for HTTP (i.e. status, headers, content etc...).
+enable us to validate all result criteria for HTTP (status, headers, content, etc).
 
 ## Next steps
 
-Now we are ready for full Integration tests using TestContainers to assist our REST service with real JPA functionality, real CatService, and an actual HTTP server. Let's go!
+Now we are ready for full Integration tests using Testcontainers to assist our REST service with real JPA functionality, real CatService, and an actual HTTP server. Let's go!

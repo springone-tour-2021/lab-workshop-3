@@ -15,7 +15,7 @@ cd ~/cat-service
 ./mvnw spring-boot:build-image -DskipTests
 ```
 
-_As an aside... notice the following line in the build output.
+_As an aside.... notice the following line in the build output.
 [Paketo Buildpacks](https://paketo.io) are doing the hard work of turning your app into an image.
 Make a mental note of this.
 We will come back to it later in the workshop._

@@ -42,7 +42,7 @@ To be the cat's meow, you'll want to make sure this Cat passes inspection.
 Notice the three Assert statements. You will use these for testing.
 Click this action block to highlight an example.
 Compare it to the Cat in line 45.
-This one includes an id to facilitate testing.
+This one includes an id to facilitate testing (line 39 versus 45).
 ```editor:select-matching-text
 file: ~/cat-service/src/main/java/com/example/demo/Cat.java
 text: "Assert"
