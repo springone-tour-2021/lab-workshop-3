@@ -27,7 +27,7 @@ url: https://github.com/new
 
 ## GitHub Actions workflow file
 
-GitHub Actions are defined by placing workflow yaml files in a directory in your repo called `.github/workflows`.
+GitHub Actions are defined by placing workflow YAML files in a directory in your repo called `.github/workflows`.
 
 Take a look at the workflow definition file in your `cat-service` repository.
 
