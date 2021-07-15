@@ -10,7 +10,9 @@ You will need:
 
 ## GitHub repo setup
 
-### Fork the GitHub repos
+The following sections will guide you through forking and cloning the required repositories, and setting the appropriate default branch.
+
+#### Fork the GitHub repos
 
 Click on the following GitHub links and use the GitHub UI to fork the following repos:
 ![alt_text](images/prereq-fork.png "Fork by clicking top right button")
@@ -28,14 +30,14 @@ url: https://github.com/booternetes-III-springonetour-july-2021/cat-service
 url: https://github.com/booternetes-III-springonetour-july-2021/cat-service-release-ops
 ```
 
-### Set the default branch
+#### Set the default branch
 
 For each of the two repos, navigate to `Settings-->Branches` and click on the two arrows on the right of the screen to switch the default branch. Set the default to `educates-workshop`.
 ![alt_text](images/github-set-default-branch.png "Set default branch")
 
 > Make sure to update the default branch for both repositories.
 
-### Set your GitHub org
+#### Set your GitHub org
 
 It's easier to auto-generate commands in this tutorial if you store the name of your GitHub org in an environment variable (hint: the org is the bit before the repo name on your newly forked repos; often the same as your username).
 > Don't worry—the value will not be saved or used outside your tutorial session, and you do not need to provide your password.
@@ -46,7 +48,7 @@ At the prompt, enter your GitHub org name.
 printf "Enter your GitHub org and press enter/return: " && read GITHUB_ORG
 ```
 
-### Clone the repos
+#### Clone the repos
 
 Clone your repos to the workshop environment.
 ```execute-1
