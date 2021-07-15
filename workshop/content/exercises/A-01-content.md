@@ -14,7 +14,7 @@ The following sections will guide you through forking and cloning the required r
 
 #### Fork the GitHub repos
 
-Click on the following GitHub links and use the GitHub UI to fork the following repos:
+Click on the two GitHub links below and use the GitHub UI to fork the repos.
 ![alt_text](images/prereq-fork.png "Fork by clicking top right button")
 
 > Note: If you've done this workshop before and already have forks, delete and recreate them now.

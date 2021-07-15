@@ -2,6 +2,10 @@
 
 *** Further up the test pyramid, Cats become meowschievous ***
 
+So far we've been testing against an in-memory database. A more faithful representation of a production system would be a database that is external to the application. How can we achieve this without taking on the burden of managing a separate database. [Testcontainers](https://www.testcontainers.org) to the rescue! Testcontainers is a Java library that supports JUnit tests and launches instances of common databases as Docker containers on the local Docker daemon.
+
+## Add Testcontainers dependency
+
 The entrypoint for getting Testcontainers working is through `pom.xml`. Simply add the necessary `testcontainers` dependency to the project under `test` scope. Testcontainers make available many modules for getting your flavor of RDBMS in test. See a listing of what's there now [on their website](https://www.testcontainers.org/modules/databases/). This workshop uses a [postgres](https://www.testcontainers.org/modules/databases/postgres/) module for testing—we will explore its API shortly. 
 
 First, let's take a peek at the dependency inclusion for our build:
