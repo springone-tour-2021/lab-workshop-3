@@ -165,9 +165,9 @@ Paws or no paws, that is a pretty complete set of tests of the persistence and s
 
 ### Cats REST Controller 
 
-Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should—unlike most cats. 
+Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint behaves the way we think it should—unlike most cats. 
 
-Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite "Complete Integration" since not all resources are available; These are component tests indeed. This means that the resources we aren't testing need to be mocked.
+Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite "Complete Integration" since not all resources are available—these are component tests indeed. This means that the resources we aren't testing need to be mocked.
 
 Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
