@@ -48,13 +48,13 @@ after: 22
 The action `checkout@v2` checks-out your repo so your workflow can access it.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
-text: "checkout@v2"
+text: "actions/checkout@v2"
 ```
 
 The action `cache@v1` caches your maven repository `~/.m2` to speed up subsequent builds.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
-text: "cache@v1"
+text: "actions/cache@v1"
 ```
 
 The action `actions/setup-java@v1` provides a JDK for building and testing the app:
@@ -68,6 +68,7 @@ We will walk through this script momentarily.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "run:"
+after: 2
 ```
 
 #### Deployment script
@@ -108,7 +109,11 @@ Create the two repository secrets:
 - `GIT_USERNAME` - with your GitHub username as the value
 - `GIT_PASSWORD` - with your GitHub access token as the value
 
-Ideally, all developers on the Cats team would have write access to `cat-service`, but only GitHub Actions would have write access to `cat-service-release`. This would ensure that the release code has passed testing, and it would protect it from accidental or nefarious commits to the production release.
+![alt_text](images/github-actions-secrets.png "Create GitHub Actions secrets")
+
+> A thought on access control:
+> Ideally, all developers on the Cats team would have write access to `cat-service`, but only the automation toolchain—in this case, GitHub Actions—would have write access to `cat-service-release`. 
+> This would ensure that the release code has passed testing, and it would protect it from accidental or nefarious commits to the production release.
 
 ## Try it out
 
