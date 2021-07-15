@@ -64,9 +64,10 @@ This directory contains:
 - a kustomization.yaml file that ties it all together - it specifies which files to use and what modifications to make
 
 ```editor:select-matching-text
-file: file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
+file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 text: MY_REGISTRY
 ```
+
 ```editor:replace-text-selection
 file: ~/cat-service-release-ops/manifests/base/app/kustomization.yaml
 text: {{registry_host}}
