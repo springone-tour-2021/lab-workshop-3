@@ -43,14 +43,14 @@ argocd
 
 Log in through the CLI.
 ```execute-1
-argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure
+argocd login localhost:8080 --username admin --password=$ARGOCD_PW --insecure --plaintext
 ```
 
 #### Argo CD Web UI
 
 Open the Argo CD UI.
 ```dashboard:open-url
-url: {{ingress_protocol}}://{{session_namespace}}-argocd.{{ingress_domain}}
+url: http://{{workspace_namespace}}-argocd.{{ingress_domain}}
 ```
 
 Log in as `admin`.
