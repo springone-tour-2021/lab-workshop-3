@@ -1,4 +1,12 @@
-## Consumer-side (contract) Cat testing
+In this section we will use a `cat-client` application to illustrate the consumer side of Consumer Driven Contract (CDC) testing.
+
+Clone the `cat-client` repo to the workshop environment:
+```execute-1
+cd ~ && rm -rf cat-client
+git clone https://github.com/booternetes-III-springonetour-july-2021/cat-client
+```
+
+### Producer Configuration
 
 The *fur*st step is to add the `spring-cloud-starter-contract-verifier` dependency that lets us write a test to support the contract verification. Click the action below to show Maven `pom.xml` dependencies in context:
 
@@ -9,7 +17,7 @@ before: 2
 after: 2
 ```
 
-Next, we will setup the maven plugin that allows for both service to contract test exectuion, and contract to stub (contract embodied as a stand-alone mock service) generation. This gives the necessary `verification` steps that ensure the contract works against the service.
+Next, we will setup the maven plugin that allows for both service-to-contract (verify service works as stated in the contract) test verification, and contract to stub (contract embodied as a stand-alone mock service) generation.
 
 ```editor:select-matching-text
 file: ~/cat-service/pom.xml
@@ -101,10 +109,11 @@ Now, let's heard cats toward the next segment—Client to Stub tests!
 
 In this section, we will examine the validation of consumer (client) to producer (service) by using the contract stub generated previously. 
 
-Start by running `install` target to the `service` repo which installs the generated `verifier` artifacts:
+Start by running `install` target to the `service` repo which installs the generated `verifier` stubs as maven artifacts:
 
 ```execute-1
-mvn install
+cd ~/cat-service
+./mvnw clean install -DskipTests
 ```
 
 This step will execute the spring-cloud-contract maven plugin, which generates artifacts and installs them into `.m2` directory (becasue we're using Maven).
@@ -118,8 +127,7 @@ after: 2
 ```
 
 Adding the `spring-cloud-starter-contract-stub-runner` let's us declare tests bound to a specific stub generated 
-through the `verifier` module. From here we can take a quick peek at client production to understand what's under
-the client hood; the Cat data, how to make that HTTP call out, where it goes, and what to make of the result.
+through the `verifier` module. From here we can take a quick peek at client to understand what's under the hood; the Cat data, how to make that HTTP call out, and what to make of the result.
 
 Click below to see the client data in context:
 
@@ -145,9 +153,9 @@ The `restTemplate` eventually gets wired in through our application configuratio
 
 Click to see this in context:
 ```editor:select-matching-text
-file: ~/cat-client/src/main/java/com/example/catclient/CatClient.java
-text: "@Bean"
-after: 1
+file: ~/cat-client/src/main/java/com/example/catclient/CatClientApplication.java
+text: "RestTemplate restTemplate"
+before: 1
 ```
 
 From here, we can then understand what our Test will need to do: validate that that call succeeds and the data comes back without missing bits or failure.
@@ -183,4 +191,4 @@ after: 12
 
 Because this is a `@SpringBootTest`, all client dependencies will be configured as a full application, thus the stub-runner facilitates the server-side (in this case our Wiremock stub).
 
-With the client out of the way, we have come to the conclusion of our test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the automated-testing and build phases in the next section.
+With the client out of the way, we have come to the conclusion of our local-bound test section. Given the success of these tests, we can be confident the cats will always land on their 4 legs! This bring us to the automated-testing and build phases in the next section.

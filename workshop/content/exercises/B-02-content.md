@@ -1,6 +1,6 @@
 ## Persisting persistent Cats
 
-The meowtivation for these tests is to verify Cat's state remains when persisted as database entries.
+The meowtivation for these next tests is to verify Cat's state remains when persisted as database entries.
 Cats and other entities must have an `@Entity` annotation at the class level to signal that they are eligible for persistence.
 
 Click below to view the usage of `@Entity` in context:
@@ -141,7 +141,7 @@ The good news is that our tests are certified against ***real*** database schema
 
 ### Testing the CatsService
 
-Further upstream we have the `CatsService`—responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier. Further up the cat test pyramid is where we are!
+Further upstream we have the `CatsService`—responsible for exposing application persistence. The service accepts a repository, which depends on JPA. However, we won't have a JPA engine at THIS test; the JPA tests are completed earlier.
 
 Filling in for `CatsRepostory`, [Mockito](https://site.mockito.org/) can proxy the instance to return custom (test) Cat beans during test. This is as simple as applying Mockito to the repository bean in a `before` method that will get called at the beginning of each test. Take a look at how this works in context:
 
@@ -165,9 +165,9 @@ Paws or no paws, that is a pretty complete set of tests of the persistence and s
 
 ### Cats REST Controller 
 
-Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint performs how we think it should—unlike most cats. 
+Another layer of our testing regimen is the HTTP REST endpoint: web tests. Similar to the previous JPA tests, the point here is to ensure quickly that the REST endpoint behaves the way we think it should—unlike most cats. 
 
-Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite "Complete Integration" since not all resources are available. This means that the resources we aren't testing need to be mocked.
+Likewise, this test is still quite low on the pyramid—closer to Integration than Unit tests, but not quite "Complete Integration" since not all resources are available—these are component tests indeed. This means that the resources we aren't testing need to be mocked.
 
 Let's take a look at the REST Controller first. We can find out what the production behaviour is like since the code is available. Then we can focus on testing it.
 
@@ -195,7 +195,7 @@ text: "@WebMvcTest"
 after: 10
 ```
 
-For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly—there is no transport logic in our code—which reduces the time necessary to complete tests.
+For this test, we also include mock `CatsService` as prescribed earlier. But also, we include an `ObjectMapper` for translating objects back and forth from JSON encoding, and a `MockMvc` object to communicate with Controller code without using transports (i.e. TCP/IP). This MockMvc component exposes the framework paths leading to our code transparently and directly—sans transport (TCP) specifics—which reduces the time necessary to complete tests.
 
 Let's focus on the test itself. Using the mock CatsService we can return a real Cat result when called, but we also transform that into a JSON blob using ObjectMapper. Let's see this more in depth.
 
