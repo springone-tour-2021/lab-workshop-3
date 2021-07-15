@@ -14,11 +14,8 @@ spec:
     files: github.com/springone-tour-2021/lab-workshop-3?ref=main
   session:
     resources:
-      ingresses:
-      - name: argocd
-        protocol: https
-        port: 80 
       memory: 2.5Gi
+      # ingresses:
 #      - name: argocd-grpc
 #        protocol: https
 #        host: argocd-server-grpc.argocd.svc.cluster.local
