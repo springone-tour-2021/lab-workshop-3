@@ -1,47 +1,35 @@
-In the previous exercises you ran the tests manually, but this is not optimal. The next step is to have an automated workflow. One way is with [GitHub Actions](https://docs.github.com/en/actions). 
+In the previous exercises you ran the tests manually, but this is not optimal. Instead, we want to establish an automated testing workflow. 
 
-GitHub Actions are used to automate your development workflow. 
-They can be triggered on any GitHub event, including pull requests, commits, and more, and can be used to build, test, and/or deploy your code.
+One way to achieve this is with [GitHub Actions](https://docs.github.com/en/actions). 
+GitHub Actions can be used to build, test, and/or deploy your code. They can be configured as a series of pre-defined actions or they can execute a shell script that you provide. They can be triggered on any GitHub event, including pull requests, commits, webhook events, and more. Best of all, they are built right into GitHub, so you don't need to install or manage any additional software in order to use them—just pop a couple of additional files into your app repo and you're off to the races!
 
-### GitHub Actions workflow
+## Objective
 
-There are some key tasks to automate:
-- Testing
-- Ensuring the app builds
+Our objective in this exercise is two-fold:
+1. Automate all the testing in the previous sections.
+We can accomplish this by running `mvn verify`, as this goal includes both unit tests and integration tests.
+2. Trigger the next step in the workflow. 
 
-Triggering `mvn clean build` on a git commit would do all of these tasks. However, we do not want to build containers if the tests fail. We need a way to decouple these parts of the workflow. 
+This can be done in a few different ways. For this workshop, we've chosen to "force push" the tested code to a separate GitHub repo called `cat-service-release`. A commit to this "release" repo can serve as a trigger to the next step in the workflow.
 
-This can be done in different ways. We're first going to use `mvn clean deploy` to test and ensure the app builds. Then we are choosing to copy (via a forced git push) the code into a separate repository, `cat-service-release`. Presumably this release repository could have more limited write access than cat-service (e.g. only pipeline system account can write to it). And then the container will be built. We will see the container building part in the next section.
+## Prerequisite: release repository
 
-Click on the following link to get to your GitHub and use the UI to create a new repository called `cat-service-release` (this link works if you're signed in).
+Start by creating the "release" repository that will house the tested code.
+This repository must exist in order for our GitHub Actions to push code to it.
 
+You can use the following link to get to the right page on GitHub for creating a new repo.
+Name the repo `cat-service-release` and make sure you set the visibility to `public`.
 ```dashboard:open-url
 url: https://github.com/new
 ```
-Make sure that your repo is `public` so that GitHub actions can work. Please match the following settings including the naming the repo `cat-service-release`.
+
 ![alt_text](images/ga-new-repo.png "Create new repo exe and settings")
-#### Deployment script
-Now take a look at the deployment script. This script calls `mvn clean verify`, initializes the `cat-service-release` as a git respository, and pushes the code if and only if `mvn clean verify` passes. 
-```editor:open-file
-file: ~/cat-service/.github/workflows/deploy.sh 
-```
 
-This first part of the script sets the `user.email` and `user.name` to set the Author as `Booternetes CI Bot` and the email as `<>` in the commit. 
-```editor:select-matching-text
-file: ~/cat-service/.github/workflows/deploy.sh
-text: "user.name"
-before: 1
-```
+## GitHub Actions workflow file
 
-It then does a `mvn clean verify` to test the code. On success, it creates some directories and then clones the upstream `booternetes-III-springonetour-july-2021/cat-service-release` repository from GitHub. It then moves the `.git` directory out to preserve it. The contents are cleared and the code from `cat-service` is then copied over and the `.git` directory is moved back. Lastly a branch is created and it's pushed up to your `cat-service-release` repository.
-```editor:select-matching-text
-file: ~/cat-service/.github/workflows/deploy.sh
-text: "promote_code()"
-after: 11
-```
+GitHub Actions are defined by placing workflow yaml files in a directory in your repo called `.github/workflows`.
 
-#### GitHub Actions workflow file
-Now take a look at the YAML workflow file. You'll be storing your GitHub username and access token in the next step. 
+Take a look at the workflow definition file in your `cat-service` repository.
 
 The `on` section lists the kinds of events that will trigger the `job`.
 ```editor:select-matching-text
@@ -50,7 +38,7 @@ text: "on"
 after: 5
 ```
 
-The `jobs` section executes all the tasks triggered by `on`.
+The `jobs` section defines the tasks that it will run.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "jobs"
@@ -63,40 +51,73 @@ file: ~/cat-service/.github/workflows/deploy.yaml
 text: "checkout@v2"
 ```
 
-The next action `cache@v1` caches everything from your maven repository `~/.m2` to speed up subsequent builds.
+The action `cache@v1` caches your maven repository `~/.m2` to speed up subsequent builds.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "cache@v1"
 ```
 
-To set the workflow to use JDK 11 with the action use `actions/setup-java@v1`:
+The action `actions/setup-java@v1` provides a JDK for building and testing the app:
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "actions/setup-java@v1"
 ```
 
-To `run:` is used to run the `deploy.sh` script that we just looked at.
+The final step executes a custom script that we have provided called `deploy.sh`.
+We will walk through this script momentarily.
 ```editor:select-matching-text
 file: ~/cat-service/.github/workflows/deploy.yaml
 text: "run:"
 ```
 
-### GitHub Actions secrets
+#### Deployment script
 
-The last configuration detail to set up is to add credentials to `cat-service` so that the GitHub Actions in `cat-service` can push a copy of the tested code to `cat-service-release`. 
+Take a look at the deployment script.
+It looks more complicated than it is.
+Focus on the last line, which is the heart of the script:
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.sh
+text: 'mvn clean verify && promote_code'
+```
 
-Create a GitHub [personal access token](https://github.com/settings/tokens). It needs "repo" and "workflow" access rights.
+`mvn clean verify` will run unit and integration tests.
+If this operation succeeds, the code is good to go and can be pushed to the `cat-service-release` repository.
+The `promote_code` function does just that, and the `&&` between the two command ensures that `promote_code` will be executed if and only if `mvn clean verify` passes.
+
+Don't let the entrails of the `promote_code` function (defined in the same file) distract you. They are not germaine to the topic at hand. It is merely some .git folder manipulation to achieve the push to `cat-service-release`.
+
+#### GitHub Actions secrets
+
+Notice there are several environment variables in the `deploy.sh` script.
+The variables that start with GITHUB are provided by default.
+However, there are two additional, non-default variables.
+```editor:select-matching-text
+file: ~/cat-service/.github/workflows/deploy.sh
+text: '${GIT_USERNAME}:${GIT_PASSWORD}'
+before: 1
+```
+
+These two variables are needed in order to push code to the release repository. Note, however, that:
+- The values must be set on GitHub (not in the tutorial editor), protected under your GitHub account as GitHub `Secrets`.
+- You need to use a GitHub [personal access tokens](https://github.com/settings/tokens), not your account password. Make sure that your token has **"repo"** and **"workflow"** access rights.
 
 Run this command and click on the link in terminal 1 to get to the `cat-service` repository's secrets.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/settings/secrets/actions
 ```
-Create a new repository secret called `GIT_USERNAME` with your GitHub username as the value.
-Create another secret called `GIT_PASSWORD` with your access token as the value.
+Create the two repository secrets:
+- `GIT_USERNAME` - with your GitHub username as the value
+- `GIT_PASSWORD` - with your GitHub access token as the value
 
-## Enable GitHub Actions
+Ideally, all developers on the Cats team would have write access to `cat-service`, but only GitHub Actions would have write access to `cat-service-release`. This would ensure that the release code has passed testing, and it would protect it from accidental or nefarious commits to the production release.
 
-Run this command and click on the link in terminal 1 to navigate to the `cat-service` repository's actions page:
+## Try it out
+
+#### Enable GitHub Actions
+
+Because your repo is a fork, GitHub Actions are initially disabled.
+Enable them now by clicking on the Actions section of the repo on GitHub.
+You can use the link generated by this command to get to the right page.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
 ```
@@ -104,21 +125,13 @@ echo https://github.com/$GITHUB_ORG/cat-service/actions
 Click on the button to enable GitHub Actions workflows.
 ![alt_text](images/github-actions-enable-workflows.png "Enable GitHub Actions workflows")
 
-### Try it out
-
-Take a look at the contents of `cat-service-release`. It will be empty.
-Run this command and click on the link in terminal 1
-```execute-1
-echo https://github.com/$GITHUB_ORG/cat-service-release
-```
-
 #### Commit and push a change
-We are going to manually push to the `cat-service` repository to trigger the GitHub Actions workflow to push the tested code to `cat-service-release`.
-> We will be doing this through the Github UI to avoid asking for your password, otherwise it is common to trigger this after pushing code to GitHub as part of the development process.
 
-Within the `cat-service` repo make a change to the file `bump` 
+Now, remember, in our ideal scenario described above, as a developer you only have access to `cat-service`. Go ahead and make a commit to `cat-service` now.
 
-Open the file `cat-service/bump` in your repo by clicking the next command to get a link in terminal-1.
+Navigate to the `cat-service` repository on GitHub.
+Open the file called `bump`. 
+You can use the following action to generate a link to the right page.
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/blob/educates-workshop/bump
 ```
@@ -126,16 +139,16 @@ echo https://github.com/$GITHUB_ORG/cat-service/blob/educates-workshop/bump
 When you get to that file it will look like this:
 ![alt_text](images/ga-bump-1.png "Change this file to trigger GitHub Actions workflow")
 
-Click the edit button on the right hand side of the window, it's a pencil icon.
+Click the edit button on the right hand side of the window (it's a pencil icon).
 ![alt_text](images/ga-edit-file.png "Click edit file to edit bump file")
 
-Now, you can alter this file so you can commit to this repo, you can add another `+` sign if you wish.
+Edit this file any way you like. Adding or deleting a single character is enough.
 ![alt_text](images/ga-update-1.png "Change bump file")
 
-Commit your changes in the UI at the bottom of this page like so.
+Scroll to the bottom and commit your changes.
 ![alt_text](images/ga-commit-bump.png "Change bump file")
 
-Now check out the logs by clicking on the Action's name and then build. You'll see a log for setting up the job, running through each of the actions in the workflow file, post logs, and completing the job. Click on any of them to check out the logs.
+Now check out the logs by clicking on the Action's name, and then on "build." You'll see a log for setting up the job, running through each of the actions in the workflow file, post logs, and completing the job. Click on any of them to check out the logs.
 Run this command and click on the link in terminal 1:
 ```execute-1
 echo https://github.com/$GITHUB_ORG/cat-service/actions
