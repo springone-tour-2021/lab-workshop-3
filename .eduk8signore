@@ -5,3 +5,6 @@
 ./README.md
 ./kustomization.yaml
 ./resources
+./local-eduk8s-start.sh
+./docker
+./gradle
