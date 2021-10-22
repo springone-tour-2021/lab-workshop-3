@@ -3,7 +3,7 @@ kind: Workshop
 metadata:
   name: lab-springone-tour-devops
 spec:
-  title: Main Branch
+  title: argocd-session-users branch
   description: SpringOne Tour 2021 Workshop 3
   vendor: eduk8s.io
   difficulty: beginner
@@ -11,7 +11,7 @@ spec:
   url: https://github.com/springone-tour-2021/lab-workshop-3
   content:
     image: quay.io/eduk8s/jdk11-environment:latest
-    files: github.com/springone-tour-2021/lab-workshop-3?ref=main
+    files: github.com/springone-tour-2021/lab-workshop-3?ref=argocd-session-users
   session:
     resources:
       memory: 2.5Gi
