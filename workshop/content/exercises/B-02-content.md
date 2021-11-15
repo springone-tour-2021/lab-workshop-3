@@ -98,7 +98,7 @@ text: "private CatsRepository repository;"
 before: 1
 ```
 
-A `CatsRepository` is autowired into the `CatsRepositoryTests` class through constructor injection. The `CatsRepository` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test that is not caused by the EntityManager. The resulting test case is a straightforward save-and-find through the repository methods.
+A `CatsRepository` is autowired into the `CatsRepositoryTests` class through field injection. The `CatsRepository` receives an EntityManager in the form of TestEntityManager. Thus, it is easy to isolate failure if the repository fails a test that is not caused by the EntityManager. The resulting test case is a straightforward save-and-find through the repository methods.
 
 See the repository test in context:
 

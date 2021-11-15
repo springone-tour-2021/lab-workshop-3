@@ -120,7 +120,7 @@ This step will execute the spring-cloud-contract maven plugin, which generates a
 
 Then we can check out what needs to go in our `pom.xml` to enable stub reception at test:
 ```editor:select-matching-text
-file: ~/cat-service/pom.xml
+file: ~/cat-client/pom.xml
 text: "spring-cloud-starter-contract-stub-runner"
 before: 2
 after: 2
