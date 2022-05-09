@@ -1,15 +1,7 @@
-# SpringOne Tour 2021 - Workshop 3
+# Kubecon 2022 - kpack Workshop
 
-This repo contains a hands-on workshop covering the following topics:
-  - Spring Boot application testing 
-    - Unit testing
-    - Integration testing using contracts
-    - Database schema testing using Flyay and Testcontainers
-  - Automated deployment to Kubernetes
-    - GitHub Actions
+This repo contains a hands-on workshop on building images using kpack.covering the following topics:
     - kpack
-    - ArgoCD
-    - ArgoCD-Image-Updater
 
 The workshop can be run using [educates](https://docs.edukates.io), a system for hosting interactive workshop environments.
 Educates can run on any Kubernetes cluster.
@@ -17,23 +9,25 @@ Educates can run on any Kubernetes cluster.
 ---
 ## Run locally
 
-Prerequisites:
-- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
-
-To start the workshop, clone this repo and run:
-```bash
-sh local-eduk8s-start.sh
+Create a cluster to host this workshop:
+```shell
+git clone https://github.com/vmware-tanzu-labs/educates-local-dev.git
+cd educates-local-dev
+brew install kctrl
+./create-cluster
+cd ..
 ```
 
-This command will start minikube, install the Educates operator, and deploy the workshop files.
-
-When startup is complete, the console will show a link to the training portal.
-You can also retrieve the link by running:
-```bash
-kubectl get trainingportal
+Deploy this workshop content:
+```shell
+git clone https://github.com/springone-tour-2021/lab-workshop-3.git
+cd lab-workshop-3
+git checkout kubecon2022
 ```
 
-Click on the link, then click on the `Start workshop` button in your browser, and you will find yourself in the hands-on training environment where you will be guided through the workshop.
+When startup is complete, run `kubectl get trainingportal` and click on the link, or simply run `make open-workshop`.
+
+When the workshop opens in your browser, click on the `Start workshop` button and follow the workshop instructions.
 
 > See below for instructions to "Run on existing Kubernetes cluster"
 

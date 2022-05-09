@@ -10,19 +10,6 @@ curl -L https://github.com/pivotal/kpack/releases/download/v$VERSION/logs-v$VERS
     mv logs /home/eduk8s/bin/logs
 echo "### Finished installing kpack logs CLI"
 
-echo -e "\n### Installing argocd CLI"
-VERSION=v2.0.4
-#VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-curl -sSL -o /home/eduk8s/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${VERSION}/argocd-linux-amd64
-chmod +x /home/eduk8s/bin/argocd
-echo "### Finished installing argocd CLI"
-
-echo -e "\n### Installing argocd-image-updater CLI"
-VERSION=v0.9.5
-curl -sSL -o /home/eduk8s/bin/argocd-image-updater https://github.com/argoproj-labs/argocd-image-updater/releases/download/${VERSION}/argocd-image-updater_${VERSION}_linux-amd64
-chmod +x /home/eduk8s/bin/argocd-image-updater
-echo "### Finished installing argocd-image-updater CLI"
-
 echo -e "\n### Installing httpie CLI"
 virtualenv /home/eduk8s/bin/httpie
 source /home/eduk8s/bin/httpie/bin/activate
